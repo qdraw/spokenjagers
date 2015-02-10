@@ -1,0 +1,12 @@
+# Site settings
+title: Procesblog
+email: qdraw@github.com
+description: > # this means to ignore newlines until "baseurl:"
+  Procesblog voor de verdieping
+baseurl: "/avans-verdieping-blok9-10" # the subpath of your site, e.g. /blog/
+url: "http://qdraw.github.io" # the base hostname & protocol for your site
+twitter_username: qdrawmedia
+github_username:  qdraw
+
+# Build settings
+markdown: kramdown
