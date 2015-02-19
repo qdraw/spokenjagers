@@ -42,28 +42,6 @@ Het doel van het project is dat ik meer leer over UX en de techniek die nodig is
 ### Inschatting Methodieken 
 Er wordt veel informatie verzameld op basis van het weer, deze informatie is vrij opvraagbaar, om deze gegevens te koppelen aan de geo-locatie en dit bij een afbeelding op te slaan wordt het mogelijk om terug te zoeken.
 
-## Plan B (Interactie tussen computer en mens):
-
-### Inleiding
-
-### Probleemstelling
-
-### Doel
-
-### Opdracht
-
-### Markt
-
-### Op te leveren producten
-
-### Budget
-
-### Succesindicatoren
-
-
-### Inschatting Methodieken 
-
-
 
 ## Plan C (Modulair CMS-systeem):
 
@@ -94,3 +72,26 @@ Het project is een succes als ik een uitgewerkt prototype kan opleveren en dat i
 ### Inschatting Methodieken 
 Het CMS-syteem is modulair met de focus op interactie met de gebruiker.
 
+
+## Plan B (Interactie tussen computer en mens):
+
+op afstand besturen, inloggen bekijken zit ik aan te denken maar deze ga ik nog verder invullen.
+
+
+### Inleiding
+Een 
+### Probleemstelling
+
+### Doel
+
+### Opdracht
+
+### Markt
+
+### Op te leveren producten
+
+### Budget
+
+### Succesindicatoren
+
+### Inschatting Methodieken 
