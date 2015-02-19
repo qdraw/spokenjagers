@@ -42,7 +42,7 @@ Het doel van het project is dat ik meer leer over UX en de techniek die nodig is
 ### Inschatting Methodieken 
 Er wordt veel informatie verzameld op basis van het weer, deze informatie is vrij opvraagbaar, om deze gegevens te koppelen aan de geo-locatie en dit bij een afbeelding op te slaan wordt het mogelijk om terug te zoeken.
 
-## Plan B ():
+## Plan B (Interactie tussen computer en mens):
 
 ### Inleiding
 
@@ -65,7 +65,7 @@ Er wordt veel informatie verzameld op basis van het weer, deze informatie is vri
 
 
 
-# Plan C (Modulair CMS-systeem):
+## Plan C (Modulair CMS-systeem):
 
 ### Inleiding
 Er bestaan veel CMS-systemen en Wordpress is de bekendste. Wordpress is gemaakt om te bloggen en wanneer je wilt bloggen is het handig om Wordpress te gebruiken. Alleen waar Wordpress niet zo goed in is het maken van een eenvoudige website te makkelijk te bewerken is. Bij een website worden vaak plugins geïnstalleerd die veel mogelijkheden hebben maar door de hoeveelheid mogelijkheden maar niet de gene die de gebruiker wil. 
