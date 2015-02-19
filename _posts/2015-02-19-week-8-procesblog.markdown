@@ -6,6 +6,7 @@ date:   2015-02-19 14:05:01
 categories: update
 ---
 
+# Week 8 plannen
 In deze blog-post ga ik het hebben over drie voorstellen die ik doe m.b.t. het plan dat ik ga uitvoeren. Ik twijfel zelf nog tussen deze drie plannen.
 
 # Plan A (Weerfoto's-zoeken):
