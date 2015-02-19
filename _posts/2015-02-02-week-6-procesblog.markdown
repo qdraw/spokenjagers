@@ -13,7 +13,7 @@ Het eerste gesprek was een korte introductie en kennismaking. We hebben het over
 
 Tijdens het tweede gesprek met Gabri heb ik de voorlopige versie van de roadmap gepresenteerd. De feedback was op het voorstel dat er onvoldoende doelen waren geformuleerd. Zo miste de leerdoelen en een overzicht. Zo was het onvoldoende duidelijk welke richting ik wilde gaan. In het overzicht heb ik ook toegevoegd wat mijn skills al waren.
 
-Dus kort samengevat heb ik de volgende punten aangepast:
+Dus kort samengevat ga ik de volgende punten aanpassen:
 
 -	Leerdoel
 -	Waarheen, nog niet duidelijk in overzicht
