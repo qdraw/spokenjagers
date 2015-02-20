@@ -6,65 +6,69 @@ categories: update
 ---
 
 # Week 8 plannen
-In deze blog-post ga ik het hebben over drie voorstellen die ik doe m.b.t. het plan dat ik ga uitvoeren. Ik twijfel zelf nog tussen deze drie plannen.
+In deze blog-post ga ik het hebben over drie voorstellen die ik doe m.b.t. het plan dat ik ga uitvoeren. Ik twijfel zelf nog tussen deze drie plannen, maar de volgorde is op basis van mijn huidige voorkeur.
 
 ## Plan A (Weerfoto's-zoeken):
 
 ### Inleiding
-Wij Nederlanders hebben het altijd over het weer en bij veel mensen hangt de gemoedstoestand af op basis van het weer, dat laatste is een aanname. De sfeer van de foto wordt zeker in een landschapsfoto bepaald door de sfeer. Het probleem is dat het lastig om dit soort foto's te zoeken. Het doel is om een extra laag aan het zoeken toe toevoegen en dit is zowel de interactie met de gebruiker en het maken van een werkend prototype.
+Wij Nederlanders hebben het altijd over het weer en bij veel mensen hangt de gemoedstoestand af op basis van het weer, dat laatste is een aanname. De sfeer van de foto in een landschapsfoto wordt bepaald door het weer. Het is lastig om voor dit soort foto's een goede zoekopdracht te maken en daardoor zijn ze moeilijk te vinden. Het doel dit project is om een foto te vinden waarbij het mooi weer is.
   
 ### Probleemstelling
-Het is lastig om foto's door te zoeken en het zoeken op basis van alleen steekwoorden is het bijzonder lastig om een geschikte landschaps-sfeerafbeelding te vinden.
+Bij het zoeken naar een geschikte landschapsfoto is het moeilijk om de juiste zoektermen in te voeren die lijden naar het gewenste zoekresultaat. In dit scenario heb ik het dan over het zoeken naar een mooi weer foto voor bijvoorbeeld voor een bureaublad-achtergrond.
 
 ### Doel
-Het doel is om makkelijker een geschikte sfeerafbeelding te vinden om deze te gebruiken in een publicatie.
+Het doel van het project is om makkelijker een geschikte sfeerafbeelding te vinden om deze te afbeelding te kunnen gebruiken in een publicatie.
 
 ### Opdracht
-Een digitaal systeem waarmee je alleen kunt zoeken op sfeer op basis van weer. Een digitaal systeem kan een app, web-app of website zijn. 
+Een digitaal systeem waarmee je alleen kunt zoeken op sfeer op basis van weer. Een digitaal systeem kan een app, web-app of website zijn. De opdracht is om een systeem te creëren die zoekt naar foto's waar de gebruiker blij van wordt en gebruikers worden blij van mooi weer (en dat is een aanname).
 
 ### Markt
-Ik weet niet of er markt voor dit product is maar waar ik het voor zou gebruiken is om het zoeken van foto's makkelijker te maken voor een publicatie. Een publicatie kan bijvoorbeeld een blog-post zijn of een foto ter sfeer impressie.
+Ik weet niet of er markt voor dit product is maar waar ik het voor zou gebruiken is om het zoeken van foto's gemakkelijker te maken, voor een publicatie. Een publicatie kan bijvoorbeeld een blog-post zijn of een foto ter sfeerimpressie.
 
-Wat ik niet wil maken is een website waar alle foto's op komen te staan zoals everpix was. Op deze website staat hoe het met Everpix is gegaan: https://github.com/everpix/Everpix-Intelligence
+Wat ik niet wil maken is een website waar alle foto's op komen te staan zoals Everpix was. Op deze website staat hoe het met Everpix is gegaan: https://github.com/everpix/Everpix-Intelligence . Ik richt mij meer op een specifiek onderdeel.
+
+Wat misschien een idee is om een app te maken die gratis is in de app-store. Deze app maakt het dan mogelijk om te zoeken binnen de eigen fotoverzameling. Het is dan mogelijk om meer naamsbekendheid op te bouwen en eventueel wat te verdienen met in-app-purchases. 
 
 ### Op te leveren producten
-n.o.t.k.
+Een uitgewerkt prototype.
 
 ### Eigen visie op het project
-Het project heeft al basis een probleem met een oplossing die in het interaction-design gedeelte moet worden opgelost worden en ik kan met deze opdracht mijn eigen focus leggen zoals ik beschreven heb in de roadmap.
+Het project heeft als basis een probleem met een oplossing die in het interaction-design gedeelte opgelost moet worden en ik kan met deze opdracht mijn eigen focus leggen zoals ik beschreven heb in de roadmap.
 
 ### Budget
-€0,- en de tijd die voor dit project gereserveerd is.
+Met eigen computer, tablet, telefoon en de tijd die voor dit project gereserveerd is.
 
 ### Succesindicatoren
 Het doel van het project is dat ik meer leer over UX en de techniek die nodig is om dit te maken, een ander doel is om werk op mijn portfolio-site te hebben staan dat interessant is binnen mijn gekozen richting. Het project is succesvol waneer het mij lukt om binnen de tijd en kadering een werkend prototype af te leveren.
 
 ### Inschatting Methodieken 
-Er wordt veel informatie verzameld op basis van het weer, deze informatie is vrij opvraagbaar, om deze gegevens te koppelen aan de geo-locatie en dit bij een afbeelding op te slaan wordt het mogelijk om terug te zoeken.
+Het belangrijkste is dat er zo min mogelijk false-positieven uit komen. Zo zoek ik door de meta-data naar de datum het  diafragma en de sluitertijd, en of er geflitst is. In de mooi weer foto is vaak ook veel blauw en groen aanwezig. Een extra categorie is een sneeuwfoto, hier is vaak veel blauw en wit aanwezig
 
+Een oplossing die te moeilijk is voor mij en die ik daarom niet ga uitvoeren is dat: Er wordt veel informatie verzameld op basis van het weer, deze informatie is vrij opvraagbaar. Het moeilijkste is om deze gegevens te koppelen aan de geo-locatie van de foto. Als je deze gegevens gevonden heb kun dit in of bij de foto opslaan. Op deze manier is het mogelijk om deze afbeelding terug te zoeken.
 
-## Plan C (Modulair CMS-systeem):
+## Plan B (Modulair CMS-systeem):
 
 ### Inleiding
-Er bestaan veel CMS-systemen en Wordpress is de bekendste. Wordpress is gemaakt om te bloggen en wanneer je wilt bloggen is het handig om Wordpress te gebruiken. Alleen waar Wordpress niet zo goed in is het maken van een eenvoudige website te makkelijk te bewerken is. Bij een website worden vaak plugins geïnstalleerd die veel mogelijkheden hebben maar door de hoeveelheid mogelijkheden maar niet de gene die de gebruiker wil. 
+Er bestaan veel CMS-systemen en Wordpress is de bekendste. Wordpress is gemaakt om te bloggen en wanneer je wilt bloggen is het handig om Wordpress te gebruiken. Wordpress is niet zo goed in het maken van een eenvoudige website die makkelijk te bewerken is. Bij een websites worden vaak plugins geïnstalleerd die veel mogelijkheden hebben maar door de hoeveelheid mogelijkheden maar niet de gene bieden wat de gebruiker wil. 
 
 ### Probleemstelling
-Te ingewikkeld beheersysteem voor een eenvoudige website waar af en toe wat aangepast moet worden
+Te ingewikkeld beheersysteem voor een eenvoudige website waar af en toe wat aangepast moet worden.
 
 ### Doel
-Makkelijk te beheren met de eenvoud van medium.com een website kunnen beheren.
+Een beheersysteem waarbij de gebruiker met de kracht van eenvoud een website beheren kan. 
 
 ### Opdracht
-Een voorstel maken om een modulair systeem te maken met de gebruiksvriendelijkheid van medium.com
+Een voorstel doen om een modulair systeem te maken met de gebruiksvriendelijkheid van medium.com
 
 ### Markt
-Ik verwacht het systeem te kunnen gebruiken voor kleine systemen die ik zelf kan verkopen, met de nadruk op eenvoud en het modulair kunnen opzetten.
+Ik verwacht het systeem te kunnen gebruiken voor kleine websites welke af en toe gewijzigd worden. Deze websites zou ik dan zelf kunnen verkopen. De nadruk ligt op eenvoud van bewerken en het modulair opzetten van de website. Een goed voorbeeld van een website die goed is in eenvoud is medium.com
+
 
 ### Op te leveren producten
-Een uitgewerkt prototype?
+Een uitgewerkt prototype.
 
 ### Budget
-€0,- en de tijd die voor dit project gereserveerd is.
+Met eigen computer, tablet, telefoon en de tijd die voor dit project gereserveerd is.
 
 ### Succesindicatoren
 Het project is een succes als ik een uitgewerkt prototype kan opleveren en dat ik kan aantonen dat ik veel geleerd heb van dit project. 
@@ -73,25 +77,16 @@ Het project is een succes als ik een uitgewerkt prototype kan opleveren en dat i
 Het CMS-syteem is modulair met de focus op interactie met de gebruiker.
 
 
-## Plan B (Interactie tussen computer en mens):
+## Plan C (Interactie tussen computer en mens):
 
-op afstand besturen, inloggen bekijken zit ik aan te denken maar deze ga ik nog verder invullen.
-
+Dit plan heb ik nog niet uitgewerkt maar ik zit hier te denken aan de interactie tussen mens en computer. Dat er "dingen" in de fysieke wereld gebeuren en in de digitale wereld. Ik heb deze opdracht nog niet ingevuld omdat dit voor mijzelf nog niet duidelijk is.
 
 ### Inleiding
-Een 
 ### Probleemstelling
-
 ### Doel
-
 ### Opdracht
-
 ### Markt
-
 ### Op te leveren producten
-
 ### Budget
-
 ### Succesindicatoren
-
 ### Inschatting Methodieken 
