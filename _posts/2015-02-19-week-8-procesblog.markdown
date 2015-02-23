@@ -14,7 +14,7 @@ In deze blog-post ga ik het hebben over drie voorstellen die ik doe m.b.t. het p
 Wij Nederlanders hebben het altijd over het weer en bij veel mensen hangt de gemoedstoestand af op basis van het weer, dat laatste is een aanname. De sfeer van de foto in een landschapsfoto wordt bepaald door het weer. Het is lastig om voor dit soort foto's een goede zoekopdracht te maken en daardoor zijn ze moeilijk te vinden. Het doel dit project is om een foto te vinden waarbij het mooi weer is.
   
 ### Probleemstelling
-Bij het zoeken naar een geschikte landschapsfoto is het moeilijk om de juiste zoektermen in te voeren die lijden naar het gewenste zoekresultaat. In dit scenario heb ik het dan over het zoeken naar een mooi-weer-foto voor bijvoorbeeld een bureaublad-achtergrond.
+Bij het zoeken naar een geschikte landschapsfoto is het moeilijk om de juiste zoektermen in te voeren die leiden naar het gewenste zoekresultaat. In dit scenario heb ik het dan over het zoeken naar een mooi-weer-foto voor bijvoorbeeld een bureaublad-achtergrond.
 
 ### Doel
 Het doel van het project is om makkelijker een geschikte sfeerafbeelding te vinden om deze te afbeelding te kunnen gebruiken in een publicatie.
