@@ -20,4 +20,6 @@ Het probleem is dat het lastig is om eigen foto's te vinden op basis van kleuren
 
 ## Geo-locatie, fotografie
 
-Helaas was deze pitch onvoldoende overtuigend en voldeed niet aan de gestelde criteria, daarom 
+Helaas was deze pitch onvoldoende overtuigend en voldeed niet aan de gestelde criteria, daarom is het beter om met een nieuw voorstel te komen. Dit voorstel dient te worden ingeleverd voor 4 maart 2015 11:00 (GMT).
+
+
