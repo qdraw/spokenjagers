@@ -31,21 +31,13 @@ Het maken een functioneel ontwerp (fo) waarvoor ik het spel moet gaan prototypen
 Er bestaan wel van dit soort spellen, het populairste spel is Ingres. Ingres is een digitaal landjepik. Het spel moet gratis blijven voor de gebruikers, maar met in-app-aankopen valt er een klein bedrag te verdienen.
 
 ### Op te leveren producten
-Een uitgewerkt functioneel-ontwerp (fo) waarin de functionaliteiten staan uitgelegd. Als toevoeging op het fo ga ik een prototype maken die de basisfuncties demonstreert.
+Een functioneel-ontwerp (fo) waarin de functionaliteiten staan uitgelegd op een toegankelijke manier. Als toevoeging op het fo ga ik een uitgewerkt prototype maken die de basisfuncties demonstreert.
 
 ### Budget
 Er is voor dit project 224 uur gereserveerd. Ik heb een eigen computer die ik kan gebruiken. Een iOS Developer-account van 99 euro per jaar ben ik nog nodig voor het bouwen van het prototype.
 
 ### Succesindicatoren
-Een fo 
-
-
-
-Een uitgewerkt functioneel ontwerp waarin de functies van de app duidelijk zijn
+Het project is een succes wanneer ik door middel van deze app op een leuke manier en onbewuste manier kan bijdragen aan beweging en gezondheid van een brede doelgroep.
 
 ### Inschatting Methodieken 
-Om tot een goed fo te komen
-
-1 doelgroep, concept vormgeving past dg
-meerdere games, eenvoudig
-verbeterde versie
+Om tot een goed fo te komen ga ik eerst prototypes maken en testen. Het uitgewerkte prototype is op basis van het fo. 
