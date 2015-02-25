@@ -3,7 +3,7 @@ title: Procesblog
 email: qdraw@github.com
 description: > # this means to ignore newlines until "baseurl:"
   Procesblog voor de verdieping
-baseurl: "/avans-individueel-verdieping-blok9-10" # the subpath of your site, e.g. /blog/
+baseurl: "/avans-individueel-verdieping-blok11-12" # the subpath of your site, e.g. /blog/
 url: "http://qdraw.github.io" # the base hostname & protocol for your site
 twitter_username: qdrawmedia
 github_username:  qdraw
