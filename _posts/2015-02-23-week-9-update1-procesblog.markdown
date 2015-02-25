@@ -37,6 +37,10 @@ Een uitgewerkt functioneel-ontwerp (fo) waarin de functionaliteiten staan uitgel
 Er is voor dit project 224 uur gereserveerd. Ik heb een eigen computer die ik kan gebruiken. Een iOS Developer-account van 99 euro per jaar ben ik nog nodig voor het bouwen van het prototype.
 
 ### Succesindicatoren
+Een fo 
+
+
+
 Een uitgewerkt functioneel ontwerp waarin de functies van de app duidelijk zijn
 
 ### Inschatting Methodieken 
