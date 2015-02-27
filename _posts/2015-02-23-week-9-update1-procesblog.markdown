@@ -9,12 +9,18 @@ In dit artikel formuleer ik de opdracht:
 ## Deathmatch-locative-game
 
 ### Inleiding
-Ik ga een manier bedenken om buiten nieuwe dingen te ontdekken. Ik ga een app ontwikkelen om de de omgeving interessanter te maken zodat de buurt minder saai wordt.
+Tegenwoordig zien we steeds minder kinderen op straat en juist meer achter de computers. Kinderen moeten op deze leeftijd juist buiten spelen, want dagelijks uren achter de computer zitten is slecht voor de ontwikkeling. Bijvoorbeeld: Meer dan de helft van de kinderen in Nederland is te motiveren om vaker buiten te spelen als hun buurt minder saai zou zijn, aldus Jantje Beton.
 
 ### Probleemstelling
-Buiten wordt er te weinig ontdekt, waardoor men de omgeving als saai ervaart. Bijvoorbeeld: Meer dan de helft van de kinderen in Nederland is te motiveren om vaker buiten te spelen als hun buurt minder saai zou zijn, aldus Jantje Beton. 
+Buiten wordt er te weinig ontdekt, waardoor men de omgeving als saai ervaart.
 
-### Doel
+### Doelstelling
+Ik ga een app bedenken om buiten nieuwe dingen te ontdekken. Door deze app wordt de omgeving interessanter gemaakt, zodat de buurt minder saai wordt.
+
+### Opdracht
+Het maken een functioneel ontwerp (fo) waarvoor ik het spel moet gaan prototypen, ontwerpen, testen voordat ik dit ontwerp kan gaan uitwerken. Mijn leerdoel is om meer te leren over Interaction Design en dit praktisch toe te passen in het fo. In het fo bewijs ik mijn ontwerp-vaardigheden.
+
+### Potentiële uitwerking
 Er zijn twee team's in de Deathmatch-locative-game die tegen elkaar strijden in de fysieke wereld door gebruik te maken van een mobiele telefoon met internet. 
 
 Er zijn verschillende manieren om dit spel uit te werken:
@@ -22,9 +28,6 @@ Er zijn verschillende manieren om dit spel uit te werken:
 1) Door op de telefoon een mogelijkheid te bieden om een persoon uit te schakelen binnen 5 meter. Er moet hierbij wel rekening worden gehouden met dat er een limiet op het aantal kills achter elkaar moet zijn zodat campen wordt bestreden.
 2) Er is fysiek een nummer op de rug van de persoon aanwezig. Wanneer het nummer wordt ingegeven in de telefoon wordt de persoon uitgeschakeld. 
 3) Aan de hand van de foto's, welke doorgestuurd worden kan de moderator beslissen of de persoon af is. 
-
-### Opdracht
-Het maken een functioneel ontwerp (fo) waarvoor ik het spel moet gaan prototypen, ontwerpen, testen voordat ik dit ontwerp kan gaan uitwerken. Mijn leerdoel is om meer te leren over Interaction Design en dit praktisch toe te passen in het fo. In het fo bewijs ik mijn ontwerp-vaardigheden.
 
 ### Markt
 Er bestaan wel van dit soort spelen, het populairste spel is Ingres. Ingres is een digitaal landjepik. Het spel moet gratis blijven voor de gebruikers, maar door extra's in het spel valt er een klein bedrag te verdienen d.m.v. in in-app-purchases.
