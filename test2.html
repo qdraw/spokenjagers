@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>qqqqqqq</title>
+	<meta charset="utf-8" />
+
+	    <script src="/socket.io/socket.io.js"></script>
+
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+</head>
+<body>
+
+
+
+
+
+
+	<div id="map" style="width: 600px; height: 400px"></div>
+
+
+
+
+
+    <div id="date"></div>
+    <p><button onclick="geoFindMe()">Show my location</button></p>
+
+    <div id="geo"></div>
+	
+
+
+
+
+
+
+
+
+
+
+
+	<script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+    <script type="text/javascript" src="js/md5.js"></script>
+    <script type="text/javascript" src="js/requestAnimationFrame.js"></script>
+
+
+	<script type="text/javascript">
+
+var socket = io.connect();
+
+var plugins = "";
+for (var i = 0; i < navigator.plugins.length; i++) {
+	plugins = plugins + navigator.plugins[i].description;
+};
+
+var userid = calcMD4(String(navigator.userAgent)  + String(plugins));
+
+console.log(userid);
+
+
+// Server time
+socket.on('date', function(data){
+	document.getElementById("date").innerHTML = data.date;
+});
+
+// geoFindMe();
+
+function geoFindMe() {
+  var output = document.getElementById("geo");
+
+  if (!navigator.geolocation){
+    output.innerHTML = "<p>Geolocation is not supported by your browser</p>";
+    return;
+  }
+
+  function success(position) {
+    
+    var latitude  = position.coords.latitude;
+    var longitude = position.coords.longitude;
+
+
+	var map = L.map('map').setView([latitude, longitude], 13);
+
+	L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
+		maxZoom: 18,
+		attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+			'<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+			'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+		id: 'examples.map-i875mjb7'
+	}).addTo(map);  	
+
+
+
+
+    try {
+    	output.innerHTML = '<p>Latitude is ' + latitude + ' deg <br/> Longitude is ' + longitude + 'deg </p>';
+    }catch(e) {
+    }
+
+    updateGeoLocation();
+
+  };
+
+  function error() {
+    output.innerHTML = "Unable to retrieve your location";
+  };
+
+  	// show user scrolling sun
+	navigator.geolocation.getCurrentPosition(success, error);
+}
+
+
+var serverSend = "";
+var serverSendPrevious = "";
+
+
+function updateGeoLocation () {
+
+	navigator.geolocation.getCurrentPosition(success, error);
+
+	function success(position) {
+
+	    var latitude  = position.coords.latitude;
+	    var longitude = position.coords.longitude;
+
+
+	    serverSend = userid + ";"  + latitude + "," + longitude;
+
+
+	    if (serverSendPrevious != serverSend) {
+	    	console.log(serverSend);
+	   		socket.emit('geo', {'letter': serverSend});
+	   		serverSendPrevious = serverSend;
+	    }
+
+		// var map = L.map('map').setView([latitude, longitude], 18);
+		var map = L.map('map').setView(new L.LatLng(latitude, longitude), 18);
+
+
+		L.marker([latitude, longitude]).addTo(map).bindPopup("<b>Hello world!</b><br />I am a popup.").openPopup();
+
+
+	    requestAnimationFrame(function(z) {
+	    	updateGeoLocation();
+	    });
+	}
+
+	function error() {
+    	output.innerHTML = "Unable to retrieve your location";
+ 	};
+
+
+}
+
+	</script>
+	<script>
+
+		// var map = L.map('map').setView([52.20, 6.144], 13);
+
+		// L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
+		// 	maxZoom: 18,
+		// 	attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+		// 		'<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+		// 		'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+		// 	id: 'examples.map-i875mjb7'
+		// }).addTo(map);
+
+        // var markers = [
+        //     [ -0.1244324, 51.5006728, "Big Ben" ],
+        //     [ -0.119623, 51.503308, "London Eye" ],
+        //     [ -0.1279688, 51.5077286, "Nelson's Column<br><a href=\"https://en.wikipedia.org/wiki/Nelson's_Column\">wp</a>" ] 
+        // ];
+
+
+
+
+
+	function updateMarker (markers) {
+        for (var i=0; i<markers.length; i++) {
+           
+            var lon = markers[i][0];
+            var lat = markers[i][1];
+            var popupText = markers[i][2];
+            var markerLocation = new L.LatLng(lat, lon);
+            var marker = new L.Marker(markerLocation);
+            map.addLayer(marker);
+            marker.bindPopup(popupText);
+        }
+	}
+
+	</script>
+
+
+</body>
+</html>
