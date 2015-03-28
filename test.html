@@ -1,0 +1,160 @@
+<!doctype html>
+<html>
+    <head>
+		<meta charset="UTF-8">
+    	<title>Socket.io Test</title>
+
+    <script src="/socket.io/socket.io.js"></script>
+<!-- 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js"></script>
+ -->  
+
+	</head>
+  	<body>
+
+
+    <script type="text/javascript" src="js/md5.js"></script>
+    <script type="text/javascript" src="js/requestAnimationFrame.js"></script>
+
+    <script>    
+
+
+// https://gist.github.com/paulirish/1579671
+
+
+
+
+
+var socket = io.connect();
+      
+// socket.on('date', function(data){
+// $('#date').text(data.date);
+// });
+
+// $(document).ready(function(){
+// $('#text').keypress(function(e){
+//   socket.emit('client_data', {'letter': String.fromCharCode(e.charCode)});
+// });
+// });
+
+
+var plugins = "";
+for (var i = 0; i < navigator.plugins.length; i++) {
+	plugins = plugins + navigator.plugins[i].description;
+};
+
+var userid = calcMD4(String(navigator.userAgent)  + String(plugins));
+
+console.log(userid);
+
+
+// Server time
+socket.on('date', function(data){
+	document.getElementById("date").innerHTML = data.date;
+});
+
+// geoFindMe();
+
+function geoFindMe() {
+  var output = document.getElementById("geo");
+
+  if (!navigator.geolocation){
+    output.innerHTML = "<p>Geolocation is not supported by your browser</p>";
+    return;
+  }
+
+  function success(position) {
+    var latitude  = position.coords.latitude;
+    var longitude = position.coords.longitude;
+
+    try {
+    	output.innerHTML = '<p>Latitude is ' + latitude + ' deg <br/> Longitude is ' + longitude + 'deg </p>';
+    }catch(e) {
+    }
+
+
+    var img = new Image();
+    img.src = "https://maps.googleapis.com/maps/api/staticmap?center=" + latitude + "," + longitude + "&zoom=10&size=300x300&sensor=false";
+    try {
+    	output.appendChild(img);
+    }catch(e) {
+    }
+
+    updateGeoLocation();
+
+  };
+
+  function error() {
+    output.innerHTML = "Unable to retrieve your location";
+  };
+
+  	// show user scrolling sun
+	navigator.geolocation.getCurrentPosition(success, error);
+}
+
+
+var serverSend = "";
+var serverSendPrevious = "";
+
+
+function updateGeoLocation () {
+
+	navigator.geolocation.getCurrentPosition(success, error);
+
+	function success(position) {
+
+	    var latitude  = position.coords.latitude;
+	    var longitude = position.coords.longitude;
+
+
+	    serverSend = userid + ";"  + latitude + "," + longitude + "\n";
+
+	    if (serverSendPrevious != serverSend) {
+	   		socket.emit('geo', {'letter': serverSend});
+	   		serverSendPrevious = serverSend;
+	    }
+
+
+
+	    if (document.querySelectorAll("#geo img").length === 0 ) {
+		    var img = new Image();
+		    img.src = "https://maps.googleapis.com/maps/api/staticmap?center=" + latitude + "," + longitude + "&zoom=10&size=300x300&sensor=false";
+		    try {
+		    	output.appendChild(img);
+		    }catch(e) {
+		    }
+
+	    } else {
+			document.querySelector("#geo img").src= "https://maps.googleapis.com/maps/api/staticmap?center=" + latitude + "," + longitude + "&zoom=20&size=300x300&sensor=false";
+
+	    }
+
+
+		console.log("https://maps.googleapis.com/maps/api/staticmap?center=" + latitude + "," + longitude + "&zoom=25&size=300x300&sensor=false");
+
+	    requestAnimationFrame(function(z) {
+	    	updateGeoLocation();
+	    });
+	}
+
+	function error() {
+    	output.innerHTML = "Unable to retrieve your location";
+ 	};
+
+
+}
+
+
+    </script>
+
+
+    <div id="date"></div>
+    <p><button onclick="geoFindMe()">Show my location</button></p>
+
+    <div id="geo"></div>
+
+    <textarea id="text"></textarea>
+
+ 
+  </body>
+</html>
