@@ -16,8 +16,7 @@ function handler (request, response) {
 // io.set('log level', 1);
 
 
-io.set('origins', 'http://192.168.1.104:8080/');
-
+io.set('origins', '*:*');
 
 io.sockets.on('connection', function (socket) {
 
