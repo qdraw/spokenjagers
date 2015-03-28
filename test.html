@@ -107,9 +107,10 @@ function updateGeoLocation () {
 	    var longitude = position.coords.longitude;
 
 
-	    serverSend = userid + ";"  + latitude + "," + longitude + "\n";
+	    serverSend = userid + ";"  + latitude + "," + longitude;
 
 	    if (serverSendPrevious != serverSend) {
+	    	console.log(serverSend);
 	   		socket.emit('geo', {'letter': serverSend});
 	   		serverSendPrevious = serverSend;
 	    }
