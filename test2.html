@@ -80,7 +80,7 @@ function geoFindMe() {
     var longitude = position.coords.longitude;
 
 
-	var map = L.map('map').setView([latitude, longitude], 13);
+	var map = L.map('map').setView([latitude, longitude], 18);
 
 	L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
 		maxZoom: 18,
@@ -98,7 +98,7 @@ function geoFindMe() {
     }catch(e) {
     }
 
-    updateGeoLocation();
+    updateGeoLocation(map);
 
   };
 
@@ -115,7 +115,7 @@ var serverSend = "";
 var serverSendPrevious = "";
 
 
-function updateGeoLocation () {
+function updateGeoLocation (map) {
 
 	navigator.geolocation.getCurrentPosition(success, error);
 
@@ -134,15 +134,16 @@ function updateGeoLocation () {
 	   		serverSendPrevious = serverSend;
 	    }
 
+		map.panTo(L.latLng(latitude, longitude));
+
 		// var map = L.map('map').setView([latitude, longitude], 18);
-		var map = L.map('map').setView(new L.LatLng(latitude, longitude), 18);
+		// var map = L.map('map').setView(new L.LatLng(latitude, longitude), 18);
 
-
-		L.marker([latitude, longitude]).addTo(map).bindPopup("<b>Hello world!</b><br />I am a popup.").openPopup();
+		// L.marker([latitude, longitude]).addTo(map).bindPopup("<b>Hello world!</b><br />I am a popup.").openPopup();
 
 
 	    requestAnimationFrame(function(z) {
-	    	updateGeoLocation();
+	    	updateGeoLocation(map);
 	    });
 	}
 
@@ -176,18 +177,18 @@ function updateGeoLocation () {
 
 
 
-	function updateMarker (markers) {
-        for (var i=0; i<markers.length; i++) {
+	// function updateMarker (markers) {
+ //        for (var i=0; i<markers.length; i++) {
            
-            var lon = markers[i][0];
-            var lat = markers[i][1];
-            var popupText = markers[i][2];
-            var markerLocation = new L.LatLng(lat, lon);
-            var marker = new L.Marker(markerLocation);
-            map.addLayer(marker);
-            marker.bindPopup(popupText);
-        }
-	}
+ //            var lon = markers[i][0];
+ //            var lat = markers[i][1];
+ //            var popupText = markers[i][2];
+ //            var markerLocation = new L.LatLng(lat, lon);
+ //            var marker = new L.Marker(markerLocation);
+ //            map.addLayer(marker);
+ //            marker.bindPopup(popupText);
+ //        }
+	// }
 
 	</script>
 
