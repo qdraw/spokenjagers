@@ -18,7 +18,7 @@
 
 
 
-	<div id="map" style="width: 100vh; height: 80vh"></div>
+	<div id="map" style="width: 100vw; height: 80vh"></div>
 
 
 
@@ -123,6 +123,12 @@ function updateGeoLocation (map) {
 
 	    var latitude  = position.coords.latitude;
 	    var longitude = position.coords.longitude;
+
+        try {
+           	output.innerHTML = '<p>Latitude is ' + latitude + ' deg <br/> Longitude is ' + longitude + 'deg </p>';
+        }catch(e) {
+        }
+
 
 
 	    serverSend = userid + ";"  + latitude + "," + longitude;
