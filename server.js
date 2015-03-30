@@ -9,10 +9,15 @@ server = http.createServer(function(req, res){
     // your normal server code
     var path = url.parse(req.url).pathname;
 
+    if (path === "/") {
+    	path = "/index.html"
+    };
+
     fs.readFile(__dirname + path, function(err, data){
         if (err){ 
             return send404(res);
         }
+
         // res.writeHead(200, {'Content-Type': path == '.js' ? 'text/javascript' : 'text/html'});
 
         
@@ -43,8 +48,16 @@ server = http.createServer(function(req, res){
 
 send404 = function(res){
     res.writeHead(404);
-    res.write('404');
-    res.end();
+    fs.readFile(__dirname + "/404.html", function(err, data){
+        if (err){ 
+		    res.write('That page cant be found.');
+		    res.end();
+            return;
+        }
+        res.write(data, 'utf8');
+        res.end();
+
+    });
 };
 
 server.listen(8080);
@@ -55,17 +68,37 @@ var io = require('socket.io').listen(server);
 //turn off debug
 // io.set('log level', 1);
 
+
+
 // define interactions with client
 io.sockets.on('connection', function(socket){
+	var geoData = "q";
+    // //send data to client
+    // setInterval(function(){
+    //     socket.emit('date', {'date': new Date()});
+    // }, 1000);
 
     //send data to client
-    setInterval(function(){
-        socket.emit('date', {'date': new Date()});
-    }, 1000);
+    setInterval(function(geoData){
+        socket.emit('date', {'date': geoData});
+        console.log("hi" + geoData);
+
+        var geoData = "";
+    }, 2000);
 
     //recieve client data
     socket.on('geo', function(data){
-        process.stdout.write(data.letter);
+    	geoData = geoData + "*" + data.letter;
+        // process.stdout.write(data.letter);
+        // process.stdout.write(data.letter);
+
     });
 
+
+
 });
+
+
+
+
+
