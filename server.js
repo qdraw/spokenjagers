@@ -62,7 +62,6 @@ var io = require('socket.io').listen(server);
 // io.set('log level', 1);
 
 var saveData = [];
-
 // define interactions with client
 io.sockets.on('connection', function(socket){
     //recieve client data
@@ -88,8 +87,13 @@ io.sockets.on('connection', function(socket){
 
     // //send data to client
     setInterval(function(){
-        socket.emit('users', saveData);
-        saveData = [];
+        
+        if (saveData.length != 0) {
+            socket.emit('users', saveData);
+            console.log(saveData);
+            saveData = [];
+        };
+
     }, 2000);
 
     // //send data to client

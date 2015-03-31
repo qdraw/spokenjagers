@@ -2,3 +2,18 @@
 	width: 100vw;
 	height: 70vh;
 }
+
+
+#preloader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 58px;
+    height: 58px;
+    background-size: 58px 58px;
+    margin-top: -29px;
+    margin-left: -29px;
+    z-index:-1;
+    
+    background-image: url("../images/preloader.svg");
+}
