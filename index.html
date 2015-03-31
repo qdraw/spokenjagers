@@ -3,215 +3,38 @@
 <head>
 	<title>Q is good for you</title>
 	<meta charset="utf-8" />
-
-	    <script src="/socket.io/socket.io.js"></script>
-
-
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+	<link rel="stylesheet" href="/css/reset.css" />	
+	<link rel="stylesheet" href="/css/leaflet.css" />	
+	<link rel="stylesheet" href="/css/style.css" />	
 </head>
 <body>
 
 
+<div id="map"></div>
+
+<div id="loading">There is something horribly wrong over here</div>
 
 
-
-
-	<div id="map" style="width: 100vw; height: 80vh"></div>
-
-
-
-
-
-    <div id="date"></div>
-    <p><button onclick="geoFindMe()">Show my location</button></p>
-
-    <div id="geo"></div>
-	
-
-
-
-
-
-
-
-
-
-
-
-	<script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
-    <script type="text/javascript" src="js/md5.js"></script>
+	<script type="text/javascript" src="js/leaflet.js"></script>
+    <script type="text/javascript" src="js/md4.js"></script>
     <script type="text/javascript" src="js/requestAnimationFrame.js"></script>
+    <script type="text/javascript" src="js/userid.js"></script>
+    <script type="text/javascript" src="js/mapio.js"></script>
 
-
-	<script type="text/javascript">
-
-var socket = io.connect();
-
-var plugins = "";
-for (var i = 0; i < navigator.plugins.length; i++) {
-	plugins = plugins + navigator.plugins[i].description;
-};
-
-var userid = calcMD4(String(navigator.userAgent)  + String(plugins));
-
-console.log(userid);
-
-
-// Server time
-socket.on('date', function(data){
-	document.getElementById("date").innerHTML = data.date;
-});
-
-// geoFindMe();
-
-function geoFindMe() {
-  var output = document.getElementById("geo");
-
-  if (!navigator.geolocation){
-    output.innerHTML = "<p>Geolocation is not supported by your browser</p>";
-    return;
-  }
-
-  function success(position) {
-    
-    var latitude  = position.coords.latitude;
-    var longitude = position.coords.longitude;
-
-
-	var map = L.map('map').setView([latitude, longitude], 18);
-
-	L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
-		maxZoom: 18,
-		attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
-			'<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-			'Imagery © <a href="http://mapbox.com">Mapbox</a>',
-		id: 'examples.map-i875mjb7'
-	}).addTo(map);  	
-
-
-
-
-    try {
-    	output.innerHTML = '<p>Latitude is ' + latitude + ' deg <br/> Longitude is ' + longitude + 'deg </p>';
-    }catch(e) {
-    }
-
-    updateGeoLocation(map);
-
-  };
-
-  function error() {
-    output.innerHTML = "Unable to retrieve your location";
-  };
-
-  	// show user scrolling sun
-	navigator.geolocation.getCurrentPosition(success, error);
-}
-
-
-var serverSend = "";
-var serverSendPrevious = "";
-
-
-function updateGeoLocation (map) {
-
-	navigator.geolocation.getCurrentPosition(success, error);
-
-	function success(position) {
-
-	    var latitude  = position.coords.latitude;
-	    var longitude = position.coords.longitude;
-
-        try {
-           	output.innerHTML = '<p>Latitude is ' + latitude + ' deg <br/> Longitude is ' + longitude + 'deg </p>';
-        }catch(e) {
-        }
-
-
-
-	    serverSend = userid + ";"  + latitude + "," + longitude;
-
-
-	    if (serverSendPrevious != serverSend) {
-	    	console.log(serverSend);
-	   		socket.emit('geo', {'letter': serverSend});
-	   		serverSendPrevious = serverSend;
-	    }
-
-		map.panTo(L.latLng(latitude, longitude));
-
-		// var map = L.map('map').setView([latitude, longitude], 18);
-		// var map = L.map('map').setView(new L.LatLng(latitude, longitude), 18);
-
-		// L.marker([latitude, longitude]).addTo(map).bindPopup("<b>Hello world!</b><br />I am a popup.").openPopup();
-
-
-	    requestAnimationFrame(function(z) {
-	    	updateGeoLocation(map);
-	    });
-	}
-
-	function error() {
-    	output.innerHTML = "Unable to retrieve your location";
- 	};
-
-
-}
-
-	</script>
-	<script>
-
-		// var map = L.map('map').setView([52.20, 6.144], 13);
-
-		// L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
-		// 	maxZoom: 18,
-		// 	attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
-		// 		'<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-		// 		'Imagery © <a href="http://mapbox.com">Mapbox</a>',
-		// 	id: 'examples.map-i875mjb7'
-		// }).addTo(map);
-
-        // var markers = [
-        //     [ -0.1244324, 51.5006728, "Big Ben" ],
-        //     [ -0.119623, 51.503308, "London Eye" ],
-        //     [ -0.1279688, 51.5077286, "Nelson's Column<br><a href=\"https://en.wikipedia.org/wiki/Nelson's_Column\">wp</a>" ] 
-        // ];
-
-
-
-
-
-	// function updateMarker (markers) {
- //        for (var i=0; i<markers.length; i++) {
-           
- //            var lon = markers[i][0];
- //            var lat = markers[i][1];
- //            var popupText = markers[i][2];
- //            var markerLocation = new L.LatLng(lat, lon);
- //            var marker = new L.Marker(markerLocation);
- //            map.addLayer(marker);
- //            marker.bindPopup(popupText);
- //        }
-	// }
-
-	</script>
 
 <script type="text/javascript">
-	
-
 	// Qdraw.github.io
 
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
     m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
     ga('create', 'UA-34944229-1', {'siteSpeedSampleRate': 100});
     ga('require', 'displayfeatures');
     ga('set', 'forceSSL', true);
-
 </script>
 
 </body>

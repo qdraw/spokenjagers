@@ -15,40 +15,33 @@ server = http.createServer(function(req, res){
 
     fs.readFile(__dirname + path, function(err, data){
         if (err){ 
-            return send404(res);
+            return send404(path,res);
         }
 
         // res.writeHead(200, {'Content-Type': path == '.js' ? 'text/javascript' : 'text/html'});
 
+        if (path.indexOf(".js") >= 0 ) {
+            res.writeHead(200,'text/javascript');
+        };
+        if (path.indexOf(".html") >= 0 ) {
+            res.writeHead(200,'text/html');
+        };
+        if (path.indexOf(".png") >= 0 ) {
+            res.writeHead(200,'image/png');
+        };
+
+        
         
         res.write(data, 'utf8');
         res.end();
     });
 
-    // var path = url.parse(req.url).pathname;
-    // switch (path){
-    //     case '/':
-    //         res.writeHead(200, {'Content-Type': 'text/html'});
-    //         res.write('<h1>Hello! Try the <a href="/test.html">Test page</a></h1>');
-    //         res.end();
-    //         break;
-    //     case '/test.html':
-    //         fs.readFile(__dirname + path, function(err, data){
-    //             if (err){ 
-    //                 return send404(res);
-    //             }
-    //             res.writeHead(200, {'Content-Type': path == 'json.js' ? 'text/javascript' : 'text/html'});
-    //             res.write(data, 'utf8');
-    //             res.end();
-    //         });
-    //     break;
-    //     default: send404(res);
-    // }
 }),
 
-send404 = function(res){
+send404 = function(path,res){
     res.writeHead(404);
     fs.readFile(__dirname + "/404.html", function(err, data){
+        console.log(path);
         if (err){ 
 		    res.write('That page cant be found.');
 		    res.end();
@@ -68,31 +61,47 @@ var io = require('socket.io').listen(server);
 //turn off debug
 // io.set('log level', 1);
 
-
+var saveData = [];
 
 // define interactions with client
 io.sockets.on('connection', function(socket){
-	var geoData = "q";
+    //recieve client data
+    socket.on('data', function(data){
+        procesData(data);
+    });
+
+    
+    function procesData(data) {
+        var addTo = true;
+
+        for (var i = 0; i < saveData.length; i++) {
+            if (saveData[i].userid === data.userid) {
+                addTo = false;
+            };
+        }
+
+        if (addTo) {
+            saveData.push(data);
+        }
+
+    }
+
     // //send data to client
-    // setInterval(function(){
-    //     socket.emit('date', {'date': new Date()});
-    // }, 1000);
-
-    //send data to client
-    setInterval(function(geoData){
-        socket.emit('date', {'date': geoData});
-        console.log("hi" + geoData);
-
-        var geoData = "";
+    setInterval(function(){
+        socket.emit('users', saveData);
+        saveData = [];
     }, 2000);
 
-    //recieve client data
-    socket.on('geo', function(data){
-    	geoData = geoData + "*" + data.letter;
-        // process.stdout.write(data.letter);
+    // //send data to client
+    // setInterval(function(geoData){
+    //     socket.emit('date', {'date': geoData});
+    //     console.log("hi" + geoData);
+            // process.stdout.write(data.letter);
         // process.stdout.write(data.letter);
 
-    });
+    //     var geoData = "";
+    // }, 2000);
+
 
 
 
