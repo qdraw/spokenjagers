@@ -62,6 +62,11 @@ var io = require('socket.io').listen(server);
 // io.set('log level', 1);
 
 var saveData = [];
+var savePreviousData = [];
+
+// array with users active
+var activeUsers = [];
+
 // define interactions with client
 io.sockets.on('connection', function(socket){
     //recieve client data
@@ -71,6 +76,9 @@ io.sockets.on('connection', function(socket){
 
     
     function procesData(data) {
+        
+        activeUsers.push(data.userid)
+
         var addTo = true;
 
         for (var i = 0; i < saveData.length; i++) {
@@ -78,7 +86,6 @@ io.sockets.on('connection', function(socket){
                 addTo = false;
             };
         }
-
         if (addTo) {
             saveData.push(data);
         }
@@ -87,14 +94,43 @@ io.sockets.on('connection', function(socket){
 
     // //send data to client
     setInterval(function(){
+
+        activeUsers = arrayDuplicate(activeUsers);
+
+        if (activeUsers.length != saveData.length) {
+            if (activeUsers.length === savePreviousData.length) {
+                console.log("Caching-test " + activeUsers.length + " " + savePreviousData.length);
+                saveData = savePreviousData;
+            }
+
+
+        };
+        console.log(activeUsers);
+
+
         
         if (saveData.length != 0) {
             socket.emit('users', saveData);
             console.log(saveData);
+
+            savePreviousData = saveData;
             saveData = [];
+
         };
 
     }, 2000);
+
+    setInterval(function(){
+        activeUsers = [];        
+    }, 20000);
+
+
+    // stuur tijd door naar client:
+    setInterval(function(){
+        socket.emit('date', {'date': new Date()});
+    }, 1000);
+
+
 
     // //send data to client
     // setInterval(function(geoData){
@@ -113,5 +149,15 @@ io.sockets.on('connection', function(socket){
 
 
 
+function arrayDuplicate (array) {
 
+    var temp = {};
+    for (var i = 0; i < array.length; i++)
+    temp[array[i]] = true;
+    var r = [];
+    for (var k in temp)
+    r.push(k);
+    return r;
+
+}//e//arrayDuplicate
 

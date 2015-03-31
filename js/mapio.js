@@ -19,7 +19,6 @@ else {
 function findGeoLocation () {
 	navigator.geolocation.getCurrentPosition(success, error);
 
-	var data = "";
 	function success(position) {
 		var latitude  = position.coords.latitude;
 		var longitude = position.coords.longitude;
@@ -35,7 +34,7 @@ function findGeoLocation () {
  	};
 
  	requestAnimationFrame(function(z) {
- 		console.log("findGeoLocation");
+ 		// console.log("findGeoLocation");
  		findGeoLocation();
  	});
 
@@ -101,6 +100,7 @@ socket.on('users', function(users){
 			console.log(Number(users[i].longitude));
 
 		if ( Number(users[i].longitude) != NaN ) {
+
 		};
 		
 		geojson.addData({
@@ -115,7 +115,10 @@ socket.on('users', function(users){
 
 
 
-
+// Server time
+socket.on('date', function(data){
+	document.getElementById("date").innerHTML = data.date;
+});
 
 
 
