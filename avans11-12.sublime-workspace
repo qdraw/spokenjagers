@@ -3,6 +3,142 @@
 	{
 		"selected_items":
 		[
+			[
+				"ar",
+				"article	Tag"
+			],
+			[
+				"mar",
+				"margin-right"
+			],
+			[
+				"ma",
+				"margin-left"
+			],
+			[
+				"el",
+				"else"
+			],
+			[
+				"n",
+				"pointer"
+			],
+			[
+				"fon",
+				"font-weight"
+			],
+			[
+				"bor",
+				"border-bottom"
+			],
+			[
+				"m",
+				"margin-bottom"
+			],
+			[
+				"in",
+				"inline-block"
+			],
+			[
+				"d",
+				"display"
+			],
+			[
+				"tex",
+				"text-align"
+			],
+			[
+				"print",
+				"print_r"
+			],
+			[
+				"prin",
+				"print_r"
+			],
+			[
+				"f",
+				"fun	Function"
+			],
+			[
+				"s",
+				"style"
+			],
+			[
+				"pa",
+				"parentElement"
+			],
+			[
+				"Child",
+				"childElementWidth"
+			],
+			[
+				"q",
+				"querySelectorAll"
+			],
+			[
+				"inn",
+				"innerWidth"
+			],
+			[
+				"wi",
+				"width"
+			],
+			[
+				"l",
+				"length"
+			],
+			[
+				"con",
+				"console"
+			],
+			[
+				"cla",
+				"className"
+			],
+			[
+				"get",
+				"getElementById"
+			],
+			[
+				"t",
+				"top"
+			],
+			[
+				"bac",
+				"background-color"
+			],
+			[
+				"te",
+				"text-decoration"
+			],
+			[
+				"co",
+				"color"
+			],
+			[
+				"bo",
+				"bottom"
+			],
+			[
+				"w",
+				"width"
+			],
+			[
+				"ba",
+				"background-color"
+			],
+			[
+				"end",
+				"endif"
+			],
+			[
+				"cat",
+				"categories"
+			],
+			[
+				"pri",
+				"print_r"
+			]
 		]
 	},
 	"buffers":
@@ -15,12 +151,12 @@
 	"build_varint": "",
 	"command_palette":
 	{
-		"height": 392.0,
+		"height": 0.0,
 		"last_filter": "",
 		"selected_items":
 		[
 		],
-		"width": 392.0
+		"width": 0.0
 	},
 	"console":
 	{
@@ -40,21 +176,46 @@
 	},
 	"file_history":
 	[
-		"/data/web/avans-individueel-verdieping-blok11-12/.gitignore",
-		"/Users/dion/Desktop/com.paragon.ntfs12.refresh.plist",
-		"/Users/dion/Desktop/ntfs12refresh.sh",
-		"/Applications/Sublime Text.app/Contents/MacOS/changelog.txt",
-		"/data/web/Qdraw GeoTool/reverse_geocode_allCountries.py",
-		"/Users/dion/Library/Application Support/Sublime Text 3/Packages/Default/Preferences.sublime-settings",
-		"/Users/dion/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings"
+		"/data/web/qdraw.github.io/blog-thema/page.php",
+		"/data/web/qdraw.github.io/blog-thema/index.php",
+		"/data/web/qdraw.github.io/blog-thema/css/style.css",
+		"/Users/dion/Desktop/test node/app.js",
+		"/Users/dion/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/Users/dion/Desktop/iets verwijnd > geeft ruimte voor iets nieuws",
+		"/data/web/qdraw.github.io/blog-thema/archive.php",
+		"/data/web/qdraw.github.io/blog-thema/category-page.php",
+		"/data/web/qdraw.github.io/blog-thema/search-page.php",
+		"/data/web/qdraw.github.io/blog-thema/category.php",
+		"/data/web/qdraw.github.io/blog-thema/js/scrollmenu.js",
+		"/data/web/qdraw-blog/wp-config.php",
+		"/data/web/qdraw.github.io/.htaccess",
+		"/data/web/qdraw.github.io/blog-thema/footer.php",
+		"/data/web/qdraw.github.io/blog-thema/404.php",
+		"/data/web/qdraw.github.io/blog-thema/js/imagegallery.js",
+		"/data/web/qdraw.github.io/blog-thema/js/imagereplacer.jq.js",
+		"/data/web/qdraw.github.io/blog-thema/tag.php",
+		"/data/web/qdraw.github.io/blog-thema/tag-page.php",
+		"/data/web/qdraw.github.io/blog-thema/single.php",
+		"/data/web/qdraw.github.io/blog-thema/search.php",
+		"/data/web/qdraw.github.io/pages/index.php",
+		"/data/web/qdraw.github.io/blog-thema/author.php",
+		"/Users/dion/Downloads/Extensis.Suitcase.Fusion.6.v17.0.0.MacOSX.Incl.Keymaker-CORE/cr-tg2g0/CORE.NFO",
+		"/Users/dion/Dropbox/DE MONSTERS/temp/Profiles-avanspass/4sf4bgx3.default-1418216507500/bookmarkbackups/bookmarks-2015-01-29_739_5l9r-bmmNoM1eQtzFRxnzg==.jsonlz4",
+		"/Users/dion/Desktop/Wordpress vs statische website/Wordpress vs statische website.nfo",
+		"/private/var/folders/yw/m7d6hmj10kx926kqkbt2sflh0000gn/T/01190964-ffbf-4396-91ef-ed571da55a78/domains/qdraw.nl/public_html/blog/.htaccess",
+		"/data/web/qdraw.github.io/css/style.css",
+		"/data/web/qdraw.github.io/blog-thema/header.php",
+		"/data/web/qdraw.github.io/blog-thema/loop.php",
+		"/Users/dion/.profile",
+		"/Users/dion/.wakeup"
 	],
 	"find":
 	{
-		"height": 35.0
+		"height": 23.0
 	},
 	"find_in_files":
 	{
-		"height": 0.0,
+		"height": 93.0,
 		"where_history":
 		[
 		]
@@ -64,6 +225,63 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"requestAnimationFrame",
+			"h1",
+			"article h1",
+			"article",
+			"none",
+			"hide",
+			"meta",
+			"Redirect",
+			"canonical",
+			"ch",
+			"xmlrpc",
+			"grey",
+			"greyscale",
+			"dataset",
+			"dataset.counter",
+			"navigation-header",
+			"nav-previous",
+			"breadcrumb",
+			"#blog",
+			"input",
+			"breadc",
+			"microdata",
+			"search",
+			"microdata",
+			"media",
+			"img",
+			"bigImagesLink",
+			"960",
+			"cont",
+			"media",
+			"nav",
+			"bigImagesLinkProxy",
+			"b {",
+			"border-bottom",
+			"article",
+			"lightbox",
+			"article ul",
+			".meta",
+			"images",
+			"backgroundimage",
+			"width",
+			"input",
+			"OffsetTop",
+			"goToPosition",
+			"Top",
+			"grey",
+			"red",
+			"200px",
+			"vh",
+			"dede",
+			"trans",
+			"cat",
+			".co",
+			"portfolio",
+			"backgroundAnimationProxy",
+			"RewriteRule ^index\\.php$ - [L]",
+			"mod_rewrite"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -139,12 +357,12 @@
 	},
 	"select_project":
 	{
-		"height": 500.0,
+		"height": 0.0,
 		"last_filter": "",
 		"selected_items":
 		[
 		],
-		"width": 380.0
+		"width": 0.0
 	},
 	"select_symbol":
 	{
