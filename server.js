@@ -21,17 +21,17 @@ server = http.createServer(function(req, res){
         // res.writeHead(200, {'Content-Type': path == '.js' ? 'text/javascript' : 'text/html'});
 
         if (path.indexOf(".js") >= 0 ) {
-            res.writeHead(200,'text/javascript');
+            res.writeHead(200,{'Content-Type':'text/javascript'});
         };
         if (path.indexOf(".html") >= 0 ) {
-            res.writeHead(200,'text/html');
+            res.writeHead(200,{'Content-Type':'text/html'});
         };
         if (path.indexOf(".png") >= 0 ) {
-            res.writeHead(200,'image/png');
+            res.writeHead(200,{'Content-Type':'image/png'});
         };
 
         if (path.indexOf(".css") >= 0 ) {
-            res.writeHead(200,'text/css');
+            res.writeHead(200,{'Content-Type':'text/css'});
         };        
         
         res.write(data, 'utf8');

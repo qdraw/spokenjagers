@@ -1,4 +1,7 @@
 #map {
+	width: 500px;
+	height: 500px;
+
 	width: 100vw;
 	height: 75vh;
 }
