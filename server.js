@@ -30,7 +30,9 @@ server = http.createServer(function(req, res){
             res.writeHead(200,'image/png');
         };
 
-        
+        if (path.indexOf(".css") >= 0 ) {
+            res.writeHead(200,'text/css');
+        };        
         
         res.write(data, 'utf8');
         res.end();
