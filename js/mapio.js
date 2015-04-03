@@ -140,6 +140,11 @@ socket.on('users', function(users){
 	// }
 	// marker.setLatLng([latitude, longitude]).update();
 
+	var userList = "Users: <br />";
+	Object.keys(users).forEach(function(key) {
+		userList = userList + key + "<br />";
+	});
+	document.getElementById("users").innerHTML = userList;
 
 });
 
