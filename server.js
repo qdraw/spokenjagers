@@ -32,7 +32,11 @@ server = http.createServer(function(req, res){
 
         if (path.indexOf(".css") >= 0 ) {
             res.writeHead(200,{'Content-Type':'text/css'});
-        };        
+        };
+        if (path.indexOf(".ico") >= 0 ) {
+            res.writeHead(200,{'Content-Type':'image/x-icon'});
+        };
+
         
         res.write(data, 'utf8');
         res.end();
@@ -60,17 +64,14 @@ server.listen(8080);
 // use socket.io
 var io = require('socket.io').listen(server);
 
-//turn off debug
-// io.set('log level', 1);
 
-var saveData = [];
-var savePreviousData = [];
-
-// array with users active
-var activeUsers = [];
+var db1 = {};
+var db2 = {};
+var db3 = {};
 
 // define interactions with client
 io.sockets.on('connection', function(socket){
+
     //recieve client data
     socket.on('data', function(data){
         procesData(data);
@@ -78,53 +79,53 @@ io.sockets.on('connection', function(socket){
 
     
     function procesData(data) {
-        
-        activeUsers.push(data.userid)
-
-        var addTo = true;
-
-        for (var i = 0; i < saveData.length; i++) {
-            if (saveData[i].userid === data.userid) {
-                addTo = false;
-            };
-        }
-        if (addTo) {
-            saveData.push(data);
-        }
-
+        // console.log(data.userid);  
+        var userid = data.userid;
+        db1[userid] = [ data.latitude, data.longitude ];
     }
 
-    // //send data to client
+
     setInterval(function(){
-
-        activeUsers = arrayDuplicate(activeUsers);
-
-        if (activeUsers.length != saveData.length) {
-            if (activeUsers.length === savePreviousData.length) {
-                console.log("Caching-test " + activeUsers.length + " " + savePreviousData.length);
-                saveData = savePreviousData;
-            }
+        socket.emit('users', db1);
+        console.log(db1);
+    }, 500);
 
 
-        };
-        console.log(activeUsers);
+
+
+
+    // // //send data to client
+    // setInterval(function(){
+
+    //     activeUsers = arrayDuplicate(activeUsers);
+
+    //     if (activeUsers.length != saveData.length) {
+    //         if (activeUsers.length === savePreviousData.length) {
+    //             console.log("Caching-test " + activeUsers.length + " " + savePreviousData.length);
+    //             saveData = savePreviousData;
+    //         }
+
+
+    //     };
+    //     // console.log(activeUsers);
 
 
         
-        if (saveData.length != 0) {
-            socket.emit('users', saveData);
-            console.log(saveData);
+    //     if (saveData.length != 0) {
+    //         socket.emit('users', saveData);
+    //         console.log(saveData);
 
-            savePreviousData = saveData;
-            saveData = [];
+    //         savePreviousData = saveData;
+    //         saveData = [];
 
-        };
+    //     };
 
-    }, 2000);
+    // }, 2000);
 
-    setInterval(function(){
-        activeUsers = [];        
-    }, 20000);
+
+
+
+
 
 
     // stuur tijd door naar client:
@@ -151,15 +152,15 @@ io.sockets.on('connection', function(socket){
 
 
 
-function arrayDuplicate (array) {
+// function arrayDuplicate (array) {
 
-    var temp = {};
-    for (var i = 0; i < array.length; i++)
-    temp[array[i]] = true;
-    var r = [];
-    for (var k in temp)
-    r.push(k);
-    return r;
+//     var temp = {};
+//     for (var i = 0; i < array.length; i++)
+//     temp[array[i]] = true;
+//     var r = [];
+//     for (var k in temp)
+//     r.push(k);
+//     return r;
 
-}//e//arrayDuplicate
+// }//e//arrayDuplicate
 
