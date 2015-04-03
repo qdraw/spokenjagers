@@ -63,11 +63,13 @@ function findGeoLocation () {
 		
 		var latitude  = position.coords.latitude;
 		var longitude = position.coords.longitude;
+		var accuracy = position.coords.accuracy;
 
 		var data = {
 			userid: userid,
 			longitude: longitude,
-			latitude: latitude
+			latitude: latitude,
+			accuracy: accuracy
 		}
 
 		sendToQ(data)
@@ -123,11 +125,13 @@ socket.on('users', function(users){
 
 		// window[key]
 		if (!window[key]) {
-	    	window[key] = L.marker([users[key][0],users[key][1]]).bindPopup(key).addTo(map);
+	    	window[key] = L.marker([users[key][0],users[key][1]]).bindPopup("U: " + key + "    R: " + users[key][2] ).addTo(map);
 		}
 		window[key].setLatLng([users[key][0],users[key][1]]).update();
 
-	    console.log("<", key, users[key], ">");
+
+
+	    // console.log("<", key, users[key], ">");
 
 	});
 
