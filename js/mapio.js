@@ -114,27 +114,27 @@ function sendToQ (data) {
 
 socket.on('users', function(users){
 
-// console.log(users);
+	// console.log(users);
 
 
-// var obj = { first: "John", last: "Doe" };
-// Visit non-inherited enumerable keys
-Object.keys(users).forEach(function(key) {
+	// var obj = { first: "John", last: "Doe" };
+	// Visit non-inherited enumerable keys
+	Object.keys(users).forEach(function(key) {
 
-	// window[key]
-	if (!window[key]) {
-    	window[key] = L.marker([users[key][0],users[key][1]]).bindPopup(key).addTo(map);
-	}
-	window[key].setLatLng([users[key][0],users[key][1]]).update();
+		// window[key]
+		if (!window[key]) {
+	    	window[key] = L.marker([users[key][0],users[key][1]]).bindPopup(key).addTo(map);
+		}
+		window[key].setLatLng([users[key][0],users[key][1]]).update();
 
-    console.log("<", key, users[key], ">");
+	    console.log("<", key, users[key], ">");
 
-});
+	});
 
-// if (!marker) {
-//     marker = L.marker([latitude,longitude]).bindPopup("Ikke  " + userid).addTo(map);
-// }
-// marker.setLatLng([latitude, longitude]).update();
+	// if (!marker) {
+	//     marker = L.marker([latitude,longitude]).bindPopup("Ikke  " + userid).addTo(map);
+	// }
+	// marker.setLatLng([latitude, longitude]).update();
 
 
 });

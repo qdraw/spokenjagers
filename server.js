@@ -65,9 +65,10 @@ server.listen(8080);
 var io = require('socket.io').listen(server);
 
 
+var db0 = {};
 var db1 = {};
 var db2 = {};
-var db3 = {};
+var countToThree = 0;
 
 // define interactions with client
 io.sockets.on('connection', function(socket){
@@ -76,56 +77,44 @@ io.sockets.on('connection', function(socket){
     socket.on('data', function(data){
         procesData(data);
     });
-
     
     function procesData(data) {
         // console.log(data.userid);  
         var userid = data.userid;
-        db1[userid] = [ data.latitude, data.longitude ];
+
+        if (countToThree === 0) {
+            db0[userid] = [ data.latitude, data.longitude];
+        };        
+        if (countToThree === 1) {
+            db1[userid] = [ data.latitude, data.longitude];
+        }; 
+        if (countToThree === 2) {
+            db2[userid] = [ data.latitude, data.longitude];
+        }; 
+
     }
 
-
     setInterval(function(){
-        socket.emit('users', db1);
-        console.log(db1);
+
+        switch (countToThree) {
+            case 0:
+                socket.emit('users', db0);
+                console.log(0);
+                countToThree++;
+                break;
+            case 1:
+                socket.emit('users', db1);
+                console.log(1);
+                countToThree++;
+                break;
+            case 2:
+                socket.emit('users', db2);
+                console.log(2);
+                countToThree=0;
+                break;
+        }
+            
     }, 500);
-
-
-
-
-
-    // // //send data to client
-    // setInterval(function(){
-
-    //     activeUsers = arrayDuplicate(activeUsers);
-
-    //     if (activeUsers.length != saveData.length) {
-    //         if (activeUsers.length === savePreviousData.length) {
-    //             console.log("Caching-test " + activeUsers.length + " " + savePreviousData.length);
-    //             saveData = savePreviousData;
-    //         }
-
-
-    //     };
-    //     // console.log(activeUsers);
-
-
-        
-    //     if (saveData.length != 0) {
-    //         socket.emit('users', saveData);
-    //         console.log(saveData);
-
-    //         savePreviousData = saveData;
-    //         saveData = [];
-
-    //     };
-
-    // }, 2000);
-
-
-
-
-
 
 
     // stuur tijd door naar client:
@@ -134,18 +123,20 @@ io.sockets.on('connection', function(socket){
     }, 1000);
 
 
+    // Error handeling:
+    setInterval(function(){
 
-    // //send data to client
-    // setInterval(function(geoData){
-    //     socket.emit('date', {'date': geoData});
-    //     console.log("hi" + geoData);
-            // process.stdout.write(data.letter);
-        // process.stdout.write(data.letter);
+        // Object.keys(db1).forEach(function(key) {
+        //     console.log(db1, db1[key])
+        // });
 
-    //     var geoData = "";
-    // }, 2000);
+        Object.keys(db1).forEach(function(key) {
+            // console.log(db1, db1[key])
+        });
 
+        // console.log(db1);
 
+    }, 1500);
 
 
 });
@@ -164,3 +155,8 @@ io.sockets.on('connection', function(socket){
 
 // }//e//arrayDuplicate
 
+        // var nowTime = new Date().getTime();
+        // var unixTime = Math.ceil(nowTime/1000);
+        // var microSeconds = nowTime;
+        // var microSeconds = nowTime.toString().substring(unixTime.toString().length, nowTime.toString().length); 
+        // console.log(microSeconds);
