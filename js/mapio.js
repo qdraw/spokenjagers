@@ -148,7 +148,10 @@ socket.on('users', function(users){
 
 // Server time
 socket.on('date', function(data){
-	document.getElementById("date").innerHTML = data.date;
+
+	document.getElementById("timedifference").innerHTML = "Delay in ms: <br /> " + Number(new Date().getTime() - data.date )+ "<br />";
+	document.getElementById("date").innerHTML = "Server time: <br />" + new Date(data.date) + "<br />";
+
 });
 
 

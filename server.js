@@ -69,6 +69,9 @@ var userData = {
     1: {},
     2: {}
 };
+
+var latestConnectionTime = {};
+
 var c = 0;
 
 var isFirstRun = true;
@@ -93,6 +96,8 @@ io.sockets.on('connection', function(socket){
 
         userData[c][userid] = [ data.latitude, data.longitude, data.accuracy];
 
+        latestConnectionTime[userid] = new Date().getTime();
+
         c++;
         if (c===3) c=0;
     }//e/procesData
@@ -113,7 +118,9 @@ io.sockets.on('connection', function(socket){
 
     // stuur tijd door naar client:
     setInterval(function(){
-        socket.emit('date', {'date': new Date()});
+        // socket.emit('date', {'date': new Date()});
+        socket.emit('date', {'date': new Date().getTime()});
+
     }, 1000);
 
     // Error handeling:
@@ -127,13 +134,8 @@ io.sockets.on('connection', function(socket){
 
 
 
-
+            // Incorrect movement correction:
             Object.keys(userData[c]).forEach(function(key) {
-                // console.log(userData[c][key]);
-                // console.log(current[key][0]);
-
-                // console.log(userData[cMinOne][key][0]);
-
                 if ( !(userData[cMinOne][key][0] === undefined) && !(userData[cMinOne][key][1] === undefined) ) {
                     // console.log(userData[c][key]);
                     var diffence = calcCrow(userData[c][key][0], userData[c][key][1], userData[cMinOne][key][0], userData[cMinOne][key][1]);
@@ -142,49 +144,12 @@ io.sockets.on('connection', function(socket){
                     var diffence = 0;
                 }
 
-                // if (Number(diffence) > 0.001) {
-                //     console.log("diffence " + diffence);
-                // }
-
                 if (Number(diffence) > 0.01) {
                     userData[c][key][0] = userData[cMinOne][key][0];
                     userData[c][key][1] = userData[cMinOne][key][1];
                     console.log("c " + c + " " + diffence);
                 };
-
-
-
             });
-
-            // console.log("c- "+ cMinOne);
-
-            // console.log("c  "+ c);
-
-
-            // console.log(typeof userData[c-1]);
-
-
-
-
-
-            // // console.log(userData);
-
-            // var current = userData[c];
-
-            // if (c===0) {
-            //     // console.log(userData[2]);
-            //     var minusOne = userData[2];
-            // } else {
-            //     // console.log(userData[c-1]);
-            //     var minusOne = userData[c-1];
-            // }
-
-
-
-
-
-
-
 
         }; 
 
@@ -192,7 +157,38 @@ io.sockets.on('connection', function(socket){
     }, 200);
 
 
+    // Kill Bill function
+    setInterval(function(){
+
+
+        Object.keys(latestConnectionTime).forEach(function(key) {
+
+            var diffence = new Date().getTime() - latestConnectionTime[key]
+
+            console.log(diffence);
+            if (diffence > 10000) {
+
+            userData[0][key] = [ 0, 0, 999999];
+            userData[1][key] = [ 0, 0, 999999];
+            userData[2][key] = [ 0, 0, 999999];
+
+            };
+
+        });
+
+
+    }, 5000);
+
+
 });
+
+
+
+
+
+
+
+
 
 
 
