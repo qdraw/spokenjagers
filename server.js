@@ -36,6 +36,10 @@ server = http.createServer(function(req, res){
         if (path.indexOf(".ico") >= 0 ) {
             res.writeHead(200,{'Content-Type':'image/x-icon'});
         };
+        if (path.indexOf(".svg") >= 0 ) {
+            res.writeHead(200,{'Content-Type':'image/svg+xml'});
+        };
+
 
         
         res.write(data, 'utf8');
@@ -132,22 +136,26 @@ io.sockets.on('connection', function(socket){
             var cMinOne = c-1
             if ( cMinOne === -1) cMinOne=2;
 
-
-
             // Incorrect movement correction:
             Object.keys(userData[c]).forEach(function(key) {
-                if ( !(userData[cMinOne][key][0] === undefined) && !(userData[cMinOne][key][1] === undefined) ) {
-                    // console.log(userData[c][key]);
+
+                try {
                     var diffence = calcCrow(userData[c][key][0], userData[c][key][1], userData[cMinOne][key][0], userData[cMinOne][key][1]);
                 }
-                else {
-                    var diffence = 0;
+                catch(e) {
+                    console.log(e);
+                    var diffence = "9999";
                 }
 
                 if (Number(diffence) > 0.01) {
-                    userData[c][key][0] = userData[cMinOne][key][0];
-                    userData[c][key][1] = userData[cMinOne][key][1];
-                    console.log("c " + c + " " + diffence);
+                    try {
+                        userData[c][key][0] = userData[cMinOne][key][0];
+                        userData[c][key][1] = userData[cMinOne][key][1];
+                        console.log("c " + c + " " + diffence);
+                    }
+                    catch(e) {
+                        console.log(e);
+                    }
                 };
             });
 
@@ -165,8 +173,8 @@ io.sockets.on('connection', function(socket){
 
             var diffence = new Date().getTime() - latestConnectionTime[key]
 
-            console.log(diffence);
             if (diffence > 10000) {
+                console.log(key + " " + diffence);
 
             userData[0][key] = [ 0, 0, 999999];
             userData[1][key] = [ 0, 0, 999999];

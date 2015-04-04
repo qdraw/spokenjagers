@@ -3,9 +3,30 @@
 	height: 500px;
 
 	width: 100vw;
-	height: 75vh;
+	height: 100vh;
 }
 
+#debug {
+	position: absolute;
+	bottom: 0px;
+	left: 0px;
+	color: white;
+}
+
+#update {
+	position: absolute;
+	bottom: 20px;
+	right: 10px;
+	height: 50px;
+	width: 50px;
+	background-image: url("../images/geopointer.svg");
+	background-size: cover;
+	cursor:pointer;
+}
+
+.hide {
+	display: none;
+}
 
 #preloader {
     position: absolute;

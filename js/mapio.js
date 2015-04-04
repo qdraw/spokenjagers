@@ -10,10 +10,10 @@ console.log(userid);
 
 // var mapId = document.getElementById("map");
 
-var map = L.map('map').setView([51, 5.1], 18);
+var map = L.map('map').setView([51, 5.1], 19);
 
 L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
-	maxZoom: 18,
+	maxZoom: 19,
 	// attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
 	// 	'<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
 	// 	'Imagery © <a href="http://mapbox.com">Mapbox</a>',
@@ -60,7 +60,7 @@ function findGeoLocation () {
     }
 
 	function success(position) {
-		
+
 		var latitude  = position.coords.latitude;
 		var longitude = position.coords.longitude;
 		var accuracy = position.coords.accuracy;
@@ -111,6 +111,31 @@ function sendToQ (data) {
 // }).addTo(map);
 
 
+var blackIcon = L.icon({
+    iconUrl: 'images/fa-map-marker.svg',
+    shadowUrl: 'js/images/marker-shadow.png',
+
+    iconSize:     [50, 50], // size of the icon
+    shadowSize:   [50, 50], // size of the shadow
+    iconAnchor:   [25, 50], // point of the icon which will correspond to marker's location
+    shadowAnchor: [15, 55],  // the same for the shadow
+    popupAnchor:  [0, -50] // point from which the popup should open relative to the iconAnchor
+});
+
+
+var blueIcon = L.icon({
+    iconUrl: 'images/fa-map-marker-blue.svg',
+    shadowUrl: 'js/images/marker-shadow.png',
+
+    iconSize:     [50, 50], // size of the icon
+    shadowSize:   [50, 50], // size of the shadow
+    iconAnchor:   [25, 50], // point of the icon which will correspond to marker's location
+    shadowAnchor: [15, 55],  // the same for the shadow
+    popupAnchor:  [0, -50] // point from which the popup should open relative to the iconAnchor
+});
+
+var YouCircle = 0;
+
 function startSocket () {
 
 	socket.on('users', function(users){
@@ -124,7 +149,15 @@ function startSocket () {
 
 			// window[key]
 			if (!window[key]) {
-		    	window[key] = L.marker([users[key][0],users[key][1]]).bindPopup("U: " + key + "    R: " + users[key][2] ).addTo(map);
+
+				if (userid === key) {
+			    	window[key] = L.marker([users[key][0],users[key][1]],{icon: blackIcon}).bindPopup("U: " + key + "    R: " + users[key][2] ).addTo(map);
+				}
+				else {
+			    	window[key] = L.marker([users[key][0],users[key][1]],{icon: blueIcon}).bindPopup("U: " + key + "    R: " + users[key][2] ).addTo(map);
+			    	// window[key] = L.marker([users[key][0],users[key][1]]).bindPopup("U: " + key + "    R: " + users[key][2] ).addTo(map);
+				}
+
 			}
 			window[key].setLatLng([users[key][0],users[key][1]]).update();
 
@@ -133,6 +166,26 @@ function startSocket () {
 		    // console.log("<", key, users[key], ">");
 
 		});
+
+
+
+		Object.keys(users).forEach(function(key) {
+
+			if ((userid === key)&& (YouCircle === 0)) {
+				YouCircle = L.circle([users[key][0],users[key][1]],20 ).addTo(map);
+			}
+			if ((userid === key) && (YouCircle != 0)) {
+				map.removeLayer(YouCircle);
+				YouCircle = L.circle([users[key][0],users[key][1]],20 ).addTo(map);
+			}
+
+		});
+
+
+
+
+
+
 
 		// if (!marker) {
 		//     marker = L.marker([latitude,longitude]).bindPopup("Ikke  " + userid).addTo(map);
@@ -152,14 +205,31 @@ function startSocket () {
 startSocket();
 
 
-
 // Server time
+var date = 0;
 socket.on('date', function(data){
-
-	document.getElementById("timedifference").innerHTML = "Delay in ms: <br /> " + Number(new Date().getTime() - data.date )+ "<br />";
-	document.getElementById("date").innerHTML = "Server time: <br />" + new Date(data.date) + "<br />";
-
+	date = data.date;
 });
+
+setInterval(function(){
+	var delay = Number(new Date().getTime() - date);
+	if ((delay > 10001) &&(delay < 15001)) {
+		alert("you've lost the connection for 10 seconds");
+	};
+}, 5000);
+
+// debug showing
+setInterval(function(){
+	document.getElementById("timedifference").innerHTML = "Delay in ms: <br /> " + Number(new Date().getTime() - date )+ "<br />";
+	
+	var myDate = new Date(date).toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
+	document.getElementById("date").innerHTML = "Server time: <br />" + myDate + "<br />";
+
+ }, 1000);
+
+
+//update button
+document.getElementById("update").addEventListener("click", FirstFindGeoLocation, false);
 
 
 

@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8" />
 	<title>Q is good for you</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
 
     <script type="text/javascript" src="/socket.io/socket.io.js"></script>
 	<link rel="stylesheet" href="/css/reset.css" />	
@@ -13,17 +13,21 @@
 </head>
 <body>
 
+<div id="map"><h1>There is something horribly wrong over here</h1></div>
 
-<div id="map"></div>
+<div id="debug">
+	<div id="timedifference"></div>
+	<div id="date"></div>
+</div>
 
-<div id="timedifference"></div>
-
-<div id="date"></div>
-
-<div id="users"></div>
+<div id="update">
+</div>
 
 
-<div id="preloader">There is something horribly wrong over here</div>
+<div id="users" class="hide"></div>
+
+
+<div id="preloader"></div>
 
 
 	<script type="text/javascript" src="js/leaflet.js"></script>
