@@ -111,43 +111,45 @@ function sendToQ (data) {
 // }).addTo(map);
 
 
+function startSocket () {
+
+	socket.on('users', function(users){
+
+		// console.log(users);
+
+
+		// var obj = { first: "John", last: "Doe" };
+		// Visit non-inherited enumerable keys
+		Object.keys(users).forEach(function(key) {
+
+			// window[key]
+			if (!window[key]) {
+		    	window[key] = L.marker([users[key][0],users[key][1]]).bindPopup("U: " + key + "    R: " + users[key][2] ).addTo(map);
+			}
+			window[key].setLatLng([users[key][0],users[key][1]]).update();
 
 
 
-socket.on('users', function(users){
+		    // console.log("<", key, users[key], ">");
 
-	// console.log(users);
+		});
 
+		// if (!marker) {
+		//     marker = L.marker([latitude,longitude]).bindPopup("Ikke  " + userid).addTo(map);
+		// }
+		// marker.setLatLng([latitude, longitude]).update();
 
-	// var obj = { first: "John", last: "Doe" };
-	// Visit non-inherited enumerable keys
-	Object.keys(users).forEach(function(key) {
-
-		// window[key]
-		if (!window[key]) {
-	    	window[key] = L.marker([users[key][0],users[key][1]]).bindPopup("U: " + key + "    R: " + users[key][2] ).addTo(map);
-		}
-		window[key].setLatLng([users[key][0],users[key][1]]).update();
-
-
-
-	    // console.log("<", key, users[key], ">");
+		var userList = "Users: <br />";
+		Object.keys(users).forEach(function(key) {
+			userList = userList + key + "<br />";
+		});
+		document.getElementById("users").innerHTML = userList;
 
 	});
 
-	// if (!marker) {
-	//     marker = L.marker([latitude,longitude]).bindPopup("Ikke  " + userid).addTo(map);
-	// }
-	// marker.setLatLng([latitude, longitude]).update();
+}//e/sS
 
-	var userList = "Users: <br />";
-	Object.keys(users).forEach(function(key) {
-		userList = userList + key + "<br />";
-	});
-	document.getElementById("users").innerHTML = userList;
-
-});
-
+startSocket();
 
 
 
