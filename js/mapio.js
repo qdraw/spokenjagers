@@ -32,6 +32,7 @@ else {
 
 
 function FirstFindGeoLocation () {
+
 	navigator.geolocation.getCurrentPosition(success, error);
 	function success(position) {
 		var latitude  = position.coords.latitude;
@@ -134,7 +135,20 @@ var blueIcon = L.icon({
     popupAnchor:  [0, -50] // point from which the popup should open relative to the iconAnchor
 });
 
+var whiteIcon = L.icon({
+    iconUrl: 'images/fa-map-marker-white.svg',
+    shadowUrl: 'js/images/marker-shadow.png',
+
+    iconSize:     [50, 50], // size of the icon
+    shadowSize:   [50, 50], // size of the shadow
+    iconAnchor:   [25, 50], // point of the icon which will correspond to marker's location
+    shadowAnchor: [15, 55],  // the same for the shadow
+    popupAnchor:  [0, -50] // point from which the popup should open relative to the iconAnchor
+});
+
 var YouCircle = 0;
+
+var users = {};
 
 function startSocket () {
 
@@ -198,6 +212,7 @@ function startSocket () {
 		});
 		document.getElementById("users").innerHTML = userList;
 
+
 	});
 
 }//e/sS
@@ -228,8 +243,78 @@ setInterval(function(){
  }, 1000);
 
 
-//update button
-document.getElementById("update").addEventListener("click", FirstFindGeoLocation, false);
+
+
+
+
+
+
+
+
+
+
+
+
+// map.on("zoomstart", function (e) { console.log("ZOOMEND", e); });
+
+// map.on("zoomend", function (e) { 
+// 	console.log("ZOOMSTART", e.target._zoom); 
+
+// 	console.log(map.getBounds()._southWest.lat);
+// 	console.log(map.getBounds()._southWest.lng);
+
+// 	if (!window["_southWest"]) {
+//     	window["_southWest"] = L.marker(map.getBounds()._southWest,{icon: blackIcon}).addTo(map);
+// 	}
+// 	window["_southWest"].setLatLng(map.getBounds()._southWest).update();
+
+
+
+// });
+
+
+socket.on('opponent', function(opponent){
+
+	Object.keys(opponent).forEach(function(key) {
+
+		if (!window[key]) {
+	    	window[key] = L.marker([opponent[key][0],opponent[key][1]],{icon: whiteIcon}).bindPopup( key ).addTo(map);
+		}
+		window[key].setLatLng([opponent[key][0],opponent[key][1]]).update();
+
+	});
+}); //e/oppo
+
+
+
+
+
+socket.on('outbound', function(outbound){
+
+	Object.keys(outbound).forEach(function(key) {
+
+		if (!window[key]) {
+	    	window[key] = L.marker([outbound[key][0],outbound[key][1]],{icon: whiteIcon}).bindPopup("outbound " + key ).addTo(map);
+		}
+		window[key].setLatLng([outbound[key][0],outbound[key][1]]).update();
+
+	});
+}); //e/outbound
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
