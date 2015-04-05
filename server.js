@@ -80,6 +80,10 @@ var c = 0;
 
 var isFirstRun = true;
 
+var isStartedOpponent = false;
+var opponent = {}  
+
+
 // define interactions with client
 io.sockets.on('connection', function(socket){
 
@@ -193,7 +197,7 @@ io.sockets.on('connection', function(socket){
 
 
     // opponent
-    var opponent = {}  
+    // var opponent = {}  
 
     Array.prototype.max = function () {
         return Math.max.apply(Math, this);
@@ -296,7 +300,6 @@ io.sockets.on('connection', function(socket){
 
 
 
-    var isStarted = false;
     function startOpponent() {
 
         var theCanvas = getCanvas();
@@ -311,11 +314,13 @@ io.sockets.on('connection', function(socket){
 
             var longmax = theCanvas[1][1];
 
-            for (var i = 0; i < 10; i++) {
-               opponent["opponent_" + i] = [getRandomArbitrary(latmin-0.0007, latmax+0.0007),getRandomArbitrary(longmin-0.0007, longmax+0.0007)];
+            for (var i = 0; i < 5; i++) {
+                opponent["opponent_" + i] = [getRandomArbitrary(latmin-0.0007, latmax+0.0007),getRandomArbitrary(longmin-0.0007, longmax+0.0007)];
+                console.log(getRandomArbitrary(latmin-0.0007, latmax+0.0007),getRandomArbitrary(longmin-0.0007, longmax+0.0007));
             };
+                console.log("-")
 
-            isStarted = true;
+            isStartedOpponent = true;
 
         };
 
@@ -327,8 +332,10 @@ io.sockets.on('connection', function(socket){
 
         socket.emit('outbound', outbound);
         
-        if (isStarted === false) {
+        if (isStartedOpponent === false) {
             startOpponent();
+                console.log("-")
+
         };
 
         socket.emit('opponent', opponent);
@@ -336,45 +343,40 @@ io.sockets.on('connection', function(socket){
     }, 1000);
 
 
-    // setInterval(function(){
+    setInterval(function(){
 
-    //     microSeconds = calcMicroSeconds();
-    //     if ((microSeconds > 0 && microSeconds < 201) ) {
+        microSeconds = calcMicroSeconds();
+        if ((microSeconds > 0 && microSeconds < 201) ) {
 
-    //         var edit = getRandomInt(0, 1);
+            var edit = getRandomInt(0, 1);
 
-    //         if (isStarted) {
-
-
-    //             for (var i = 0; i < 10; i++) {
-
-    //             };
+            if (isStartedOpponent) {
 
 
-    //             for (var i = 0; i < 10; i++) {
-    //                 // opponent["opponent_" + i][edit] =  Number(opponent["opponent_" + i][edit] + getRandomArbitrary(-0.000057, +0.000057));
+                for (var i = 0; i < 10; i++) {
+                    opponent["opponent_" + i][edit] =  Number(opponent["opponent_" + i][edit] + getRandomArbitrary(-0.000057, +0.000057));
 
-    //             };
+                };
 
-    //         };
+            };
 
 
 
-    //         // opponent["test2"][edit] =  Number(opponent["test2"][edit] + getRandomArbitrary(-0.000057, +0.000057));
+            // opponent["test2"][edit] =  Number(opponent["test2"][edit] + getRandomArbitrary(-0.000057, +0.000057));
 
 
 
 
 
-    //         // Object { name [ 52.2287453    6.0956636 , 83] }
+            // Object { name [ 52.2287453    6.0956636 , 83] }
 
-    //         socket.emit('opponent', opponent);
-
-
-    //     }; 
+            socket.emit('opponent', opponent);
 
 
-    // }, 200);
+        }; 
+
+
+    }, 200);
 
 
 });
