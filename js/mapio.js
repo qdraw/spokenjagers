@@ -166,6 +166,7 @@ function startSocket () {
 
 				if (userid === key) {
 			    	window[key] = L.marker([users[key][0],users[key][1]],{icon: blackIcon}).bindPopup("U: " + key + "    R: " + users[key][2] ).addTo(map);
+					
 				}
 				else {
 			    	window[key] = L.marker([users[key][0],users[key][1]],{icon: blueIcon}).bindPopup("U: " + key + "    R: " + users[key][2] ).addTo(map);
@@ -211,6 +212,7 @@ function startSocket () {
 			userList = userList + key + "<br />";
 		});
 		document.getElementById("users").innerHTML = userList;
+
 
 
 	});
@@ -278,7 +280,8 @@ socket.on('opponent', function(opponent){
 	Object.keys(opponent).forEach(function(key) {
 
 		if (!window[key]) {
-	    	window[key] = L.marker([opponent[key][0],opponent[key][1]],{icon: whiteIcon}).bindPopup( key ).addTo(map);
+	    	window[key] = L.marker([opponent[key][0],opponent[key][1]],{icon: whiteIcon}).addTo(map);
+	    	// window[key] = L.marker([opponent[key][0],opponent[key][1]],{icon: whiteIcon}).bindPopup( key ).addTo(map);
 		}
 		window[key].setLatLng([opponent[key][0],opponent[key][1]]).update();
 
@@ -304,15 +307,25 @@ socket.on('outbound', function(outbound){
 
 
 
+map.on('click', onMapClick);
+
+function onMapClick(e) {
+	// console.log(e.latlng);
+	socket.emit('shoot', e.latlng);
+}
 
 
 
 
 
 
+socket.on('score', function(score){
+	console.log("run");
+	console.log(score["score"]);
 
+		document.getElementById("score").innerHTML = score["score"];
 
-
+}); //e/score
 
 
 

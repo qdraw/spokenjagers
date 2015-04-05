@@ -24,6 +24,17 @@
 	cursor:pointer;
 }
 
+
+#score {
+	position: absolute;
+	bottom: 20px;
+	right: 10px;
+	height: 50px;
+	width: 50px;
+	font-size: 30pt;
+	color: white;
+}
+
 #fullscreen {
 	position: absolute;
 	bottom: 80px;

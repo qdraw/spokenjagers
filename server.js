@@ -80,7 +80,6 @@ var c = 0;
 
 var isFirstRun = true;
 
-
 // define interactions with client
 io.sockets.on('connection', function(socket){
 
@@ -91,11 +90,12 @@ io.sockets.on('connection', function(socket){
     
     function procesData(data) {
         var userid = data.userid;
+        global["userid"] = data.userid;
 
         if (isFirstRun) {
             userData[0][userid] = [ data.latitude, data.longitude, data.accuracy];
             userData[1][userid] = [ data.latitude, data.longitude, data.accuracy];
-            userData[2][userid] = [ data.latitude, data.longitude, data.accuracy];
+            // userData[2][userid] = [ data.latitude, data.longitude, data.accuracy];
             isFirstRun = false;
         };
 
@@ -177,9 +177,9 @@ io.sockets.on('connection', function(socket){
             if (diffence > 10000) {
                 console.log(key + " " + diffence);
 
-            userData[0][key] = [ 0, 0, 999999];
-            userData[1][key] = [ 0, 0, 999999];
-            userData[2][key] = [ 0, 0, 999999];
+            userData[0][key] = [ 0, 0];
+            userData[1][key] = [ 0, 0];
+            userData[2][key] = [ 0, 0];
 
             };
 
@@ -383,6 +383,85 @@ io.sockets.on('connection', function(socket){
 
     }, 1000);
 
+
+    socket.on('shoot', function(shoot){
+        console.log(shoot);
+
+            var opponentHit = -9999;
+            for (var i = 0; i < 5; i++) {
+
+                var minLat = shoot.lat - 0.0001;
+                var maxLat = shoot.lat + 0.0001;
+
+                var minLng = shoot.lng - 0.0001;
+                var maxLng = shoot.lng + 0.0001;
+
+                var posLat = global["opponent"]["opponent_" + i][0];
+                var posLng = global["opponent"]["opponent_" + i][1];
+
+                if ( (minLat  < posLat )&& (maxLat  > posLat  ) && (minLng  < posLng )&& ( maxLng  > posLng )  ) {
+                    console.log("you hit marker!!" + i);
+                    opponentHit = i;
+                };
+
+                var posLat;
+                var posLng;
+
+            };
+
+
+            var userid = global["userid"];
+
+            var minLat = shoot.lat - 0.00019;
+            var maxLat = shoot.lat + 0.00019;
+
+            var minLng = shoot.lng - 0.00019;
+            var maxLng = shoot.lng + 0.00019;
+
+            try {
+                var posLat = userData[c][userid][0];
+                var posLng = userData[c][userid][1];                    
+            }
+            catch(e) {
+                var posLat = 0;    
+                var posLng = 0;    
+            }
+
+
+
+            if ( (minLat  < posLat )&& (maxLat  > posLat  ) && (minLng  < posLng )&& ( maxLng  > posLng )  ) {
+                // console.log("hit bleubox");
+            }
+            else {
+                opponentHit = -9999;
+            }
+
+            var posLat;
+            var posLng;
+
+
+            if (opponentHit > 0) {
+                console.log(opponentHit);
+
+                console.log(global["score"][userid])
+
+                if (global["score"][userid] === undefined) {
+                    global["score"][userid] = 0;
+                };
+
+                global["score"][userid] = Number(global["score"][userid] + 1);
+
+                socket.emit('score', {"score": global["score"][userid]});
+
+                opponentHit = -9999;
+
+            };
+
+
+
+
+    });///e/shoot
+
 });
 
 
@@ -392,12 +471,14 @@ global["opponent"] = {};
 startOpponent();
 function startOpponent() {
     for (var i = 0; i < 5; i++) {
-        global["opponent"]["opponent_" + i] = [0,0];
+                                            // xy, score
+        global["opponent"]["opponent_" + i] = [0,0,10];
     };
 }//e/startOpponent
 
 
 
+global["score"] = {};
 
 
 
