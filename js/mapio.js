@@ -42,9 +42,7 @@ function FirstFindGeoLocation () {
 	function error() {
     	map.innerHTML = "Unable to retrieve your location";
  	};	
-
  	findGeoLocation();
-
 }
 
 var interval = 2; //frames per second
@@ -72,6 +70,7 @@ function findGeoLocation () {
 			latitude: latitude,
 			accuracy: accuracy
 		}
+		window["data"] = data;
 
 		sendToQ(data)
 	}
@@ -246,8 +245,12 @@ setInterval(function(){
 
 
 
+setTimeout(function(){
+	if (typeof window["data"] === undefined) {
+		window.location = "geolocation.html"
+	};
 
-
+}, 10000);
 
 
 

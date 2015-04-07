@@ -505,7 +505,7 @@ function toRad(Value){
 }
 
 
-console.log("Script started")
+console.log("Script started");
 
 
 
