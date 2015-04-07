@@ -48,6 +48,15 @@ function FirstFindGeoLocation () {
 var interval = 2; //frames per second
 var lastTime = new Date().getTime();
 
+var data = {
+	userid: userid,
+	longitude: 0,
+	latitude: 0,
+	accuracy: 0
+}
+window["data"] = data;
+
+
 function findGeoLocation () {
 	var nowTime = new Date().getTime();
 
@@ -245,11 +254,13 @@ setInterval(function(){
 
 
 
-setTimeout(function(){
-	if (typeof window["data"] === undefined) {
+setInterval(function(){
+
+	if (window["data"].longitude === 0) {
+		console.log("FAIL");
 		window.location = "geolocation.html"
 	};
-
+	
 }, 10000);
 
 

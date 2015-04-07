@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+   	<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+	<link rel="stylesheet" href="/css/reset.css" />	
+	<link rel="stylesheet" href="/css/style.css" />	
+	<link rel="stylesheet" href="/css/leaflet.css" />	
+
+	<title>GeoLocation helper</title>
+</head>
+<body>
+
+<div class="container">
+	<h1>How to give permission</h1>
+	<img id="browserimage" />
+
+
+	<script type="text/javascript">
+
+		var isChromium = !!window.chrome;
+		var isFF = !!window.sidebar;
+		var isSafari = /constructor/i.test(window.HTMLElement);
+
+		if (isChromium) document.getElementById("browserimage").src = "images/geolocation.chrome.jpg" ;
+		if (isFF) document.getElementById("browserimage").src = "images/geolocation.firefox.jpg" ;
+		if (isSafari) document.getElementById("browserimage").src = "images/geolocation.safari.jpg" ;
+	</script>
+
+
+
+</div>
+
+
+</body>
+</html>
