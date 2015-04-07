@@ -27,12 +27,14 @@
 
 #score {
 	position: absolute;
-	bottom: 20px;
+	top: 20px;
 	right: 10px;
 	height: 50px;
 	width: 50px;
-	font-size: 30pt;
 	color: white;
+}
+#score #points {
+	font-size: 30pt;
 }
 
 #fullscreen {

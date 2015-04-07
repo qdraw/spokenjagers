@@ -311,14 +311,17 @@ socket.on('opponent', function(opponent){
 
 socket.on('outbound', function(outbound){
 
-	Object.keys(outbound).forEach(function(key) {
+	if (outbound != null) {
+		Object.keys(outbound).forEach(function(key) {
 
-		if (!window[key]) {
-	    	window[key] = L.marker([outbound[key][0],outbound[key][1]],{icon: whiteIcon}).bindPopup("outbound " + key ).addTo(map);
-		}
-		window[key].setLatLng([outbound[key][0],outbound[key][1]]).update();
+			if (!window[key]) {
+		    	window[key] = L.marker([outbound[key][0],outbound[key][1]],{icon: whiteIcon}).bindPopup("outbound " + key ).addTo(map);
+			}
+			window[key].setLatLng([outbound[key][0],outbound[key][1]]).update();
 
-	});
+		});		
+	};
+
 }); //e/outbound
 
 
@@ -335,13 +338,10 @@ function onMapClick(e) {
 
 
 
-
+document.getElementById("points").innerHTML = 0;
 socket.on('score', function(score){
-	console.log("run");
-	console.log(score["score"]);
-
-		document.getElementById("score").innerHTML = score["score"];
-
+	console.log(score["points"]);
+	document.getElementById("points").innerHTML = score["points"];
 }); //e/score
 
 

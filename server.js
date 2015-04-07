@@ -177,9 +177,9 @@ io.sockets.on('connection', function(socket){
             if (diffence > 10000) {
                 console.log(key + " " + diffence);
 
-            userData[0][key] = [ 0, 0];
-            userData[1][key] = [ 0, 0];
-            userData[2][key] = [ 0, 0];
+                userData[0][key] = [ 0, 0];
+                userData[1][key] = [ 0, 0];
+                userData[2][key] = [ 0, 0];
 
             };
 
@@ -282,10 +282,10 @@ io.sockets.on('connection', function(socket){
             // } 
 
             outbound = {
-                    "topLeft":[latmin+0.0007,longmin-0.0007,83],
-                    "topRight":[latmin+0.0007,longmax+0.0007,83],
-                    "bottomLeft":[latmin-0.0007,longmin-0.0007,83],
-                    "bottomRight":[latmin-0.0007,longmax+0.0007,83],
+                    "topLeft":[latmin+0.0006,longmin-0.0006,0],
+                    "topRight":[latmin+0.0006,longmax+0.0006,0],
+                    "bottomLeft":[latmin-0.0006,longmin-0.0006,0],
+                    "bottomRight":[latmin-0.0006,longmax+0.0006,0],
             }
             return outbound;
         }
@@ -313,7 +313,7 @@ io.sockets.on('connection', function(socket){
                 var ready = true;
             };
         }
-        catch(e){
+        catch(error){
             var ready = false;
         }
 
@@ -329,13 +329,22 @@ io.sockets.on('connection', function(socket){
 
 
             for (var i = 0; i < 5; i++) {
-                global["opponent"]["opponent_" + i] = [getRandomArbitrary(latmin-0.0007, latmax+0.0007),getRandomArbitrary(longmin-0.0007, longmax+0.0007)];
+                global["opponent"]["opponent_" + i] = [getRandomArbitrary(latmin-0.0006, latmax+0.0006),getRandomArbitrary(longmin-0.0006, longmax+0.0006)];
             };
 
         };
 
     }, 1000);
 
+    function newOpponent (i) {
+            var theCanvas = global["theCanvas"];
+            var latmin = theCanvas[0][0];
+            var latmax = theCanvas[0][1];
+            var longmin = theCanvas[1][0];
+            var longmax = theCanvas[1][1];
+            global["opponent"]["opponent_" + i] = [getRandomArbitrary(latmin-0.0006, latmax+0.0006),getRandomArbitrary(longmin-0.0006, longmax+0.0006)];
+    }
+    
 
     setInterval(function(){
         socket.emit('outbound', global["area"]);
@@ -345,9 +354,28 @@ io.sockets.on('connection', function(socket){
         for (var i = 0; i < 5; i++) {
 
             if (global["opponent"]["opponent_0"][0] != 0) {
-               
-                var value = getRandomArbitrary(-0.000027, +0.000027);
 
+                var speedInt = getRandomInt(0, 3);
+
+                switch (speedInt){
+                    case 0:
+                        var value = getRandomArbitrary(-0.000037, +0.000037);
+                        // console.log(0);
+                        break;
+                    case 1:
+                        var value = getRandomArbitrary(-0.000057, +0.000057);
+                        // console.log(1);
+                        break;
+                    case 2:
+                        var value = getRandomArbitrary(-0.00009, +0.00009);
+                        // console.log(2);
+                        break;
+                    case 3:
+                        var value = getRandomArbitrary(-0.0001, +0.0001);
+                        // console.log(3);
+                        break;
+                }
+               
                 var position = Number(opponent["opponent_" + i][oneORzero]);
                 var newPosition = Number(value + position);
 
@@ -356,7 +384,7 @@ io.sockets.on('connection', function(socket){
                     }
                     else {
                         newPosition = position;
-                        console.log("top/bottom == wrong")
+                        // console.log("top/bottom == wrong")
                     }
                 }
                 else {
@@ -364,7 +392,7 @@ io.sockets.on('connection', function(socket){
                     }
                     else {
                         newPosition = position;
-                        console.log("left/right == wrong")
+                        // console.log("left/right == wrong")
                     }
                 }
 
@@ -381,27 +409,65 @@ io.sockets.on('connection', function(socket){
 
         socket.emit('opponent', global["opponent"]);
 
-    }, 1000);
+    }, 500);
 
+    var userid = global["userid"];
+    global["score"][userid] = 0;
 
     socket.on('shoot', function(shoot){
-        console.log(shoot);
 
-            var opponentHit = -9999;
+        var isInBox = false;
+
+        var userid = global["userid"];
+        try {
+            // console.log(calcCrow(shoot.lat, shoot.lng, userData[c][userid][0], userData[c][userid][1]));
+            if (calcCrow(shoot.lat, shoot.lng, userData[c][userid][0], userData[c][userid][1]) <= 0.0199883) {
+                console.log(shoot);
+                var isInBox = true;
+            };
+        }
+        catch(e) {
+        }
+
+        if (isInBox) {
+
             for (var i = 0; i < 5; i++) {
-
-                var minLat = shoot.lat - 0.0001;
-                var maxLat = shoot.lat + 0.0001;
-
-                var minLng = shoot.lng - 0.0001;
-                var maxLng = shoot.lng + 0.0001;
 
                 var posLat = global["opponent"]["opponent_" + i][0];
                 var posLng = global["opponent"]["opponent_" + i][1];
 
-                if ( (minLat  < posLat )&& (maxLat  > posLat  ) && (minLng  < posLng )&& ( maxLng  > posLng )  ) {
-                    console.log("you hit marker!!" + i);
-                    opponentHit = i;
+                if (calcCrow(shoot.lat, shoot.lng, posLat, posLng) < 0.006) {
+
+
+                    if (isNaN(global["opponent"]["opponent_" + i][2])) {
+                        global["opponent"]["opponent_" + i][2] = 3;
+                    };
+
+                    global["opponent"]["opponent_" + i][2]--;
+
+                    console.log("opponent score");
+                    console.log(global["opponent"]["opponent_" + i][2]);
+
+                    if (global["opponent"]["opponent_" + i][2] <= 0) {
+
+                        global["opponent"]["opponent_" + i][0] = newOpponent (i); 
+                        global["opponent"]["opponent_" + i][1] = newOpponent (i);
+
+                    };
+
+
+                    if (isNaN(global["score"][userid] + 1)) {
+                        console.log("fdgdf11111111gdfgdf");
+                        global["score"][userid] = 0;
+                    };
+
+
+                    global["score"][userid]++;
+                    socket.emit('score', {"points": global["score"][userid]});
+
+
+
+
                 };
 
                 var posLat;
@@ -409,59 +475,9 @@ io.sockets.on('connection', function(socket){
 
             };
 
+        var isInBox = false;
 
-            var userid = global["userid"];
-
-            var minLat = shoot.lat - 0.00026822;
-            var maxLat = shoot.lat + 0.00026822;
-
-            var minLng = shoot.lng - 0.00026822;
-            var maxLng = shoot.lng + 0.00026822;
-
-            try {
-                var posLat = userData[c][userid][0];
-                var posLng = userData[c][userid][1];                    
-            }
-            catch(e) {
-                var posLat = 0;    
-                var posLng = 0;    
-            }
-
-
-
-            if ( (minLat  < posLat )&& (maxLat  > posLat  ) && (minLng  < posLng )&& ( maxLng  > posLng )  ) {
-                // console.log("hit bleubox");
-            }
-            else {
-                opponentHit = -9999;
-            }
-
-            var posLat;
-            var posLng;
-
-
-            if (opponentHit > 0) {
-                // console.log(opponentHit);
-
-                console.log(global["score"][userid]);
-
-                global["opponent"]["opponent_" + i][2] -= 1
-
-
-                if (global["score"][userid] === undefined) {
-                    global["score"][userid] = 0;
-                };
-
-                global["score"][userid] = Number(global["score"][userid] + 1);
-
-                socket.emit('score', {"score": global["score"][userid]});
-
-                opponentHit = -9999;
-
-            };
-
-
-
+        };//e/isInBox
 
     });///e/shoot
 
