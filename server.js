@@ -346,7 +346,7 @@ io.sockets.on('connection', function(socket){
 
             if (global["opponent"]["opponent_0"][0] != 0) {
                
-                var value = getRandomArbitrary(-0.000057, +0.000057);
+                var value = getRandomArbitrary(-0.000027, +0.000027);
 
                 var position = Number(opponent["opponent_" + i][oneORzero]);
                 var newPosition = Number(value + position);
@@ -412,11 +412,11 @@ io.sockets.on('connection', function(socket){
 
             var userid = global["userid"];
 
-            var minLat = shoot.lat - 0.00019;
-            var maxLat = shoot.lat + 0.00019;
+            var minLat = shoot.lat - 0.00026822;
+            var maxLat = shoot.lat + 0.00026822;
 
-            var minLng = shoot.lng - 0.00019;
-            var maxLng = shoot.lng + 0.00019;
+            var minLng = shoot.lng - 0.00026822;
+            var maxLng = shoot.lng + 0.00026822;
 
             try {
                 var posLat = userData[c][userid][0];
@@ -441,9 +441,12 @@ io.sockets.on('connection', function(socket){
 
 
             if (opponentHit > 0) {
-                console.log(opponentHit);
+                // console.log(opponentHit);
 
-                console.log(global["score"][userid])
+                console.log(global["score"][userid]);
+
+                global["opponent"]["opponent_" + i][2] -= 1
+
 
                 if (global["score"][userid] === undefined) {
                     global["score"][userid] = 0;

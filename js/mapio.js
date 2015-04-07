@@ -173,12 +173,15 @@ function startSocket () {
 			if (!window[key]) {
 
 				if (userid === key) {
-			    	window[key] = L.marker([users[key][0],users[key][1]],{icon: blackIcon}).bindPopup("U: " + key + "    R: " + users[key][2] ).addTo(map);
+			    	// window[key] = L.marker([users[key][0],users[key][1]],{icon: blackIcon}).bindPopup("U: " + key + "    R: " + users[key][2] ).addTo(map);
+			    	window[key] = L.marker([users[key][0],users[key][1]],{icon: blackIcon}).addTo(map);
 					
 				}
 				else {
-			    	window[key] = L.marker([users[key][0],users[key][1]],{icon: blueIcon}).bindPopup("U: " + key + "    R: " + users[key][2] ).addTo(map);
+			    	// window[key] = L.marker([users[key][0],users[key][1]],{icon: blueIcon}).bindPopup("U: " + key + "    R: " + users[key][2] ).addTo(map);
 			    	// window[key] = L.marker([users[key][0],users[key][1]]).bindPopup("U: " + key + "    R: " + users[key][2] ).addTo(map);
+			    	window[key] = L.marker([users[key][0],users[key][1]],{icon: blueIcon}).addTo(map);
+
 				}
 
 			}
