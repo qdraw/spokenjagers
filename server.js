@@ -18,6 +18,48 @@ server = http.createServer(function(req, res){
             return send404(path,res);
         }
 
+        // Ban List
+        banList = ["Abrave Spider", "GingerCrawler", "HTTrack", "ichiro", "Image Stripper", "Image Sucker", "ISC Systems iRc", "JadynAveBot", "Java", "LexxeBot", "lwp::", "lwp-", "LinkWalker", "libwww-perl", "localbot", "Mass Downloader", "Missigua", "Locator", "Offline", "OpenAnything", "Purebot", "PycURL", "python", "python", "Python-xmlrpc", "SiteSnagger", "SiteSucker", "SuperBot", "swish-e", "Web Image Collector", "Web Sucker", "WebAuto", "WebCopier", "webcollage", "WebFetch", "WebLeacher", "WebReaper", "Website eXtractor", "WebStripper", "WebWhacker", "WebZIP", "Mail.ru", "Yandex", "WinHTTP", "bazqux"]
+
+        banList.push("Googlebot");
+        banList.push("MSNBot");
+        banList.push("Yahoo");
+        banList.push("FacebookExternalHit/1");
+        banList.push("Pinterest");
+
+        function wordInString(s, word){
+            return new RegExp( '\\b' + word + '\\b', 'i').test(s);
+        }
+
+        function contains(array,searchFor) {
+            var i = array.length;
+            while (i--) {
+                containsword = wordInString(searchFor.toLowerCase(),array[i].toLowerCase());
+                // console.log(containsword);
+                if (containsword) {
+                    console.log(array[i]);
+
+                    return true;
+                };
+
+                // // if (this[i] === obj){
+                // if (this[i].indexOf(obj.toLowerCase()) >= 0) {
+                //     console.log(this[i]);
+                //     return true;
+                // }
+            }
+            return false;
+        }
+
+
+
+        if (contains(banList,req.headers['user-agent'])|| req.headers['user-agent'] === "") {
+            return send404(path,res);
+        };
+
+        // end banList
+        
+
         // res.writeHead(200, {'Content-Type': path == '.js' ? 'text/javascript' : 'text/html'});
 
         if (path.indexOf(".js") >= 0 ) {
@@ -40,11 +82,16 @@ server = http.createServer(function(req, res){
             res.writeHead(200,{'Content-Type':'image/svg+xml'});
         };
 
+        if (path.indexOf(".gpx") >= 0 ) {
+            return send404(path,res);
+        };
+
 
         
         res.write(data, 'utf8');
         res.end();
     });
+
 
 }),
 
@@ -481,6 +528,39 @@ io.sockets.on('connection', function(socket){
 
     });///e/shoot
 
+
+
+
+    // Logger
+    setInterval(function(){
+
+        try {
+            var userid = global["userid"];
+            if (userData[c][userid][0] != 0) {
+                var lat = userData[c][userid][0];
+            };
+            if (userData[c][userid][1] != 0) {
+                var lng = userData[c][userid][1];
+            };
+
+            var myDate = new Date().toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
+            var today = new Date().toJSON().slice(0,10);
+            var appendData = '<trkpt lat="'+ lat +'" lon="'+ lng +'">' + "\n" + "<ele>" + lat + "</ele>\n" + "<time>" + today + "T" + myDate + "Z" +"</time>" + "\n<extensions>\n<speed>0.0</speed>\n</extensions>\n"+ "</trkpt>";
+
+
+            fs.appendFile("logs/" + global["userid"] + ".gpx", appendData, function (err) {
+            });
+
+        }
+        catch(e) {
+            console.log("log fails");
+        }
+
+
+
+    }, 10000);
+
+
 });
 
 
@@ -528,213 +608,10 @@ console.log("Script started");
 
 
 
-
-
-
-
-    // // var opponent = {}  
-    // var outbound = {};
-
-
-
-
-
-    // function startOpponent() {
-
-    //     var theCanvas = getCanvas();
-
-    //     if (theCanvas != 0) {
-
-    //         var latmin = theCanvas[0][0];
-    //         var latmax = theCanvas[0][1];
-    //         var longmin = theCanvas[1][0];
-    //         var longmax = theCanvas[1][1];
-
-    //         for (var i = 0; i < 5; i++) {
-    //             opponent["opponent_" + i] = [getRandomArbitrary(latmin-0.0007, latmax+0.0007),getRandomArbitrary(longmin-0.0007, longmax+0.0007)];
-    //             console.log(getRandomArbitrary(latmin-0.0007, latmax+0.0007),getRandomArbitrary(longmin-0.0007, longmax+0.0007));
-    //         };
-    //         isStartedOpponent = true;
-    //     };
-
-    // }
-
-
-    // setTimeout(function(){
-    //     writeOutbound();
-    //     socket.emit('outbound', outbound);
-        
-
-
-
-
-    //     socket.emit('opponent', opponent);
-
-    // }, 1000);
-
-
-    // setInterval(function(){
-
-    //     microSeconds = calcMicroSeconds();
-    //     if ((microSeconds > 0 && microSeconds < 201) ) {
-
-
-    //         if (isStartedOpponent) {
-
-    //             var edit = getRandomInt(0, 1);
-
-    //             for (var i = 0; i < 10; i++) {
-    //                 console.log(opponent["opponent_" + i]);
-
-    //                 // opponent["opponent_" + i][edit] =  Number(opponent["opponent_" + i][edit] + getRandomArbitrary(-0.000057, +0.000057));
-    //             };
-
-    //         };
-
-
-
-    //         // opponent["test2"][edit] =  Number(opponent["test2"][edit] + getRandomArbitrary(-0.000057, +0.000057));
-
-
-
-
-
-    //         // Object { name [ 52.2287453    6.0956636 , 83] }
-
-    //         socket.emit('opponent', opponent);
-
-
-    //     }; 
-
-
-    // }, 200);
-
-
-
-
-
-// var opponent = {}  
-
-// for (var i = 0; i < 5; i++) {
-//     opponent["opponent_" + i]
-// };
-
-// if (isStartedOpponent === false) {
-//     startOpponent();
-//     // console.log(opponent);
-//     console.log("- startOpponent")
-
+// getClientAddress = function (req) {
+//         return (req.headers['x-forwarded-for'] || '').split(',')[0] 
+//         || req.connection.remoteAddress;
 // };
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// function arrayDuplicate (array) {
-
-//     var temp = {};
-//     for (var i = 0; i < array.length; i++)
-//     temp[array[i]] = true;
-//     var r = [];
-//     for (var k in temp)
-//     r.push(k);
-//     return r;
-
-// }//e//arrayDuplicate
-
-        // var nowTime = new Date().getTime();
-        // var unixTime = Math.ceil(nowTime/1000);
-        // var microSeconds = nowTime;
-        // var microSeconds = nowTime.toString().substring(unixTime.toString().length, nowTime.toString().length); 
-        // console.log(microSeconds);
-
-
-    // setInterval(function(){
-
-    //     microSeconds = calcMicroSeconds();
-    //     if ((microSeconds > 200 && microSeconds < 400)|| (microSeconds > 600 && microSeconds < 800) ) {
-    //         // console.log("start   " +microSeconds);
-
-    //         switch (countToThree) {
-    //             case 0:
-    //                 Object.keys(db0).forEach(function(key) {
-    //                     diffenceDb0vsDb2(key)
-    //                 });
-    //                 break;
-    //             case 1:
-    //                 Object.keys(db1).forEach(function(key) {
-    //                 });
-    //                 break;
-    //             case 2:
-    //                 Object.keys(db2).forEach(function(key) {
-    //                 });
-    //                 break;
-    //             default:
-    //                 console.log("default " + microSeconds);
-    //                 break;
-
-    //         }
-
-
-
-    //         // console.log("end      " +microSeconds);
-
-    //     }; 
-
-
-    // }, 200);
-
-
-    // function diffenceDb0vsDb2(userid) {
-    //     // console.log(userid)
-    // }
-
-
-
-    // function testData(userid) {
-
-    //     // console.log("db0 " + db0[userid]);
-    //     // console.log("db1 " + db1[userid]);
-    //     // console.log("db2 " + db2[userid]);
-
-    //     if ((db0[userid] != undefined) && (db1[userid] != undefined) ) {
-    //         var distance = calcCrow(db0[userid][0], db0[userid][1], db1[userid][0], db1[userid][1])
-
-    //         if (Number(distance) > 0.2) {
-
-    //             console.log("0.2 > " + distance);
-    //         };
-    //     };
-    //     if ((db1[userid] != undefined) && (db2[userid] != undefined) ) {
-    //         var distance = calcCrow(db1[userid][0], db1[userid][1], db2[userid][0], db2[userid][1])
-    //             // console.log(distance);
-
-    //         if (Number(distance) > 0.2) {
-    //             console.log("0.2 >     " + distance);
-    //         };
-    //     };
-    //     if ((db2[userid] != undefined) && (db0[userid] != undefined) ) {
-    //         var distance = calcCrow(db2[userid][0], db2[userid][1], db0[userid][0], db0[userid][1])
-    //             // console.log(distance);
-
-    //         if (Number(distance) > 0.2) {
-
-    //             console.log("0.2 >     " + distance);
-    //         };
-    //     };
-
-    // }

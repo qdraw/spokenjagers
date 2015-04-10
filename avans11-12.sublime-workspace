@@ -4,6 +4,26 @@
 		"selected_items":
 		[
 			[
+				"fo",
+				"font-size"
+			],
+			[
+				"in",
+				"innerHTML"
+			],
+			[
+				"win",
+				"window"
+			],
+			[
+				"s",
+				"sizes"
+			],
+			[
+				"read",
+				"readJSON"
+			],
+			[
 				"ar",
 				"article	Tag"
 			],
@@ -36,10 +56,6 @@
 				"margin-bottom"
 			],
 			[
-				"in",
-				"inline-block"
-			],
-			[
 				"d",
 				"display"
 			],
@@ -58,10 +74,6 @@
 			[
 				"f",
 				"fun	Function"
-			],
-			[
-				"s",
-				"style"
 			],
 			[
 				"pa",
@@ -176,6 +188,12 @@
 	},
 	"file_history":
 	[
+		"/data/web/qdraw.github.io/class/footer.php",
+		"/data/web/avans-individueel-verdieping-blok11-12/avans11-12.sublime-project",
+		"/data/web/qdraw.github.io/js/fdisplay.js",
+		"/data/web/qdraw.github.io/cache/123zing-website.html",
+		"/data/web/qdraw.github.io/class/weather.php",
+		"/data/web/qdraw.github.io/blog-thema/footer.php",
 		"/data/web/qdraw.github.io/blog-thema/page.php",
 		"/data/web/qdraw.github.io/blog-thema/index.php",
 		"/data/web/qdraw.github.io/blog-thema/css/style.css",
@@ -189,7 +207,6 @@
 		"/data/web/qdraw.github.io/blog-thema/js/scrollmenu.js",
 		"/data/web/qdraw-blog/wp-config.php",
 		"/data/web/qdraw.github.io/.htaccess",
-		"/data/web/qdraw.github.io/blog-thema/footer.php",
 		"/data/web/qdraw.github.io/blog-thema/404.php",
 		"/data/web/qdraw.github.io/blog-thema/js/imagegallery.js",
 		"/data/web/qdraw.github.io/blog-thema/js/imagereplacer.jq.js",
@@ -225,6 +242,17 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"request",
+			"new",
+			"utf-8",
+			"fotoarray",
+			"loadJSON",
+			"Element",
+			"new",
+			"event",
+			"evet",
+			"arrayDuplicate",
+			"array",
 			"requestAnimationFrame",
 			"h1",
 			"article h1",

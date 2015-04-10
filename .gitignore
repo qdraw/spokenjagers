@@ -4,3 +4,4 @@ node_modules/
 ._DS*
 .DS*
 .DS_Store
+logs/
