@@ -72,12 +72,17 @@ function findGeoLocation () {
 		var latitude  = position.coords.latitude;
 		var longitude = position.coords.longitude;
 		var accuracy = position.coords.accuracy;
+		var altitude = position.coords.altitude;
+		var speed = position.coords.speed;
+
 
 		var data = {
 			userid: userid,
 			longitude: longitude,
 			latitude: latitude,
-			accuracy: accuracy
+			accuracy: accuracy,
+			altitude: altitude,
+			speed: speed
 		}
 		window["data"] = data;
 
