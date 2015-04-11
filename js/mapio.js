@@ -320,7 +320,7 @@ socket.on('playgroundSizeData', function(playgroundSizeData){
 
 		Object.keys(playgroundSizeData).forEach(function(key) {
 			
-			console.log(key);
+			// console.log(key);
 
 			if (!window[key]) {
 		    	window[key] = L.marker([playgroundSizeData[key][0],playgroundSizeData[key][1]],{icon: whiteIcon}).bindPopup("playgroundSizeData " + key ).addTo(map);
