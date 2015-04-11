@@ -545,20 +545,109 @@ io.sockets.on('connection', function(socket){
 
             var myDate = new Date().toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
             var today = new Date().toJSON().slice(0,10);
-            var appendData = '<trkpt lat="'+ lat +'" lon="'+ lng +'">' + "\n" + "<ele>" + lat + "</ele>\n" + "<time>" + today + "T" + myDate + "Z" +"</time>" + "\n<extensions>\n<speed>0.0</speed>\n</extensions>\n"+ "</trkpt>";
+
+            var logfilename = "logs/" + global["userid"] + ".gpx";
+
+            fs.exists(logfilename, function(exists) {
+                
+                var appendData = '<trkpt lat="'+ lat +'" lon="'+ lng +'">' + "\n" + "<ele>" + lat + "</ele>\n" + "<time>" + today + "T" + myDate + "Z" +"</time>" + "\n<extensions>\n<speed>0.0</speed>\n</extensions>\n"+ "</trkpt> \n";
+                var prevAppendData = "";
+
+                if (exists==false) {
+                    var prevAppendData = '<?xml version="1.0" encoding="UTF-8" ?>' + "\n" + '<gpx xmlns="http://www.topografix.com/GPX/1/1" version="1.1" creator="Qdraw" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd ">' + "\n" + "<trk>" +"\n" + "<name>Qdraw</name> \n <trkseg> \n\n";
+
+                    var appendData = prevAppendData + appendData;
+                    fs.appendFile("logs/" + global["userid"] + ".gpx", appendData, function (err) {
+                    });
+                }
+                else {
+
+                    var appendData = appendData;
+                    fs.appendFile("logs/" + global["userid"] + ".gpx", appendData, function (err) {
+                    });
 
 
-            fs.appendFile("logs/" + global["userid"] + ".gpx", appendData, function (err) {
+                }
+
+                // else {
+                //     var afterAppendData = "</trkseg></trk></gpx>";
+                //     console.log("SADfsdaf");
+
+                //     fs.readFile(logfilename, 'utf8', function (err,data) {
+                //         if (err) {
+                //             return console.log(err);
+                //         }
+                //         var result = data.replace(/<\/trkseg><\/trk><\/gpx>/g, '');
+
+                //         fs.writeFile(logfilename, result, 'utf8', function (err) {
+                //             if (err) return console.log(err);
+                //         });
+                //     });
+
+                //     var appendData = appendData + afterAppendData;
+                //     fs.appendFile(logfilename, appendData, function (err) {
+                //     });
+                // }
             });
+
+
+
+
+            
 
         }
         catch(e) {
             console.log("log fails");
         }
 
+        // A realy simple function to write  </trkseg></trk></gpx>
 
+        // fs.readFile(logfilename, function(err, data) {
+        //     if(err) throw err;
+        //     data = data.toString();
+        //     data = data.replace(/<\/trkseg><\/trk><\/gpx>/gi, ' ');
 
-    }, 10000);
+        //     // data = data.replace(/<\/trkseg><\/trk><\/gpx>/g, ' ');
+        //     fs.writeFile(logfilename, data, function(err) {
+        //         err || console.log('Data replaced \n', data);
+        //     });
+        // });        
+
+        // var afterAppendData = "</trkseg></trk></gpx>";
+        // fs.appendFile("logs/" + global["userid"] + ".gpx", afterAppendData, function (err) {
+        // });
+
+    
+        // try {
+        //     var fs = require('fs'),
+        //         readline = require('readline');
+
+        //     var rd = readline.createInterface({
+        //         input: fs.createReadStream(logfilename),
+        //         output: process.stdout,
+        //         terminal: false
+        //     });
+
+        //     var file = "";
+        //     rd.on('line', function(line) {
+        //         if (line === "</trkseg></trk></gpx>") {
+        //             line = "";
+        //         };
+        //         file += line;
+        //     });
+
+        //     var logfilename = "logs/" + global["userid"] + ".gpx";
+
+        //     fs.writeFile(logfilename, file, function(err) {
+        //         console.log("err")
+        //     });
+
+        // }
+        // catch(e) {
+        //     console.log("log fails");
+        // }
+
+    }, 1000);
 
 
 });
