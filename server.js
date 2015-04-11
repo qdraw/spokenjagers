@@ -613,53 +613,6 @@ io.sockets.on('connection', function(socket){
 
 });
 
-        // A realy simple function to write  </trkseg></trk></gpx>
-
-        // fs.readFile(logfilename, function(err, data) {
-        //     if(err) throw err;
-        //     data = data.toString();
-        //     data = data.replace(/<\/trkseg><\/trk><\/gpx>/gi, ' ');
-
-        //     // data = data.replace(/<\/trkseg><\/trk><\/gpx>/g, ' ');
-        //     fs.writeFile(logfilename, data, function(err) {
-        //         err || console.log('Data replaced \n', data);
-        //     });
-        // });        
-
-        // var afterAppendData = "</trkseg></trk></gpx>";
-        // fs.appendFile("logs/" + global["userid"] + ".gpx", afterAppendData, function (err) {
-        // });
-
-    
-        // try {
-        //     var fs = require('fs'),
-        //         readline = require('readline');
-
-        //     var rd = readline.createInterface({
-        //         input: fs.createReadStream(logfilename),
-        //         output: process.stdout,
-        //         terminal: false
-        //     });
-
-        //     var file = "";
-        //     rd.on('line', function(line) {
-        //         if (line === "</trkseg></trk></gpx>") {
-        //             line = "";
-        //         };
-        //         file += line;
-        //     });
-
-        //     var logfilename = "logs/" + global["userid"] + ".gpx";
-
-        //     fs.writeFile(logfilename, file, function(err) {
-        //         console.log("err")
-        //     });
-
-        // }
-        // catch(e) {
-        //     console.log("log fails");
-        // }
-
 
 
 
