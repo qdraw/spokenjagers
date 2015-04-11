@@ -558,11 +558,11 @@ io.sockets.on('connection', function(socket){
                 var myDate = new Date().toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
                 var today = new Date().toJSON().slice(0,10);
 
-                var logfilename = "logs/" + global["userid"] + ".scrgpx";
+                var logfilename = "logs/" + global["userid"] + ".srcgpx";
 
                 var appendData = '<trkpt lat="'+ lat +'" lon="'+ lng +'">' + "\n" + "<ele>" + altitude + "</ele>\n" + "<time>" + today + "T" + myDate + "Z" +"</time>" + "\n<extensions>\n<speed>" + speed +"</speed>\n</extensions>\n"+ "</trkpt> \n";
                 var appendData = appendData;
-                if (logfilename != "logs/undefined.scrgpx") {
+                if (logfilename != "logs/undefined.srcgpx") {
                     fs.appendFile(logfilename, appendData, function (err) {
                     });                    
                 };
@@ -581,7 +581,7 @@ io.sockets.on('connection', function(socket){
     setInterval(function(){
         try {
             // var fs = require('fs');
-            var logfilename = "logs/" + global["userid"] + ".scrgpx";
+            var logfilename = "logs/" + global["userid"] + ".srcgpx";
 
             var file = "";
             fs.readFile(logfilename, 'utf8', function (err,data) {
