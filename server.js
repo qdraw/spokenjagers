@@ -409,34 +409,53 @@ io.sockets.on('connection', function(socket){
                         // console.log(2);
                         break;
                     case 3:
-                        var value = getRandomArbitrary(-0.0001, +0.0001);
+                        var value = getRandomArbitrary(-0.00010, +0.00010);
                         // console.log(3);
                         break;
                 }
                
-                var position = Number(opponent["opponent_" + i][oneORzero]);
-                var newPosition = Number(value + position);
 
-                // box protection
-                if (typeof global["playgroundSizeData"]["topLeft"][1] === "number") {
+                var newPosition = "0";
 
-                    if (oneORzero === 0) {
-                        if ((global["playgroundSizeData"]["topLeft"][0] > newPosition)&& (global["playgroundSizeData"]["bottomRight"][0] < newPosition)) {
+                try {
+
+                    // box protection
+                    if (typeof global["playgroundSizeData"]["topLeft"][1] === "number") {
+
+                        var position = Number(opponent["opponent_" + i][oneORzero]);
+                        newPosition = Number(value + position);
+
+                        if ( global["opponent"]["opponent_" + i][3]  == undefined  ) {
+                            global["opponent"]["opponent_" + i][3] = 15;
+                        };
+
+
+                        if (oneORzero === 0) {
+                            if ((global["playgroundSizeData"]["topLeft"][0] > newPosition)&& (global["playgroundSizeData"]["bottomRight"][0] < newPosition)) {
+                            }
+                            else {
+                                newPosition = position;
+                                console.log(opponent["opponent_" + i][3] + " top/bottom == wrong")
+                                opponent["opponent_" + i][3]--;
+                            }
                         }
                         else {
-                            newPosition = position;
-                            console.log("top/bottom == wrong")
+                            if ((global["playgroundSizeData"]["topLeft"][1] < newPosition)&& (global["playgroundSizeData"]["bottomRight"][1] > newPosition)) {
+                            }
+                            else {
+                                newPosition = position;
+                                console.log(opponent["opponent_" + i][3] + " left/right == wrong")
+                                opponent["opponent_" + i][3]--;
+                            }
                         }
-                    }
-                    else {
-                        if ((global["playgroundSizeData"]["topLeft"][1] < newPosition)&& (global["playgroundSizeData"]["bottomRight"][1] > newPosition)) {
-                        }
-                        else {
-                            newPosition = position;
-                            console.log("left/right == wrong")
-                        }
-                    }
 
+                    };
+                }
+                catch(e){}
+
+
+                if (opponent["opponent_" + i][3] < 0) {
+                    newOpponent (i);
                 };
 
                 global["opponent"]["opponent_" + i][oneORzero] = newPosition;
@@ -476,7 +495,8 @@ io.sockets.on('connection', function(socket){
         catch(e) {
         }
 
-        if (isInBox) {
+        // debug
+        if (!isInBox) {
 
             for (var i = 0; i < 5; i++) {
 
@@ -617,8 +637,8 @@ global["opponent"] = {};
 startOpponent();
 function startOpponent() {
     for (var i = 0; i < addNewOpponents; i++) {
-                                            // xy, score
-        global["opponent"]["opponent_" + i] = [0,0,0];
+                                            // xy, score  offEarth
+        global["opponent"]["opponent_" + i] = [0,0,0,15];
     };
 }//e/startOpponent
 
@@ -659,136 +679,3 @@ console.log("Script started");
 //         return (req.headers['x-forwarded-for'] || '').split(',')[0] 
 //         || req.connection.remoteAddress;
 // };
-
-
-
-
-  // // opponent
-    // // var opponent = {}  
-
-    // Array.prototype.max = function () {
-    //     return Math.max.apply(Math, this);
-    // };
-
-    // Array.prototype.min = function () {
-    //     return Math.min.apply(Math, this);
-    // };
-
-    // function getCanvas() {
-
-    //     var latArray = [];
-    //     var longArray = [];
-
-    //     Object.keys(userData[c]).forEach(function(key) {
-    //         try {
-    //                 // console.log(userData[c][key][0]);
-    //             if (userData[c][key][0] != 0) {
-    //                 latArray.push(userData[c][key][0]);
-    //             };
-    //             if (userData[c][key][1] != 0) {
-    //                 longArray.push(userData[c][key][1]);
-    //             };
-    //         }
-    //         catch(e) {
-    //         }
-
-    //     });
-
-    //     if (latArray.length != 0) {
-
-    //         var latmin = latArray.min();
-    //         var latmax = latArray.max();
-
-    //         var longmin = longArray.min();
-    //         var longmax = longArray.max();
-
-    //         var latlongArray = [[latmin,latmax], [longmin,longmax]];
-
-
-    //     }
-    //     else {
-    //         var latlongArray = 0
-    //     }
-
-    //     return latlongArray;
-    //     // console.log(latmin);
-    //     // console.log(latmax);
-    //     // console.log(longmin);
-    //     // console.log(longmax);
-    // }
-
-
-        // return [getRandomArbitrary(52.2287453+0.0007, 52.2287453-0.0007), getRandomArbitrary(6.0956636-0.0007, 6.0956636+0.0007)]
-
-
-
-    // doorsturen naar gebruiker van outbound
-    // setInterval(function(){
-        // global["area"] = writeOutbound();
-        // socket.emit('outbound', global["area"]);
-    // }, 1000);
-
-    // setInterval(function(){
-    //     // console.log(userid);
-    //     // console.log(global["area_" + userid ])
-    // }, 10000);
-
-
-    // function writeOutbound() {
-        
-    //     global["theCanvas"] = getCanvas();
-    //     theCanvas = global["theCanvas"];
-
-    //     console.log(userid);
-
-    //     console.log(theCanvas);
-
-    //     if (theCanvas != 0) {
-
-    //         var latmin = theCanvas[0][0];
-    //         // console.log(latmin);
-    //         var latmax = theCanvas[0][1];
-    //         // console.log(latmax);
-    //         var longmin = theCanvas[1][0];
-    //         // console.log(longmin);
-    //         var longmax = theCanvas[1][1];
-    //         // console.log(longmax);
-
-    //         // var opponent = {
-    //         //         "topRight":[Number(52.2287453+0.0007),Number(6.0956636+0.0007),83],
-    //         //         "topLeft":[Number(52.2287453+0.0007),Number(6.0956636-0.0007),83],
-
-    //         //         "bottomLeft":[Number(52.2287453-0.0007),Number(6.0956636-0.0007),83],
-    //         //         "bottomRight":[Number(52.2287453-0.0007),Number(6.0956636+0.0007),83],
-    //         // } 
-
-    //         outbound = {
-    //                 "topLeft":[latmin+0.0006,longmin-0.0006,0],
-    //                 "topRight":[latmin+0.0006,longmax+0.0006,0],
-    //                 "bottomLeft":[latmin-0.0006,longmin-0.0006,0],
-    //                 "bottomRight":[latmin-0.0006,longmax+0.0006,0],
-    //         }
-    //         // console.log(outbound);
-    //         return outbound;
-    //     }
-    //     else {
-    //         return 0;
-    //     }
-
-
-    // }//e/writeOutbound
-
-
-
- 
-
-
-
- 
-
-
-
-    // setInterval(function(){
-    //     socket.emit('opponent', global["opponent"]);
-    // }, 500);
-
