@@ -301,11 +301,18 @@ socket.on('opponent', function(opponent){
 
 	Object.keys(opponent).forEach(function(key) {
 
-		if (!window[key]) {
-	    	window[key] = L.marker([opponent[key][0],opponent[key][1]],{icon: whiteIcon}).addTo(map);
-	    	// window[key] = L.marker([opponent[key][0],opponent[key][1]],{icon: whiteIcon}).bindPopup( key ).addTo(map);
-		}
-		window[key].setLatLng([opponent[key][0],opponent[key][1]]).update();
+		if (opponent[key][0] != 0) {
+			console.log(opponent[key]);	
+
+			if (!window[key]) {
+		    	window[key] = L.marker([opponent[key][0],opponent[key][1]],{icon: whiteIcon}).addTo(map);
+		    	// window[key] = L.marker([opponent[key][0],opponent[key][1]],{icon: whiteIcon}).bindPopup( key ).addTo(map);
+			}
+			window[key].setLatLng([opponent[key][0],opponent[key][1]]).update();
+
+
+		};
+
 
 	});
 }); //e/oppo
@@ -314,20 +321,23 @@ socket.on('opponent', function(opponent){
 
 
 
-socket.on('outbound', function(outbound){
+socket.on('playgroundSizeData', function(playgroundSizeData){
 
-	if (outbound != null) {
-		Object.keys(outbound).forEach(function(key) {
+	if (playgroundSizeData != null) {
+
+		Object.keys(playgroundSizeData).forEach(function(key) {
+			
+			// console.log(key);
 
 			if (!window[key]) {
-		    	window[key] = L.marker([outbound[key][0],outbound[key][1]],{icon: whiteIcon}).bindPopup("outbound " + key ).addTo(map);
+		    	window[key] = L.marker([playgroundSizeData[key][0],playgroundSizeData[key][1]],{icon: whiteIcon}).bindPopup("playgroundSizeData " + key ).addTo(map);
 			}
-			window[key].setLatLng([outbound[key][0],outbound[key][1]]).update();
+			window[key].setLatLng([playgroundSizeData[key][0],playgroundSizeData[key][1]]).update();
 
 		});		
 	};
 
-}); //e/outbound
+}); //e/playgroundSizeData
 
 
 
