@@ -321,23 +321,23 @@ socket.on('opponent', function(opponent){
 
 
 
-socket.on('playgroundSizeData', function(playgroundSizeData){
+socket.on('outbound', function(outbound){
 
-	if (playgroundSizeData != null) {
+	if (outbound != null) {
 
-		Object.keys(playgroundSizeData).forEach(function(key) {
+		Object.keys(outbound).forEach(function(key) {
 			
 			// console.log(key);
 
 			if (!window[key]) {
-		    	window[key] = L.marker([playgroundSizeData[key][0],playgroundSizeData[key][1]],{icon: whiteIcon}).bindPopup("playgroundSizeData " + key ).addTo(map);
+		    	window[key] = L.marker([outbound[key][0],outbound[key][1]],{icon: whiteIcon}).bindPopup("outbound " + key ).addTo(map);
 			}
-			window[key].setLatLng([playgroundSizeData[key][0],playgroundSizeData[key][1]]).update();
+			window[key].setLatLng([outbound[key][0],outbound[key][1]]).update();
 
 		});		
 	};
 
-}); //e/playgroundSizeData
+}); //e/outbound
 
 
 
