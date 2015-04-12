@@ -2,15 +2,16 @@
 // Requries userid
 
 
-
+// Ask for WebSocket Connection
 var socket = io.connect();
 
 
 console.log(userid);
 
-// var mapId = document.getElementById("map");
 
 var map = L.map('map').setView([51, 5.1], 19);
+
+
 
 // // MapBox
 // L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {

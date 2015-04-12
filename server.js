@@ -603,42 +603,43 @@ io.sockets.on('connection', function(socket){
     // Logger --> /logs/*.scrgpx
     setInterval(function(){
 
-        try {
-            if ((userData[c][userid][0] != 0) && (userData[c][userid][0] != undefined)) {
-                var lat = userData[c][userid][0];
-            };
-            if ((userData[c][userid][1] != 0) && (userData[c][userid][1] != undefined)) {
-                var lng = userData[c][userid][1];
-                var altitude = userData[c][userid][3];
-                var speed = userData[c][userid][4];
+        if (userid != 0) {
+            try {
+                if ((userData[c][userid][0] != 0) && (userData[c][userid][0] != undefined)) {
+                    var lat = userData[c][userid][0];
+                };
+                if ((userData[c][userid][1] != 0) && (userData[c][userid][1] != undefined)) {
+                    var lng = userData[c][userid][1];
+                    var altitude = userData[c][userid][3];
+                    var speed = userData[c][userid][4];
 
-                if (altitude === 0 || altitude == undefined) {
-                    altitude = -1000;
+                    if (altitude === 0 || altitude == undefined) {
+                        altitude = -1000;
+                    };
+
+                    if (speed ===  null) {
+                        speed = 0;
+                    };
+
+                    var myDate = new Date().toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
+                    var today = new Date().toJSON().slice(0,10);
+
+                    var logfilename = "logs/" + userid + ".srcgpx";
+
+                    var appendData = '<trkpt lat="'+ lat +'" lon="'+ lng +'">' + "\n" + "<ele>" + altitude + "</ele>\n" + "<time>" + today + "T" + myDate + "Z" +"</time>" + "\n<extensions>\n<speed>" + speed +"</speed>\n</extensions>\n"+ "</trkpt> \n";
+                    var appendData = appendData;
+
+                    if ( (lat != 0) && (lng != 0 ) && (userid != 0 )) {
+                        fs.appendFile(logfilename, appendData, function (err) {
+                        });                    
+                    };
                 };
 
-                if (speed ===  null) {
-                    speed = 0;
-                };
-
-                var myDate = new Date().toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
-                var today = new Date().toJSON().slice(0,10);
-
-                var logfilename = "logs/" + userid + ".srcgpx";
-
-                var appendData = '<trkpt lat="'+ lat +'" lon="'+ lng +'">' + "\n" + "<ele>" + altitude + "</ele>\n" + "<time>" + today + "T" + myDate + "Z" +"</time>" + "\n<extensions>\n<speed>" + speed +"</speed>\n</extensions>\n"+ "</trkpt> \n";
-                var appendData = appendData;
-
-                if ( (lat != 0) && (lng != 0 ) && (userid != 0 )) {
-                    fs.appendFile(logfilename, appendData, function (err) {
-                    });                    
-                };
-            };
-
-        }
-        catch(e) {
-            console.log("srcgpx writer fails under: " + userid);
-        }
-
+            }
+            catch(e) {
+                console.log("srcgpx writer fails under: " + userid);
+            }
+        };
 
     }, 2000);
 
