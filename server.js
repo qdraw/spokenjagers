@@ -414,23 +414,21 @@ io.sockets.on('connection', function(socket){
 
                 switch (speedInt){
                     case 0:
-                        var value = getRandomArbitrary(-0.000037, +0.000037);
-                        // console.log(0);
+                        var speed = 0.000037/2;
                         break;
                     case 1:
-                        var value = getRandomArbitrary(-0.000057, +0.000057);
-                        // console.log(1);
+                        var speed = 0.000057/2;
                         break;
                     case 2:
-                        var value = getRandomArbitrary(-0.00009, +0.00009);
-                        // console.log(2);
+                        var speed = 0.00009/2;
                         break;
                     case 3:
-                        var value = getRandomArbitrary(-0.0001, +0.0001);
-                        // console.log(3);
+                        var speed = 0.0001/2;
                         break;
                 }
-               
+                var speedNeg = speed * -1;
+                var value = getRandomArbitrary(speedNeg, speed);
+
                 var position = Number(opponent["opponent_" + i][oneORzero]);
                 var newPosition = Number(value + position);
 
@@ -474,7 +472,7 @@ io.sockets.on('connection', function(socket){
 
         socket.emit('opponent', global["opponent"]);
 
-    }, 500);
+    }, 250); // doble speed
 
     var userid = global["userid"];
     global["score"][userid] = 0;
