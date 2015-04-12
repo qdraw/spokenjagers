@@ -110,7 +110,9 @@ server = http.createServer(function(req, res){
         if (path.indexOf(".srcgpx") >= 0 ) {
             return send404(path,res);
         };
-
+        if (path.indexOf(".log") >= 0 ) {
+            return send404(path,res);
+        };
 
         
         res.write(data, 'utf8');
@@ -711,7 +713,7 @@ function writeApacheLog(path,res,httpcode) {
     var log = ip + " -  - ["+ day +"/" + month_names_short[d.getMonth()] + "/" + d.getFullYear() + ":" + myDate + " " + u + "] " + '"' + "GET " + path + " HTTP/1.0"+ '"' + " " + httpcode + " " + fileSizeInBytes + "\n";
 
     try {
-        fs.appendFile("logs/access_log.src", log, function (err) {
+        fs.appendFile("logs/access.log", log, function (err) {
         }); 
     }
     catch(e){}
