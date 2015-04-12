@@ -8,8 +8,9 @@ var socket = io.connect();
 
 console.log(userid);
 
+var maxZoom = 20;
 
-var map = L.map('map').setView([51, 5.1], 19);
+var map = L.map('map').setView([51, 5.1], maxZoom);
 
 
 
@@ -30,7 +31,6 @@ var map = L.map('map').setView([51, 5.1], 19);
 // 	maxZoom: 18
 // }).addTo(map); 
 
-
 // Nokia Here Maps, Thanks: http://leaflet-extras.github.io/leaflet-providers/preview/
 L.tileLayer('http://{s}.{base}.maps.cit.api.here.com/maptile/2.1/maptile/{mapID}/satellite.day/{z}/{x}/{y}/256/png8?app_id={app_id}&app_code={app_code}', {
 	// attribution: 'Map &copy; 1987-2014 <a href="http://developer.here.com">HERE</a>',
@@ -40,7 +40,7 @@ L.tileLayer('http://{s}.{base}.maps.cit.api.here.com/maptile/2.1/maptile/{mapID}
 	app_code: 'dq2MYIvjAotR8tHvY8Q_Dg',
 	base: 'aerial',
 	minZoom: 0,
-	maxZoom: 20
+	maxZoom: maxZoom
 }).addTo(map);
 
 // Check if user support geolocation, after this load FirstFindGeoLocation
@@ -300,7 +300,7 @@ function panToYou () {
 	var longitude = window["data"].longitude;
 	var latitude = window["data"].latitude;
 	console.log("panToYou " + longitude + " "+  latitude);
-    map.setZoom((19), {animate: true});
+    map.setZoom((maxZoom), {animate: true});
 	map.panTo(L.latLng(latitude, longitude),{animate: true});
 }//e/pantoyou
 
