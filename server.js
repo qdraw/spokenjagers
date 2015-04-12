@@ -639,39 +639,42 @@ io.sockets.on('connection', function(socket){
             catch(e) {
                 console.log("srcgpx writer fails under: " + userid);
             }
-        };
+        };///e/userid
 
     }, 2000);
 
     setInterval(function(){
-        try {
-            // var fs = require('fs');
-            var logfilename = "logs/" + userid + ".srcgpx";
+        if (userid != 0) {
+            try {
+                // var fs = require('fs');
+                var logfilename = "logs/" + userid + ".srcgpx";
 
-            var file = "";
-            fs.readFile(logfilename, 'utf8', function (err,data) {
-              if (err) {
-                return console.log(err);
-              }
-              // console.log(data);
-              global["file_" + userid ] = data;
-            });
-
-            var logfilename = "logs/" + userid + ".gpx";
-
-            var prevAppendData = '<?xml version="1.0" encoding="UTF-8" ?>' + "\n" + '<gpx xmlns="http://www.topografix.com/GPX/1/1" version="1.1" creator="Qdraw" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd ">' + "\n" + "<trk>" +"\n" + "<name>Qdraw " + userid + "</name> \n <trkseg> \n\n";
-            var afterAppendData = "</trkseg></trk></gpx>";
-            writeFile = prevAppendData + global["file_" + userid ] + afterAppendData;
-            fs.writeFile(logfilename, writeFile, function(err) {
-                if(err) {
+                var file = "";
+                fs.readFile(logfilename, 'utf8', function (err,data) {
+                  if (err) {
                     return console.log(err);
-                }
-            });
-            global["file_" + userid ] = "";  
-        }
-        catch(e) {
-            console.log("gpx writer fails");
-        }
+                  }
+                  // console.log(data);
+                  global["file_" + userid ] = data;
+                });
+
+                var logfilename = "logs/" + userid + ".gpx";
+
+                var prevAppendData = '<?xml version="1.0" encoding="UTF-8" ?>' + "\n" + '<gpx xmlns="http://www.topografix.com/GPX/1/1" version="1.1" creator="Qdraw" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd ">' + "\n" + "<trk>" +"\n" + "<name>Qdraw " + userid + "</name> \n <trkseg> \n\n";
+                var afterAppendData = "</trkseg></trk></gpx>";
+                writeFile = prevAppendData + global["file_" + userid ] + afterAppendData;
+                fs.writeFile(logfilename, writeFile, function(err) {
+                    if(err) {
+                        return console.log(err);
+                    }
+                });
+                global["file_" + userid ] = "";  
+            }
+            catch(e) {
+                console.log("gpx writer fails");
+            }
+        };///e/userid
+
     }, 20000);
 
 
@@ -778,7 +781,7 @@ for (var k in interfaces) {
         }
     }
 }
-console.log("> Local IP: " + addresses);
+console.log("> Local Server IP: " + addresses);
 
 
 console.log("> Script loaded");
