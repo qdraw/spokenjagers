@@ -301,11 +301,18 @@ socket.on('opponent', function(opponent){
 
 	Object.keys(opponent).forEach(function(key) {
 
-		if (!window[key]) {
-	    	window[key] = L.marker([opponent[key][0],opponent[key][1]],{icon: whiteIcon}).addTo(map);
-	    	// window[key] = L.marker([opponent[key][0],opponent[key][1]],{icon: whiteIcon}).bindPopup( key ).addTo(map);
-		}
-		window[key].setLatLng([opponent[key][0],opponent[key][1]]).update();
+		if (opponent[key][0] != 0) {
+			console.log(opponent[key]);	
+
+			if (!window[key]) {
+		    	window[key] = L.marker([opponent[key][0],opponent[key][1]],{icon: whiteIcon}).addTo(map);
+		    	// window[key] = L.marker([opponent[key][0],opponent[key][1]],{icon: whiteIcon}).bindPopup( key ).addTo(map);
+			}
+			window[key].setLatLng([opponent[key][0],opponent[key][1]]).update();
+
+
+		};
+
 
 	});
 }); //e/oppo

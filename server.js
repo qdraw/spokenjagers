@@ -323,11 +323,17 @@ io.sockets.on('connection', function(socket){
         global["playgroundSizeData"] = playgroundSizeData;
 
         socket.emit('playgroundSizeData', playgroundSizeData);
-    }, 1000);
+    }, 1003);
 
 
 
-
+    // Random
+    function getRandomArbitrary(min, max) {
+        return Math.random() * (max - min) + min;
+    }
+    function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
 
  
    // Add New opponents if user login in
@@ -362,115 +368,123 @@ io.sockets.on('connection', function(socket){
 
     }, 1000);
 
-    // Random
-    function getRandomArbitrary(min, max) {
-        return Math.random() * (max - min) + min;
-    }
-    function getRandomInt(min, max) {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
 
     // Single New Opponent
     function newOpponent (i) {
+
+        global["minMaxLatLngData"] = minMaxLatLng();
         // Read playgroundSizeData!
-        var minMaxLatLngData = global["minMaxLatLngData"];
+        // var minMaxLatLngData = global["minMaxLatLngData"];
         var latmin = minMaxLatLngData[0][0];
         var latmax = minMaxLatLngData[0][1];
         var longmin = minMaxLatLngData[1][0];
         var longmax = minMaxLatLngData[1][1];
+
+        // var newPosition = [getRandomArbitrary(latmin-0.0006, latmax+0.0006),getRandomArbitrary(longmin-0.0006, longmax+0.0006)];
         global["opponent"]["opponent_" + i] = [getRandomArbitrary(latmin-0.0006, latmax+0.0006),getRandomArbitrary(longmin-0.0006, longmax+0.0006)];
+
+        if ((global["playgroundSizeData"]["topLeft"][0] > global["opponent"]["opponent_" + i][0])&& (global["playgroundSizeData"]["bottomRight"][0] < global["opponent"]["opponent_" + i][0])) {
+
+            console.log("Error 0");
+        }
+
+        if ((global["playgroundSizeData"]["topLeft"][1] < global["opponent"]["opponent_" + i][1])&& (global["playgroundSizeData"]["bottomRight"][1] > global["opponent"]["opponent_" + i][1])) {
+            console.log("Error 1");
+        }
+
+        console.log(global["opponent"]["opponent_" + i]);
     }//e/newOpponent
     
 
 
    // // // opponent Move
-   //  setInterval(function(){
+    setInterval(function(){
 
-   //      var oneORzero = getRandomInt(0, 1); 
+        var oneORzero = getRandomInt(0, 1); 
 
 
-   //      for (var i = 0; i < addNewOpponents; i++) {
+        for (var i = 0; i < addNewOpponents; i++) {
 
-   //          if (global["opponent"]["opponent_0"][0] != 0) {
+            if (global["opponent"]["opponent_0"][0] != 0) {
 
-   //              var speedInt = getRandomInt(0, 3);
+                var speedInt = getRandomInt(0, 3);
 
-   //              switch (speedInt){
-   //                  case 0:
-   //                      var value = getRandomArbitrary(-0.000037, +0.000037);
-   //                      // console.log(0);
-   //                      break;
-   //                  case 1:
-   //                      var value = getRandomArbitrary(-0.000057, +0.000057);
-   //                      // console.log(1);
-   //                      break;
-   //                  case 2:
-   //                      var value = getRandomArbitrary(-0.00009, +0.00009);
-   //                      // console.log(2);
-   //                      break;
-   //                  case 3:
-   //                      var value = getRandomArbitrary(-0.00010, +0.00010);
-   //                      // console.log(3);
-   //                      break;
-   //              }
+                switch (speedInt){
+                    case 0:
+                        var value = getRandomArbitrary(-0.000037, +0.000037);
+                        // console.log(0);
+                        break;
+                    case 1:
+                        var value = getRandomArbitrary(-0.000057, +0.000057);
+                        // console.log(1);
+                        break;
+                    case 2:
+                        var value = getRandomArbitrary(-0.00009, +0.00009);
+                        // console.log(2);
+                        break;
+                    case 3:
+                        var value = getRandomArbitrary(-0.00010, +0.00010);
+                        // console.log(3);
+                        break;
+                }
                
 
-   //              var newPosition = "0";
+                var newPosition = "0";
 
-   //              try {
+                try {
 
-   //                  // box protection
-   //                  if (typeof global["playgroundSizeData"]["topLeft"][1] === "number") {
+                    // box protection
+                    if (typeof global["playgroundSizeData"]["topLeft"][1] === "number") {
 
-   //                      var position = Number(opponent["opponent_" + i][oneORzero]);
-   //                      newPosition = Number(value + position);
+                        var position = Number(opponent["opponent_" + i][oneORzero]);
+                        newPosition = Number(value + position);
 
-   //                      if ( global["opponent"]["opponent_" + i][3]  == undefined  ) {
-   //                          global["opponent"]["opponent_" + i][3] = 15;
-   //                      };
-
-
-   //                      if (oneORzero === 0) {
-   //                          if ((global["playgroundSizeData"]["topLeft"][0] > newPosition)&& (global["playgroundSizeData"]["bottomRight"][0] < newPosition)) {
-   //                          }
-   //                          else {
-   //                              newPosition = position;
-   //                              console.log(opponent["opponent_" + i][3] + " top/bottom == wrong")
-   //                              opponent["opponent_" + i][3]--;
-   //                          }
-   //                      }
-   //                      else {
-   //                          if ((global["playgroundSizeData"]["topLeft"][1] < newPosition)&& (global["playgroundSizeData"]["bottomRight"][1] > newPosition)) {
-   //                          }
-   //                          else {
-   //                              newPosition = position;
-   //                              console.log(opponent["opponent_" + i][3] + " left/right == wrong")
-   //                              opponent["opponent_" + i][3]--;
-   //                          }
-   //                      }
-
-   //                  };
-   //              }
-   //              catch(e){}
+                        if ( global["opponent"]["opponent_" + i][3]  == undefined  ) {
+                            global["opponent"]["opponent_" + i][3] = 15;
+                        };
 
 
-   //              if (opponent["opponent_" + i][3] < 0) {
-   //                  newOpponent (i);
-   //              };
+                        if (oneORzero === 0) {
+                            if ((global["playgroundSizeData"]["topLeft"][0] > newPosition)&& (global["playgroundSizeData"]["bottomRight"][0] < newPosition)) {
+                            }
+                            else {
+                                newPosition = position;
+                                console.log(opponent["opponent_" + i][3] + " top/bottom == wrong")
+                                opponent["opponent_" + i][3]--;
+                            }
+                        }
+                        else {
+                            if ((global["playgroundSizeData"]["topLeft"][1] < newPosition)&& (global["playgroundSizeData"]["bottomRight"][1] > newPosition)) {
+                            }
+                            else {
+                                newPosition = position;
+                                console.log(opponent["opponent_" + i][3] + " left/right == wrong")
+                                opponent["opponent_" + i][3]--;
+                            }
+                        }
 
-   //              global["opponent"]["opponent_" + i][oneORzero] = newPosition;
+                    };
+                }
+                catch(e){}
 
 
-   //              // // Number(opponent["opponent_" + i][oneORzero] + getRandomArbitrary(-0.000057, +0.000057));
+                if (opponent["opponent_" + i][3] < 0) {
+                    newOpponent (i);
+                };
 
-   //              // // opponent["opponent_" + i][oneORzero] =  Number(opponent["opponent_" + i][oneORzero] + getRandomArbitrary(-0.000057, +0.000057));
+                global["opponent"]["opponent_" + i][oneORzero] = newPosition;
+
+
+                // // Number(opponent["opponent_" + i][oneORzero] + getRandomArbitrary(-0.000057, +0.000057));
+
+                // // opponent["opponent_" + i][oneORzero] =  Number(opponent["opponent_" + i][oneORzero] + getRandomArbitrary(-0.000057, +0.000057));
                 
-   //          };
-   //      };
+            };
+        };
 
-   //      socket.emit('opponent', global["opponent"]);
+        socket.emit('opponent', global["opponent"]);
 
-   //  }, 500);
+    }, 500);
 
 
 
@@ -498,7 +512,7 @@ io.sockets.on('connection', function(socket){
         // debug
         if (!isInBox) {
 
-            for (var i = 0; i < 5; i++) {
+            for (var i = 0; i < addNewOpponents; i++) {
 
                 var posLat = global["opponent"]["opponent_" + i][0];
                 var posLng = global["opponent"]["opponent_" + i][1];
@@ -524,7 +538,7 @@ io.sockets.on('connection', function(socket){
 
 
                     if (isNaN(global["score"][userid] + 1)) {
-                        console.log("fdgdf11111111gdfgdf");
+                        console.log("New Score");
                         global["score"][userid] = 0;
                     };
 
@@ -555,10 +569,10 @@ io.sockets.on('connection', function(socket){
     setInterval(function(){
 
         try {
-            if ((userData[c][userid][0] != 0) && (userData[c][userid][0] != undefined)) {
+            if ((userData[c][userid][0] != 0) || (userData[c][userid][0] != undefined)) {
                 var lat = userData[c][userid][0];
             };
-            if ((userData[c][userid][1] != 0) && (userData[c][userid][1] != undefined)) {
+            if ((userData[c][userid][1] != 0) || (userData[c][userid][1] != undefined)) {
                 var lng = userData[c][userid][1];
                 var altitude = userData[c][userid][3];
                 var speed = userData[c][userid][4];
@@ -639,7 +653,7 @@ startOpponent();
 function startOpponent() {
     for (var i = 0; i < addNewOpponents; i++) {
                                             // xy, score  offEarth
-        global["opponent"]["opponent_" + i] = [0,0,0,15];
+        global["opponent"]["opponent_" + i] = [0,0,0,20];
     };
 }//e/startOpponent
 
