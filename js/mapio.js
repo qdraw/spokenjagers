@@ -43,7 +43,7 @@ L.tileLayer('http://{s}.{base}.maps.cit.api.here.com/maptile/2.1/maptile/{mapID}
 	maxZoom: 20
 }).addTo(map);
 
-
+// Check if user support geolocation, after this load FirstFindGeoLocation
 if (!navigator.geolocation){
     mapId.innerHTML = "<p>Geolocation is not supported by your browser</p>";
 }
@@ -51,7 +51,8 @@ else {
 	FirstFindGeoLocation();
 }
 
-
+// Catch and pan the map to the location,
+// check the interval for the other panTo
 function FirstFindGeoLocation () {
 
 	navigator.geolocation.getCurrentPosition(success, error);
@@ -63,32 +64,45 @@ function FirstFindGeoLocation () {
 	function error() {
     	map.innerHTML = "Unable to retrieve your location";
  	};	
- 	findGeoLocation();
-}
 
+ 	// leave this one over, here chrome doesn't like it inside the succes()
+ 	findGeoLocation();
+
+}//e/e/FirstFindGeoLocation
+
+// interval === 1000/interval
 var interval = 2; //frames per second
+// Last Client time
 var lastTime = new Date().getTime();
 
+// This format will be send to the server!
 var data = {
 	userid: userid,
 	longitude: 0,
 	latitude: 0,
-	accuracy: 0
+	accuracy: 0,
+	altitude: 0,
+	speed: 0
 }
+
+// access global user variable
 window["data"] = data;
 
-
+// Loaded after FirstFindGeoLocation
 function findGeoLocation () {
+	// Do you know how late it is?, yes i do:
 	var nowTime = new Date().getTime();
 
+	// interval, im using request animationframe, so i ask the browser if he has memory free
 	if ((nowTime - lastTime) > (1000 / interval)){
-        //do actual drawing
+        //do actual asking of the geolocation
 		navigator.geolocation.getCurrentPosition(success, error);
-
+		// update the last client time
         lastTime = new Date().getTime();
     }
 
 	function success(position) {
+		// when i;ve a succesfull lookup of the geolocation
 
 		var latitude  = position.coords.latitude;
 		var longitude = position.coords.longitude;
@@ -96,7 +110,7 @@ function findGeoLocation () {
 		var altitude = position.coords.altitude;
 		var speed = position.coords.speed;
 
-
+		// update to the latest location:
 		var data = {
 			userid: userid,
 			longitude: longitude,
@@ -115,7 +129,7 @@ function findGeoLocation () {
 
 
  	requestAnimationFrame(function(z) {
- 		// console.log("findGeoLocation");
+ 		// and this is infinte loop, and this not a bug, this is a feature
  		findGeoLocation();
  	});
 
@@ -123,7 +137,7 @@ function findGeoLocation () {
 }// e/findGeoLocation
 
 
-
+// Send it the Q server
 function sendToQ (data) {
 	socket.emit('data', data);
 }
@@ -135,16 +149,7 @@ function sendToQ (data) {
 
 
 
-
-// on click remove 
-// geojson = L.geoJson(null, {
-//     onEachFeature: function(feature, layer) {
-//         layer.on('click', function() {
-//             geojson.removeLayer(layer);
-//         });
-//     }
-// }).addTo(map);
-
+// Decleration of the icons i'm using
 
 var blackIcon = L.icon({
     iconUrl: 'images/fa-map-marker.svg',
@@ -180,25 +185,27 @@ var whiteIcon = L.icon({
     popupAnchor:  [0, -50] // point from which the popup should open relative to the iconAnchor
 });
 
+// YouCircle === the blue cicrle where you can shoot
 var YouCircle = 0;
 
+// global object of all active users
 var users = {};
 
 function startSocket () {
 
 	socket.on('users', function(users){
+	// ask the server for a list of users:
 
-		// console.log(users);
 
-
-		// var obj = { first: "John", last: "Doe" };
+		// loop though object 
 		// Visit non-inherited enumerable keys
+		// var obj = { first: "John", last: "Doe" };
 		Object.keys(users).forEach(function(key) {
 
-			// window[key]
 			if (!window[key]) {
 
 				if (userid === key) {
+					// the Client has a different icon, thats all
 			    	// window[key] = L.marker([users[key][0],users[key][1]],{icon: blackIcon}).bindPopup("U: " + key + "    R: " + users[key][2] ).addTo(map);
 			    	window[key] = L.marker([users[key][0],users[key][1]],{icon: blackIcon}).addTo(map);
 					
@@ -213,14 +220,10 @@ function startSocket () {
 			}
 			window[key].setLatLng([users[key][0],users[key][1]]).update();
 
-
-
-		    // console.log("<", key, users[key], ">");
-
 		});
 
 
-
+		// Update the circle
 		Object.keys(users).forEach(function(key) {
 
 			if ((userid === key)&& (YouCircle === 0)) {
@@ -234,16 +237,7 @@ function startSocket () {
 		});
 
 
-
-
-
-
-
-		// if (!marker) {
-		//     marker = L.marker([latitude,longitude]).bindPopup("Ikke  " + userid).addTo(map);
-		// }
-		// marker.setLatLng([latitude, longitude]).update();
-
+		// Display a list of users:
 		var userList = "Users: <br />";
 		Object.keys(users).forEach(function(key) {
 			userList = userList + key + "<br />";
@@ -259,12 +253,13 @@ function startSocket () {
 startSocket();
 
 
-// Server time
+// Ask the Server time
 var date = 0;
 socket.on('date', function(data){
 	date = data.date;
 });
 
+// Error handeling, give you a alert when you have no connection
 setInterval(function(){
 	var delay = Number(new Date().getTime() - date);
 	if ((delay > 10001) &&(delay < 15001)) {
@@ -272,7 +267,9 @@ setInterval(function(){
 	};
 }, 5000);
 
-// debug showing
+
+
+// debug showing to all users, must be turned off
 setInterval(function(){
 	document.getElementById("timedifference").innerHTML = "Delay in ms: <br /> " + Number(new Date().getTime() - date )+ "<br />";
 	
@@ -282,23 +279,51 @@ setInterval(function(){
  }, 1000);
 
 
-
+// Kills the users without geolocation
 setInterval(function(){
-
 	if (window["data"].longitude === 0) {
 		console.log("FAIL");
 		window.location = "geolocation.html"
 	};
-	
+}, 20000);
+
+
+
+// Add auto zoom and panToYou explantion mark
+document.getElementById("update").addEventListener("click", panToYou, false);
+
+setInterval(function(){
+	panToYou ();
+}, 90000);
+
+function panToYou () {
+	var longitude = window["data"].longitude;
+	var latitude = window["data"].latitude;
+	console.log("panToYou " + longitude + " "+  latitude);
+    map.setZoom((19), {animate: true});
+	map.panTo(L.latLng(latitude, longitude),{animate: true});
+}//e/pantoyou
+
+
+// Fatal error functions:
+if (document.querySelectorAll("#error").length >= 0) {
+	document.querySelector("#error").style.display = "none";
+}; //e/fi
+
+function fatalError(zIndex) {
+	if (document.querySelectorAll("#error").length >= 0) {
+		document.querySelector("#error").style.display = "block";
+		document.querySelector("#error").style.zIndex = zIndex;
+	}//fi
+}
+
+
+setTimeout(function(){
+	fatalError(-1);
 }, 10000);
 
 
-
-
-
-
-
-
+// // ZOOM START unused
 
 // map.on("zoomstart", function (e) { console.log("ZOOMEND", e); });
 
@@ -318,14 +343,16 @@ setInterval(function(){
 // });
 
 
+// The spooks are comming, opponent handeling
+
 socket.on('opponent', function(opponent){
 
 	Object.keys(opponent).forEach(function(key) {
 
 		if (opponent[key][0] != 0) {
-			// console.log(opponent[key]);	
 
 			if (!window[key]) {
+				// if new opponent
 		    	window[key] = L.marker([opponent[key][0],opponent[key][1]],{icon: whiteIcon}).addTo(map);
 		    	// window[key] = L.marker([opponent[key][0],opponent[key][1]],{icon: whiteIcon}).bindPopup( key ).addTo(map);
 			}
@@ -336,7 +363,7 @@ socket.on('opponent', function(opponent){
 
 
 	});
-}); //e/oppo
+}); //e/opponent
 
 
 
@@ -382,118 +409,3 @@ socket.on('score', function(score){
 
 
 
-
-
-
-
-// geojson.addData({
-//     type: 'Point',
-//     coordinates: [Math.random() * 360 - 180, Math.random() * 160 - 80]
-// });
-
-
-
-
-// console.log(userid);
-
-
-// // Server time
-// socket.on('date', function(data){
-// 	document.getElementById("date").innerHTML = data.date;
-// });
-
-// // geoFindMe();
-
-// function geoFindMe() {
-//   var output = document.getElementById("geo");
-
-//   if (!navigator.geolocation){
-//     output.innerHTML = "<p>Geolocation is not supported by your browser</p>";
-//     return;
-//   }
-
-//   function success(position) {
-    
-//     var latitude  = position.coords.latitude;
-//     var longitude = position.coords.longitude;
-
-
-// 	var map = L.map('map').setView([latitude, longitude], 18);
-
-// 	L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
-// 		maxZoom: 18,
-// 		attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
-// 			'<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-// 			'Imagery © <a href="http://mapbox.com">Mapbox</a>',
-// 		id: 'examples.map-i875mjb7'
-// 	}).addTo(map);  	
-
-
-
-
-//     try {
-//     	output.innerHTML = '<p>Latitude is ' + latitude + ' deg <br/> Longitude is ' + longitude + 'deg </p>';
-//     }catch(e) {
-//     }
-
-//     updateGeoLocation(map);
-
-//   };
-
-//   function error() {
-//     output.innerHTML = "Unable to retrieve your location";
-//   };
-
-//   	// show user scrolling sun
-// 	navigator.geolocation.getCurrentPosition(success, error);
-// }
-
-
-// var serverSend = "";
-// var serverSendPrevious = "";
-
-
-// function updateGeoLocation (map) {
-
-// 	navigator.geolocation.getCurrentPosition(success, error);
-
-// 	function success(position) {
-
-// 	    var latitude  = position.coords.latitude;
-// 	    var longitude = position.coords.longitude;
-
-//         try {
-//            	output.innerHTML = '<p>Latitude is ' + latitude + ' deg <br/> Longitude is ' + longitude + 'deg </p>';
-//         }catch(e) {
-//         }
-
-
-
-// 	    serverSend = userid + ";"  + latitude + "," + longitude;
-
-
-// 	    if (serverSendPrevious != serverSend) {
-// 	    	console.log(serverSend);
-// 	   		socket.emit('geo', {'letter': serverSend});
-// 	   		serverSendPrevious = serverSend;
-// 	    }
-
-// 		map.panTo(L.latLng(latitude, longitude));
-
-// 		// var map = L.map('map').setView([latitude, longitude], 18);
-// 		// var map = L.map('map').setView(new L.LatLng(latitude, longitude), 18);
-
-// 		// L.marker([latitude, longitude]).addTo(map).bindPopup("<b>Hello world!</b><br />I am a popup.").openPopup();
-
-
-// 	    requestAnimationFrame(function(z) {
-// 	    	updateGeoLocation(map);
-// 	    });
-// 	}
-
-// 	function error() {
-//     	output.innerHTML = "Unable to retrieve your location";
-//  	};
-
-
-// }

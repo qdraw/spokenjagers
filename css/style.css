@@ -22,6 +22,19 @@
 	background-image: url("../images/geopointer.svg");
 	background-size: cover;
 	cursor:pointer;
+	text-indent: -9999px;
+}
+
+
+#error {
+	position: absolute;
+	bottom: 50%;
+	right: 40%;
+	padding: 20px;
+	height: 100px;
+	width: 200px;
+	font-size: 20px;
+	background-color: #fff;
 }
 
 
