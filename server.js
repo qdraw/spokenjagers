@@ -1,3 +1,23 @@
+/*
+                          ,                                  
+                         ,:                                  
+          ,:==++=~,      :~                                  
+        ,=+=:::::+?~     ~=                 ,,                  
+       ~+~:~==++=,,~,    ~=                :==:   ,=~,       ,   
+      ==,~      :~,      ~~       ~??~     :~ =:   :I=      ,,        
+     ~~=,        ==,    ,~II    :?$+=?=:      ?,   ++:     ;;  
+    ,==~~      ,,,   ,?Z$7ZI:  ,I$,  ~?:   +$$=,  ,+?,+= ,:;  
+     =+:     ,,,:  ,7Z: ,~=,   =I?~,+7   ,=$~,=I~   +I~77 ~:,  
+    ,=~:,   :==~::  ?I~  ,~=,  ,?$Z7$?:  +7:  ~I~   +$I==I=:   
+    ,=~:~:,:~=++,  ,I?:  ,=?:  :I7+~~:  ,?7:,~++,   =$I :I+,   
+     ,==::::::+?=~  ~II,,=II,  ,??: :~~  +?=++I$+   ~7? ,++:   
+       :~::~:, :+?+:  ?II+~:  ,:+~   ,~~  ==~::::,  :+,  :=:   
+                ,=II+:        ,:,    ,~=:                    
+                  :=~==                ~=,                   
+                      ,                ,::                            
+*/
+
+
 // Servercode
 
 var http = require('http');
@@ -5,54 +25,52 @@ var url = require('url');
 var fs = require('fs');
 var server;
 
+//star server using http
 server = http.createServer(function(req, res){
     // your normal server code
     var path = url.parse(req.url).pathname;
 
+    // index support
     if (path === "/") {
     	path = "/index.html"
     };
 
+    // read files
     fs.readFile(__dirname + path, function(err, data){
-        if (err){ 
+        if (err){ // on error serve 404
             return send404(path,res);
         }
 
-        // Ban List
+        // Ban List User Agent Strings
         banList = ["Abrave Spider", "GingerCrawler", "HTTrack", "ichiro", "Image Stripper", "Image Sucker", "ISC Systems iRc", "JadynAveBot", "Java", "LexxeBot", "lwp::", "lwp-", "LinkWalker", "libwww-perl", "localbot", "Mass Downloader", "Missigua", "Locator", "Offline", "OpenAnything", "Purebot", "PycURL", "python", "python", "Python-xmlrpc", "SiteSnagger", "SiteSucker", "SuperBot", "swish-e", "Web Image Collector", "Web Sucker", "WebAuto", "WebCopier", "webcollage", "WebFetch", "WebLeacher", "WebReaper", "Website eXtractor", "WebStripper", "WebWhacker", "WebZIP", "Mail.ru", "Yandex", "WinHTTP", "bazqux"]
 
+        // Add to ban Google, MS, Yahoo, Facbook
         banList.push("Googlebot");
         banList.push("MSNBot");
         banList.push("Yahoo");
         banList.push("FacebookExternalHit/1");
         banList.push("Pinterest");
 
+        // if word is included string
         function wordInString(s, word){
             return new RegExp( '\\b' + word + '\\b', 'i').test(s);
         }
 
+        // check if word contains in Array
         function contains(array,searchFor) {
             var i = array.length;
             while (i--) {
                 containsword = wordInString(searchFor.toLowerCase(),array[i].toLowerCase());
-                // console.log(containsword);
                 if (containsword) {
                     console.log(array[i]);
-
                     return true;
                 };
-
-                // // if (this[i] === obj){
-                // if (this[i].indexOf(obj.toLowerCase()) >= 0) {
-                //     console.log(this[i]);
-                //     return true;
-                // }
             }
             return false;
         }
 
 
-
+        // excuting banList
         if (contains(banList,req.headers['user-agent'])|| req.headers['user-agent'] === "") {
             return send404(path,res);
         };
@@ -60,7 +78,8 @@ server = http.createServer(function(req, res){
         // end banList
         
 
-        // res.writeHead(200, {'Content-Type': path == '.js' ? 'text/javascript' : 'text/html'});
+
+        // MIME TYPES serve
 
         if (path.indexOf(".js") >= 0 ) {
             res.writeHead(200,{'Content-Type':'text/javascript'});
@@ -82,6 +101,7 @@ server = http.createServer(function(req, res){
             res.writeHead(200,{'Content-Type':'image/svg+xml'});
         };
 
+        // Serve 404 pages for GPX, and SRCGPX logs
         if (path.indexOf(".gpx") >= 0 ) {
             return send404(path,res);
         };
@@ -113,34 +133,50 @@ send404 = function(path,res){
     });
 };
 
+// the server port
 server.listen(8080);
 
 // use socket.io
 var io = require('socket.io').listen(server);
 
+// setup variabels for userData to avoid crashes
 var userData = {
     0: {},
     1: {},
     2: {}
 };
+// Counter used in userData
+var c = 0;
 
 var latestConnectionTime = {};
 
-var c = 0;
-
+// fill userData with all lat,long
 var isFirstRun = true;
 
 // define interactions with client
 io.sockets.on('connection', function(socket){
+    // Every User has one connection
+    var userid = 0;
+    global["userid"] = 0;
 
     //recieve client data
+    // I receive this object from the user:
+    // var data = {
+    //     userid: userid,
+    //     longitude: longitude,
+    //     latitude: latitude,
+    //     accuracy: accuracy,
+    //     altitude: altitude,
+    //     speed: speed
+    // }
+
     socket.on('data', function(data){
         procesData(data);
     });
-    
+
+    // Excute data:
     function procesData(data) {
-        var userid = data.userid;
-        global["userid"] = data.userid;
+        userid = data.userid;
 
         if (isFirstRun) {
             userData[0][userid] = [ data.latitude, data.longitude, data.accuracy, data.altitude, data.speed];
@@ -166,19 +202,20 @@ io.sockets.on('connection', function(socket){
         return microSeconds;   
     }
 
-
+    // Send Data to client to display all users on the map
     setInterval(function(){
          socket.emit('users', userData[c]);
     }, 500);
 
-    // stuur tijd door naar client:
-    setInterval(function(){
-        // socket.emit('date', {'date': new Date()});
-        socket.emit('date', {'date': new Date().getTime()});
 
+    // Send Time to Client
+    setInterval(function(){
+        socket.emit('date', {'date': new Date().getTime()});
     }, 1000);
 
-    // Error handeling:
+
+
+    // Error handeling: Incorrect Moving detection, twiche a second;
     setInterval(function(){
 
         microSeconds = calcMicroSeconds();
@@ -216,9 +253,8 @@ io.sockets.on('connection', function(socket){
     }, 200);
 
 
-    // Kill Bill function
+    // Kill Bill function, kicking user out of the map, every 5 seconds
     setInterval(function(){
-
 
         Object.keys(latestConnectionTime).forEach(function(key) {
 
@@ -243,9 +279,9 @@ io.sockets.on('connection', function(socket){
 
 
 
-    // opponent
-    // var opponent = {}  
+    // Opponent aka Spooks
 
+    // min+max extensions use: [0,2].min()
     Array.prototype.max = function () {
         return Math.max.apply(Math, this);
     };
@@ -254,14 +290,25 @@ io.sockets.on('connection', function(socket){
         return Math.min.apply(Math, this);
     };
 
+    // return this type of object: with getCanvas of all active Users
+    // Object {
+    //     [ 
+    //         [0] lowest Latitude (north-south)
+    //         [1] highest Latitude
+    //     ]
+    //     [ 
+    //         [0] lowest Longitude (east-west)
+    //         [1] highest Longitude
+    //     ]
+    // }
     function getCanvas() {
 
         var latArray = [];
         var longArray = [];
 
+        // Loop though all userData to create a list with all Lat. and Long. to check on lowest/heighest
         Object.keys(userData[c]).forEach(function(key) {
             try {
-                    // console.log(userData[c][key][0]);
                 if (userData[c][key][0] != 0) {
                     latArray.push(userData[c][key][0]);
                 };
@@ -274,6 +321,7 @@ io.sockets.on('connection', function(socket){
 
         });
 
+        // extra check to avoid errors
         if (latArray.length != 0) {
 
             var latmin = latArray.min();
@@ -291,45 +339,32 @@ io.sockets.on('connection', function(socket){
         }
 
         return latlongArray;
-        // console.log(latmin);
-        // console.log(latmax);
-        // console.log(longmin);
-        // console.log(longmax);
     }
 
-    function getRandomArbitrary(min, max) {
-        return Math.random() * (max - min) + min;
-    }
-    function getRandomInt(min, max) {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
-        // return [getRandomArbitrary(52.2287453+0.0007, 52.2287453-0.0007), getRandomArbitrary(6.0956636-0.0007, 6.0956636+0.0007)]
+ 
+    // Active Area where the spooks are active
 
-
+    // This function return using this template:
+    // var opponent = {
+    //         "topRight":[Longitude ,latitude],
+    //         "topLeft":[Longitude ,latitude],
+    //         "bottomLeft":[Longitude ,latitude],
+    //         "bottomRight":[Longitude ,latitude]
+    // } 
 
     function writeOutbound () {
         
+        // use theCanvas!
         var theCanvas = getCanvas();
         global["theCanvas"] = theCanvas;
 
+        // check the Canvas on errors
         if (theCanvas != 0) {
 
             var latmin = theCanvas[0][0];
-            // console.log(latmin);
             var latmax = theCanvas[0][1];
-            // console.log(latmax);
             var longmin = theCanvas[1][0];
-            // console.log(longmin);
             var longmax = theCanvas[1][1];
-            // console.log(longmax);
-
-            // var opponent = {
-            //         "topRight":[Number(52.2287453+0.0007),Number(6.0956636+0.0007),83],
-            //         "topLeft":[Number(52.2287453+0.0007),Number(6.0956636-0.0007),83],
-
-            //         "bottomLeft":[Number(52.2287453-0.0007),Number(6.0956636-0.0007),83],
-            //         "bottomRight":[Number(52.2287453-0.0007),Number(6.0956636+0.0007),83],
-            // } 
 
             outbound = {
                 "topLeft":[latmax+0.0006,longmin-0.0006,0],
@@ -345,12 +380,24 @@ io.sockets.on('connection', function(socket){
 
     }//e/writeOutbound
 
-    setInterval(function(){
-        // to add + make the area bigger
 
+    // Random function to create floating numbers
+    function getRandomArbitrary(min, max) {
+        return Math.random() * (max - min) + min;
+    }
+
+    //Random interer
+    function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+
+    // Check the area and send it to the user to display, the user display must be turned off
+    setInterval(function(){
         global["area"] = writeOutbound();
         socket.emit('outbound', global["area"]);
 
+        // // use this to send it once:
         // if (typeof global["area"] != "object") {
         //     global["area"] = writeOutbound();
         //     socket.emit('outbound', global["area"]);
@@ -359,8 +406,10 @@ io.sockets.on('connection', function(socket){
     }, 1000);
 
 
+    // Create for the first time Opponents
     setInterval(function(){
 
+        // Check if Opponents exist
         try {
             if (global["opponent"]["opponent_0"][0] === 0) {
                 var ready = true;
@@ -372,15 +421,17 @@ io.sockets.on('connection', function(socket){
 
         if ((typeof global["theCanvas"] === "object")&& ready) {
             var theCanvas = global["theCanvas"];
-            console.log("theCanvas");
 
+            console.log("> Create for the first time Opponents");
             console.log(theCanvas)
+
             var latmin = theCanvas[0][0];
             var latmax = theCanvas[0][1];
             var longmin = theCanvas[1][0];
             var longmax = theCanvas[1][1];
 
-
+            // loop for new Opponents
+            // [lat,long,score, offEarthScore]
             for (var i = 0; i < opponent_lenght; i++) {
                 global["opponent"]["opponent_" + i] = [getRandomArbitrary(latmin-0.0006, latmax+0.0006),getRandomArbitrary(longmin-0.0006, longmax+0.0006),10,15];
             };
@@ -389,29 +440,34 @@ io.sockets.on('connection', function(socket){
 
     }, 1000);
 
+
+    // Create single Opponents, when you kill some, or moved out of canvas
     function newOpponent (i) {
             var theCanvas = global["theCanvas"];
             var latmin = theCanvas[0][0];
             var latmax = theCanvas[0][1];
             var longmin = theCanvas[1][0];
             var longmax = theCanvas[1][1];
+
+            // [lat,long,score, offEarthScore]
             global["opponent"]["opponent_" + i] = [getRandomArbitrary(latmin-0.0006, latmax+0.0006),getRandomArbitrary(longmin-0.0006, longmax+0.0006),10,15];
     }
     
 
+    // Move Opponents on the canvas
     setInterval(function(){
 
+        // move left|right or down|up
         var oneORzero = getRandomInt(0, 1); 
 
+        // all Opponents loop
         for (var i = 0; i < opponent_lenght; i++) {
-            // console.log(global["opponent"]);
 
-            // console.log(opponent_lenght);
-
+            // error if statement
             if (global["opponent"]["opponent_0"][0] != 0 && global["area"] != 0 ) {
 
+                // Gearbox, change the speed
                 var speedInt = getRandomInt(0, 3);
-
                 switch (speedInt){
                     case 0:
                         var speed = 0.000037/2;
@@ -432,56 +488,52 @@ io.sockets.on('connection', function(socket){
                 var position = Number(opponent["opponent_" + i][oneORzero]);
                 var newPosition = Number(value + position);
 
+                // Box protection
                 if (oneORzero === 0) {
                     if ((global["area"]["topLeft"][0] > newPosition)&& (global["area"]["bottomRight"][0] < newPosition)) {
                     }
                     else {
+                        // offEarthScore -1
                         newPosition = position;
                         global["opponent"]["opponent_" +i ][3] = Number(global["opponent"]["opponent_" +i][3] -1)
-                        // console.log("top/bottom == wrong")
                     }
                 }
                 else {
                     if ((global["area"]["topLeft"][1] < newPosition)&& (global["area"]["bottomRight"][1] > newPosition)) {
                     }
                     else {
+                        // offEarthScore -1
                         newPosition = position;
                         global["opponent"]["opponent_" +i][3] = Number(global["opponent"]["opponent_" +i][3] -1)
-
-                        // console.log("left/right == wrong")
                     }
                 }
 
-
+                // write the new posistion:
                 global["opponent"]["opponent_" + i][oneORzero] = newPosition;
 
-                // console.log(global["opponent"]["opponent_" + i][3]);
 
+                // Kill the offEarthScore
                 if (global["opponent"]["opponent_" +i][3] < 0) {
                     newOpponent (i);
-                    // global["opponent"]["opponent_" +i][3] = 15;
                 };
-
-
-                // Number(opponent["opponent_" + i][oneORzero] + getRandomArbitrary(-0.000057, +0.000057));
-
-                // opponent["opponent_" + i][oneORzero] =  Number(opponent["opponent_" + i][oneORzero] + getRandomArbitrary(-0.000057, +0.000057));
-                
+               
             };
         };
 
+        // Send oponnents to the user:
         socket.emit('opponent', global["opponent"]);
 
     }, 250); // doble speed
 
-    var userid = global["userid"];
+
+
     global["score"][userid] = 0;
 
     socket.on('shoot', function(shoot){
 
         var isInBox = false;
 
-        var userid = global["userid"];
+        // var userid = global["userid"];
         try {
             // console.log(calcCrow(shoot.lat, shoot.lng, userData[c][userid][0], userData[c][userid][1]));
             if (calcCrow(shoot.lat, shoot.lng, userData[c][userid][0], userData[c][userid][1]) <= 0.0199883) {
@@ -551,7 +603,7 @@ io.sockets.on('connection', function(socket){
     setInterval(function(){
 
         try {
-            var userid = global["userid"];
+            // var userid = global["userid"];
             if ((userData[c][userid][0] != 0) && (userData[c][userid][0] != undefined)) {
                 var lat = userData[c][userid][0];
             };
@@ -571,11 +623,11 @@ io.sockets.on('connection', function(socket){
                 var myDate = new Date().toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
                 var today = new Date().toJSON().slice(0,10);
 
-                var logfilename = "logs/" + global["userid"] + ".srcgpx";
+                var logfilename = "logs/" + userid + ".srcgpx";
 
                 var appendData = '<trkpt lat="'+ lat +'" lon="'+ lng +'">' + "\n" + "<ele>" + altitude + "</ele>\n" + "<time>" + today + "T" + myDate + "Z" +"</time>" + "\n<extensions>\n<speed>" + speed +"</speed>\n</extensions>\n"+ "</trkpt> \n";
                 var appendData = appendData;
-                if (logfilename != "logs/undefined.srcgpx") {
+                if ((logfilename != "logs/undefined.srcgpx") && (logfilename != "logs/0.srcgpx") ) {
                     fs.appendFile(logfilename, appendData, function (err) {
                     });                    
                 };
@@ -594,7 +646,7 @@ io.sockets.on('connection', function(socket){
     setInterval(function(){
         try {
             // var fs = require('fs');
-            var logfilename = "logs/" + global["userid"] + ".srcgpx";
+            var logfilename = "logs/" + userid + ".srcgpx";
 
             var file = "";
             fs.readFile(logfilename, 'utf8', function (err,data) {
@@ -602,20 +654,20 @@ io.sockets.on('connection', function(socket){
                 return console.log(err);
               }
               // console.log(data);
-              global["file_" + global["userid"] ] = data;
+              global["file_" + userid ] = data;
             });
 
-            var logfilename = "logs/" + global["userid"] + ".gpx";
+            var logfilename = "logs/" + userid + ".gpx";
 
             var prevAppendData = '<?xml version="1.0" encoding="UTF-8" ?>' + "\n" + '<gpx xmlns="http://www.topografix.com/GPX/1/1" version="1.1" creator="Qdraw" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd ">' + "\n" + "<trk>" +"\n" + "<name>Qdraw " + userid + "</name> \n <trkseg> \n\n";
             var afterAppendData = "</trkseg></trk></gpx>";
-            writeFile = prevAppendData + global["file_" + global["userid"] ] + afterAppendData;
+            writeFile = prevAppendData + global["file_" + userid ] + afterAppendData;
             fs.writeFile(logfilename, writeFile, function(err) {
                 if(err) {
                     return console.log(err);
                 }
             });
-            global["file_" + global["userid"] ] = "";  
+            global["file_" + userid ] = "";  
         }
         catch(e) {
             console.log("gpx writer fails");
