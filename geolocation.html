@@ -2,7 +2,6 @@
 <html>
 <head>
 	<meta charset="utf-8" />
-   	<script type="text/javascript" src="/socket.io/socket.io.js"></script>
 	<link rel="stylesheet" href="/css/reset.css" />	
 	<link rel="stylesheet" href="/css/style.css" />	
 	<link rel="stylesheet" href="/css/leaflet.css" />	
@@ -13,7 +12,9 @@
 
 <div class="container">
 	<h1>How to give permission</h1>
+	<p><a href="/"> Ga terug naar de game</a></p>
 	<img id="browserimage" />
+	<div id="browserimagelink"></div>
 
 
 	<script type="text/javascript">
@@ -22,9 +23,19 @@
 		var isFF = !!window.sidebar;
 		var isSafari = /constructor/i.test(window.HTMLElement);
 
-		if (isChromium) document.getElementById("browserimage").src = "images/geolocation.chrome.jpg" ;
-		if (isFF) document.getElementById("browserimage").src = "images/geolocation.firefox.jpg" ;
+		if (isChromium) {
+			document.getElementById("browserimage").src = "images/geolocation.chrome.jpg" 
+			document.getElementById("browserimagelink").innerHTML = "chrome://settings/contentExceptions#location<br />Instelligen > Geavanceerde instellingen weergeven... > Onder privacy, instellingen voor inhoud > doorscrollen tot Locatie > Uitzonderingen beheren" 
+		};
+
+		if (isFF) {
+			document.getElementById("browserimage").src = "images/geolocation.firefox.jpg" 
+			document.getElementById("browserimagelink").innerHTML = "Kopieer het volgende adres: <br /> about:permissions <br /> en ga met het filter naar deze site en geef toestemming</a>";
+		};
+
 		if (isSafari) document.getElementById("browserimage").src = "images/geolocation.safari.jpg" ;
+
+
 	</script>
 
 
