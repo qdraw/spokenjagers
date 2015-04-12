@@ -41,6 +41,8 @@ server = http.createServer(function(req, res){
             return send404(path,res);
         }
 
+        writeApacheLog(path,res,200);
+
         // Ban List User Agent Strings
         banList = ["Abrave Spider", "GingerCrawler", "HTTrack", "ichiro", "Image Stripper", "Image Sucker", "ISC Systems iRc", "JadynAveBot", "Java", "LexxeBot", "lwp::", "lwp-", "LinkWalker", "libwww-perl", "localbot", "Mass Downloader", "Missigua", "Locator", "Offline", "OpenAnything", "Purebot", "PycURL", "python", "python", "Python-xmlrpc", "SiteSnagger", "SiteSucker", "SuperBot", "swish-e", "Web Image Collector", "Web Sucker", "WebAuto", "WebCopier", "webcollage", "WebFetch", "WebLeacher", "WebReaper", "Website eXtractor", "WebStripper", "WebWhacker", "WebZIP", "Mail.ru", "Yandex", "WinHTTP", "bazqux"]
 
@@ -527,62 +529,61 @@ io.sockets.on('connection', function(socket){
 
 
 
+    // Score HANDELING , kill the opponent, seperate channel
+
     global["score"][userid] = 0;
 
     socket.on('shoot', function(shoot){
 
+        // check if the shooting is inside the circle
         var isInBox = false;
-
-        // var userid = global["userid"];
         try {
-            // console.log(calcCrow(shoot.lat, shoot.lng, userData[c][userid][0], userData[c][userid][1]));
             if (calcCrow(shoot.lat, shoot.lng, userData[c][userid][0], userData[c][userid][1]) <= 0.0199883) {
                 console.log(shoot);
                 var isInBox = true;
             };
         }
-        catch(e) {
-        }
+        catch(e) {}
 
         if (isInBox) {
 
+            // Whitch opponent is in the circle and has been shot?
             for (var i = 0; i < opponent_lenght; i++) {
 
                 var posLat = global["opponent"]["opponent_" + i][0];
                 var posLng = global["opponent"]["opponent_" + i][1];
 
+                // calculate the distance of the opponent related to the point that has been shot
                 if (calcCrow(shoot.lat, shoot.lng, posLat, posLng) < 0.006) {
 
 
+                    // Check Not a Number > give three points
                     if (isNaN(global["opponent"]["opponent_" + i][2])) {
                         global["opponent"]["opponent_" + i][2] = 3;
                     };
 
+                    // Give -1 to opponent
                     global["opponent"]["opponent_" + i][2]--;
 
-                    console.log("opponent score");
-                    console.log(global["opponent"]["opponent_" + i][2]);
+                    // display in terminal
+                    console.log("> User: " + userid + " -> opponent " + i + ", score: " + global["opponent"]["opponent_" + i][2] );
 
+                    // opponent has lost:
                     if (global["opponent"]["opponent_" + i][2] <= 0) {
-
                         global["opponent"]["opponent_" + i][0] = newOpponent (i); 
                         global["opponent"]["opponent_" + i][1] = newOpponent (i);
-
                     };
 
 
                     if (isNaN(global["score"][userid] + 1)) {
-                        console.log("Score restart");
+                        console.log("WARNING: Score restart");
                         global["score"][userid] = 0;
                     };
 
-
+                    // Give +1 to the user
                     global["score"][userid]++;
+                    // send score to user:
                     socket.emit('score', {"points": global["score"][userid]});
-
-
-
-
                 };
 
                 var posLat;
@@ -599,11 +600,10 @@ io.sockets.on('connection', function(socket){
 
 
 
-    // Logger
+    // Logger --> /logs/*.scrgpx
     setInterval(function(){
 
         try {
-            // var userid = global["userid"];
             if ((userData[c][userid][0] != 0) && (userData[c][userid][0] != undefined)) {
                 var lat = userData[c][userid][0];
             };
@@ -627,17 +627,16 @@ io.sockets.on('connection', function(socket){
 
                 var appendData = '<trkpt lat="'+ lat +'" lon="'+ lng +'">' + "\n" + "<ele>" + altitude + "</ele>\n" + "<time>" + today + "T" + myDate + "Z" +"</time>" + "\n<extensions>\n<speed>" + speed +"</speed>\n</extensions>\n"+ "</trkpt> \n";
                 var appendData = appendData;
-                if ((logfilename != "logs/undefined.srcgpx") && (logfilename != "logs/0.srcgpx") ) {
+
+                if ( (lat != 0) && (lng != 0 ) && (userid != 0 )) {
                     fs.appendFile(logfilename, appendData, function (err) {
                     });                    
                 };
-
-
             };
 
         }
         catch(e) {
-            console.log("srcgpx writer fails");
+            console.log("srcgpx writer fails under: " + userid);
         }
 
 
@@ -674,14 +673,56 @@ io.sockets.on('connection', function(socket){
         }
     }, 20000);
 
+
     // end of logger
 
 });
 
 
+function writeApacheLog(path,res,httpcode) {
+ 
+    var ip = res.connection.remoteAddress || res.socket.remoteAddress || res.connection.socket.remoteAddress;
+    // req.header('x-forwarded-for') ||
+
+     // 127.0.0.1 - frank [10/Oct/2000:13:55:36 -0700] "GET /apache_pb.gif HTTP/1.0" 200 2326 
+
+    var month_names_short = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    var myDate = new Date().toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
+    var d = new Date();
+    var n = d.getTimezoneOffset();
+    var o = n * -1;
+    var p = o / 60;
+    if ((p >= 0)&& (p <= 9) ) {
+        var u = "+0" + p + ":00";
+    };
+
+    var day = d.getUTCDate();
+    if ((day >= 0)&& (day <= 9) ) {
+        day = "0" + day;
+    }
+
+    var stats = fs.statSync(__dirname + path);
+    var fileSizeInBytes = stats["size"]    
+
+    var log = ip + " -  - ["+ day +"/" + month_names_short[d.getMonth()] + "/" + d.getFullYear() + ":" + myDate + " " + u + "] " + '"' + "GET " + path + " HTTP/1.0"+ '"' + " " + httpcode + " " + fileSizeInBytes + "\n";
+
+    try {
+        fs.appendFile("logs/access_log.src", log, function (err) {
+        }); 
+    }
+    catch(e){}
+
+    // var today = new Date().toJSON().slice(0,10);
+    // console.log("today " + today);
+    // var toda1y = new Date();
+    // console.log("toda1y " + toda1y);
 
 
 
+}
+
+
+// START opponent as global variables to avoid diffececes between users:
 global["opponent"] = {};
 var opponent_lenght = 5;
 
@@ -693,8 +734,7 @@ function startOpponent() {
     };
 }//e/startOpponent
 
-
-
+// Global object Score:
 global["score"] = {};
 
 
@@ -722,14 +762,23 @@ function toRad(Value){
 }
 
 
-console.log("Script started");
+console.log("> Script loaded");
+
+var os = require('os');
+
+var interfaces = os.networkInterfaces();
+var addresses = [];
+for (var k in interfaces) {
+    for (var k2 in interfaces[k]) {
+        var address = interfaces[k][k2];
+        if (address.family === 'IPv4' && !address.internal) {
+            addresses.push(address.address);
+        }
+    }
+}
+console.log("> Local IP: " + addresses);
 
 
-
-// getClientAddress = function (req) {
-//         return (req.headers['x-forwarded-for'] || '').split(',')[0] 
-//         || req.connection.remoteAddress;
-// };
 
 
 
