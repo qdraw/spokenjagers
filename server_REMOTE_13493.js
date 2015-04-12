@@ -133,14 +133,15 @@ var isFirstRun = true;
 // define interactions with client
 io.sockets.on('connection', function(socket){
 
+    var userid = "";
+
     //recieve client data
     socket.on('data', function(data){
         procesData(data);
     });
     
     function procesData(data) {
-        var userid = data.userid;
-        global["userid"] = data.userid;
+        userid = data.userid;
 
         if (isFirstRun) {
             userData[0][userid] = [ data.latitude, data.longitude, data.accuracy, data.altitude, data.speed];
@@ -243,8 +244,7 @@ io.sockets.on('connection', function(socket){
 
 
 
-    // opponent
-    // var opponent = {}  
+    // All users logedin, make a canvas within 
 
     Array.prototype.max = function () {
         return Math.max.apply(Math, this);
@@ -254,8 +254,7 @@ io.sockets.on('connection', function(socket){
         return Math.min.apply(Math, this);
     };
 
-    function getCanvas() {
-
+    function minMaxLatLng () {
         var latArray = [];
         var longArray = [];
 
@@ -289,78 +288,58 @@ io.sockets.on('connection', function(socket){
         else {
             var latlongArray = 0
         }
-
+        
         return latlongArray;
-        // console.log(latmin);
-        // console.log(latmax);
-        // console.log(longmin);
-        // console.log(longmax);
+
+    }//e/ 
+
+   function playgroundSize (minMaxLatLngData) {
+
+        if (minMaxLatLngData != 0) {
+            var latmin = minMaxLatLngData[0][0], 
+                latmax = minMaxLatLngData[0][1],
+                longmin = minMaxLatLngData[1][0],
+                longmax = minMaxLatLngData[1][1];
+            var playgroundSizeData = {
+                "topLeft":[latmax+0.0006,longmin-0.0006,0],
+                "topRight":[latmax+0.0006,longmax+0.0006,0],
+                "bottomLeft":[latmin-0.0006,longmin-0.0006,0],
+                "bottomRight":[latmin-0.0006,longmax+0.0006,0],
+            }
+            return playgroundSizeData;
+        };
+
     }
 
+
+    // Calculate and Send to Client > PlaygroundSize
+    setInterval(function(){
+        var minMaxLatLngData = minMaxLatLng();
+        // use for Add new user:
+        global["minMaxLatLngData"] = minMaxLatLngData;
+
+        var playgroundSizeData = playgroundSize (minMaxLatLngData);
+        // for box control and update players
+        global["playgroundSizeData"] = playgroundSizeData;
+
+        socket.emit('playgroundSizeData', playgroundSizeData);
+    }, 1003);
+
+
+
+    // Random
     function getRandomArbitrary(min, max) {
         return Math.random() * (max - min) + min;
     }
     function getRandomInt(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
-        // return [getRandomArbitrary(52.2287453+0.0007, 52.2287453-0.0007), getRandomArbitrary(6.0956636-0.0007, 6.0956636+0.0007)]
 
-
-
-    function writeOutbound () {
-        
-        var theCanvas = getCanvas();
-        global["theCanvas"] = theCanvas;
-
-        if (theCanvas != 0) {
-
-            var latmin = theCanvas[0][0];
-            // console.log(latmin);
-            var latmax = theCanvas[0][1];
-            // console.log(latmax);
-            var longmin = theCanvas[1][0];
-            // console.log(longmin);
-            var longmax = theCanvas[1][1];
-            // console.log(longmax);
-
-            // var opponent = {
-            //         "topRight":[Number(52.2287453+0.0007),Number(6.0956636+0.0007),83],
-            //         "topLeft":[Number(52.2287453+0.0007),Number(6.0956636-0.0007),83],
-
-            //         "bottomLeft":[Number(52.2287453-0.0007),Number(6.0956636-0.0007),83],
-            //         "bottomRight":[Number(52.2287453-0.0007),Number(6.0956636+0.0007),83],
-            // } 
-
-            outbound = {
-                "topLeft":[latmax+0.0006,longmin-0.0006,0],
-                "topRight":[latmax+0.0006,longmax+0.0006,0],
-                "bottomLeft":[latmin-0.0006,longmin-0.0006,0],
-                "bottomRight":[latmin-0.0006,longmax+0.0006,0]                                                    
-            }
-            return outbound;
-        }
-        else {
-            return 0;
-        }
-
-    }//e/writeOutbound
+ 
+   // Add New opponents if user login in
 
     setInterval(function(){
-        // to add + make the area bigger
-
-        global["area"] = writeOutbound();
-        socket.emit('outbound', global["area"]);
-
-        // if (typeof global["area"] != "object") {
-        //     global["area"] = writeOutbound();
-        //     socket.emit('outbound', global["area"]);
-        // };
-
-    }, 1000);
-
-
-    setInterval(function(){
-
+        //check: addNewOpponents
         try {
             if (global["opponent"]["opponent_0"][0] === 0) {
                 var ready = true;
@@ -370,40 +349,61 @@ io.sockets.on('connection', function(socket){
             var ready = false;
         }
 
-        if ((typeof global["theCanvas"] === "object")&& ready) {
-            var theCanvas = global["theCanvas"];
-            console.log("theCanvas");
+        if (typeof global["minMaxLatLngData"] === "object") {
+            
+            // Read playgroundSizeData!
+            var minMaxLatLngData = global["minMaxLatLngData"];
+            var latmin = minMaxLatLngData[0][0];
+            var latmax = minMaxLatLngData[0][1];
+            var longmin = minMaxLatLngData[1][0];
+            var longmax = minMaxLatLngData[1][1];
+        }
 
-            console.log(theCanvas)
-            var latmin = theCanvas[0][0];
-            var latmax = theCanvas[0][1];
-            var longmin = theCanvas[1][0];
-            var longmax = theCanvas[1][1];
-
-
-            for (var i = 0; i < 5; i++) {
+        if (ready) {
+            for (var i = 0; i < addNewOpponents; i++) {
                 global["opponent"]["opponent_" + i] = [getRandomArbitrary(latmin-0.0006, latmax+0.0006),getRandomArbitrary(longmin-0.0006, longmax+0.0006)];
             };
-
+            global["opponent_lenght"] = addNewOpponents;
         };
 
     }, 1000);
 
+
+    // Single New Opponent
     function newOpponent (i) {
-            var theCanvas = global["theCanvas"];
-            var latmin = theCanvas[0][0];
-            var latmax = theCanvas[0][1];
-            var longmin = theCanvas[1][0];
-            var longmax = theCanvas[1][1];
-            global["opponent"]["opponent_" + i] = [getRandomArbitrary(latmin-0.0006, latmax+0.0006),getRandomArbitrary(longmin-0.0006, longmax+0.0006)];
-    }
+
+        global["minMaxLatLngData"] = minMaxLatLng();
+        // Read playgroundSizeData!
+        // var minMaxLatLngData = global["minMaxLatLngData"];
+        var latmin = minMaxLatLngData[0][0];
+        var latmax = minMaxLatLngData[0][1];
+        var longmin = minMaxLatLngData[1][0];
+        var longmax = minMaxLatLngData[1][1];
+
+        // var newPosition = [getRandomArbitrary(latmin-0.0006, latmax+0.0006),getRandomArbitrary(longmin-0.0006, longmax+0.0006)];
+        global["opponent"]["opponent_" + i] = [getRandomArbitrary(latmin-0.0006, latmax+0.0006),getRandomArbitrary(longmin-0.0006, longmax+0.0006)];
+
+        if ((global["playgroundSizeData"]["topLeft"][0] > global["opponent"]["opponent_" + i][0])&& (global["playgroundSizeData"]["bottomRight"][0] < global["opponent"]["opponent_" + i][0])) {
+
+            console.log("Error 0");
+        }
+
+        if ((global["playgroundSizeData"]["topLeft"][1] < global["opponent"]["opponent_" + i][1])&& (global["playgroundSizeData"]["bottomRight"][1] > global["opponent"]["opponent_" + i][1])) {
+            console.log("Error 1");
+        }
+
+        console.log(global["opponent"]["opponent_" + i]);
+    }//e/newOpponent
     
 
+
+   // // // opponent Move
     setInterval(function(){
 
         var oneORzero = getRandomInt(0, 1); 
 
-        for (var i = 0; i < 5; i++) {
+
+        for (var i = 0; i < addNewOpponents; i++) {
 
             if (global["opponent"]["opponent_0"][0] != 0) {
 
@@ -423,38 +423,61 @@ io.sockets.on('connection', function(socket){
                         // console.log(2);
                         break;
                     case 3:
-                        var value = getRandomArbitrary(-0.0001, +0.0001);
+                        var value = getRandomArbitrary(-0.00010, +0.00010);
                         // console.log(3);
                         break;
                 }
                
-                var position = Number(opponent["opponent_" + i][oneORzero]);
-                var newPosition = Number(value + position);
 
-                if (oneORzero === 0) {
-                    if ((global["area"]["topLeft"][0] > newPosition)&& (global["area"]["bottomRight"][0] < newPosition)) {
-                    }
-                    else {
-                        newPosition = position;
-                        // console.log("top/bottom == wrong")
-                    }
-                }
-                else {
-                    if ((global["area"]["topLeft"][1] < newPosition)&& (global["area"]["bottomRight"][1] > newPosition)) {
-                    }
-                    else {
-                        newPosition = position;
-                        // console.log("left/right == wrong")
-                    }
-                }
+                var newPosition = "0";
 
+                try {
+
+                    // box protection
+                    if (typeof global["playgroundSizeData"]["topLeft"][1] === "number") {
+
+                        var position = Number(opponent["opponent_" + i][oneORzero]);
+                        newPosition = Number(value + position);
+
+                        if ( global["opponent"]["opponent_" + i][3]  == undefined  ) {
+                            global["opponent"]["opponent_" + i][3] = 15;
+                        };
+
+
+                        if (oneORzero === 0) {
+                            if ((global["playgroundSizeData"]["topLeft"][0] > newPosition)&& (global["playgroundSizeData"]["bottomRight"][0] < newPosition)) {
+                            }
+                            else {
+                                newPosition = position;
+                                console.log(opponent["opponent_" + i][3] + " top/bottom == wrong")
+                                opponent["opponent_" + i][3]--;
+                            }
+                        }
+                        else {
+                            if ((global["playgroundSizeData"]["topLeft"][1] < newPosition)&& (global["playgroundSizeData"]["bottomRight"][1] > newPosition)) {
+                            }
+                            else {
+                                newPosition = position;
+                                console.log(opponent["opponent_" + i][3] + " left/right == wrong")
+                                opponent["opponent_" + i][3]--;
+                            }
+                        }
+
+                    };
+                }
+                catch(e){}
+
+
+                if (opponent["opponent_" + i][3] < 0) {
+                    newOpponent (i);
+                };
 
                 global["opponent"]["opponent_" + i][oneORzero] = newPosition;
 
 
-                // Number(opponent["opponent_" + i][oneORzero] + getRandomArbitrary(-0.000057, +0.000057));
+                // // Number(opponent["opponent_" + i][oneORzero] + getRandomArbitrary(-0.000057, +0.000057));
 
-                // opponent["opponent_" + i][oneORzero] =  Number(opponent["opponent_" + i][oneORzero] + getRandomArbitrary(-0.000057, +0.000057));
+                // // opponent["opponent_" + i][oneORzero] =  Number(opponent["opponent_" + i][oneORzero] + getRandomArbitrary(-0.000057, +0.000057));
                 
             };
         };
@@ -463,14 +486,19 @@ io.sockets.on('connection', function(socket){
 
     }, 500);
 
-    var userid = global["userid"];
+
+
+  
+
+
+
+    // Score handeling
     global["score"][userid] = 0;
 
     socket.on('shoot', function(shoot){
 
         var isInBox = false;
 
-        var userid = global["userid"];
         try {
             // console.log(calcCrow(shoot.lat, shoot.lng, userData[c][userid][0], userData[c][userid][1]));
             if (calcCrow(shoot.lat, shoot.lng, userData[c][userid][0], userData[c][userid][1]) <= 0.0199883) {
@@ -481,9 +509,10 @@ io.sockets.on('connection', function(socket){
         catch(e) {
         }
 
-        if (isInBox) {
+        // debug
+        if (!isInBox) {
 
-            for (var i = 0; i < 5; i++) {
+            for (var i = 0; i < addNewOpponents; i++) {
 
                 var posLat = global["opponent"]["opponent_" + i][0];
                 var posLng = global["opponent"]["opponent_" + i][1];
@@ -509,7 +538,7 @@ io.sockets.on('connection', function(socket){
 
 
                     if (isNaN(global["score"][userid] + 1)) {
-                        console.log("fdgdf11111111gdfgdf");
+                        console.log("New Score");
                         global["score"][userid] = 0;
                     };
 
@@ -536,15 +565,14 @@ io.sockets.on('connection', function(socket){
 
 
 
-    // Logger
+    // GPX Logger
     setInterval(function(){
 
         try {
-            var userid = global["userid"];
-            if ((userData[c][userid][0] != 0) && (userData[c][userid][0] != undefined)) {
+            if ((userData[c][userid][0] != 0) || (userData[c][userid][0] != undefined)) {
                 var lat = userData[c][userid][0];
             };
-            if ((userData[c][userid][1] != 0) && (userData[c][userid][1] != undefined)) {
+            if ((userData[c][userid][1] != 0) || (userData[c][userid][1] != undefined)) {
                 var lng = userData[c][userid][1];
                 var altitude = userData[c][userid][3];
                 var speed = userData[c][userid][4];
@@ -560,11 +588,12 @@ io.sockets.on('connection', function(socket){
                 var myDate = new Date().toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
                 var today = new Date().toJSON().slice(0,10);
 
-                var logfilename = "logs/" + global["userid"] + ".srcgpx";
+                var logfilename = "logs/" + userid + ".srcgpx";
 
                 var appendData = '<trkpt lat="'+ lat +'" lon="'+ lng +'">' + "\n" + "<ele>" + altitude + "</ele>\n" + "<time>" + today + "T" + myDate + "Z" +"</time>" + "\n<extensions>\n<speed>" + speed +"</speed>\n</extensions>\n"+ "</trkpt> \n";
                 var appendData = appendData;
-                if (logfilename != "logs/undefined.srcgpx") {
+                
+                if (logfilename != "logs/.srcgpx") {
                     fs.appendFile(logfilename, appendData, function (err) {
                     });                    
                 };
@@ -583,7 +612,7 @@ io.sockets.on('connection', function(socket){
     setInterval(function(){
         try {
             // var fs = require('fs');
-            var logfilename = "logs/" + global["userid"] + ".srcgpx";
+            var logfilename = "logs/" + userid + ".srcgpx";
 
             var file = "";
             fs.readFile(logfilename, 'utf8', function (err,data) {
@@ -591,20 +620,20 @@ io.sockets.on('connection', function(socket){
                 return console.log(err);
               }
               // console.log(data);
-              global["file_" + global["userid"] ] = data;
+              global["file_" + userid ] = data;
             });
 
-            var logfilename = "logs/" + global["userid"] + ".gpx";
+            var logfilename = "logs/" + userid + ".gpx";
 
             var prevAppendData = '<?xml version="1.0" encoding="UTF-8" ?>' + "\n" + '<gpx xmlns="http://www.topografix.com/GPX/1/1" version="1.1" creator="Qdraw" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd ">' + "\n" + "<trk>" +"\n" + "<name>Qdraw</name> \n <trkseg> \n\n";
             var afterAppendData = "</trkseg></trk></gpx>";
-            writeFile = prevAppendData + global["file_" + global["userid"] ] + afterAppendData;
+            writeFile = prevAppendData + global["file_" + userid ] + afterAppendData;
             fs.writeFile(logfilename, writeFile, function(err) {
                 if(err) {
                     return console.log(err);
                 }
             });
-            global["file_" + global["userid"] ] = "";  
+            global["file_" + userid ] = "";  
         }
         catch(e) {
             console.log("gpx writer fails");
@@ -618,13 +647,13 @@ io.sockets.on('connection', function(socket){
 
 
 
-
+var addNewOpponents = 1;
 global["opponent"] = {};
 startOpponent();
 function startOpponent() {
-    for (var i = 0; i < 5; i++) {
-                                            // xy, score
-        global["opponent"]["opponent_" + i] = [0,0,10];
+    for (var i = 0; i < addNewOpponents; i++) {
+                                            // xy, score  offEarth
+        global["opponent"]["opponent_" + i] = [0,0,0,20];
     };
 }//e/startOpponent
 
@@ -665,6 +694,3 @@ console.log("Script started");
 //         return (req.headers['x-forwarded-for'] || '').split(',')[0] 
 //         || req.connection.remoteAddress;
 // };
-
-
-
