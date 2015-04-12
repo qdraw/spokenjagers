@@ -408,7 +408,7 @@ io.sockets.on('connection', function(socket){
 
             // console.log(opponent_lenght);
 
-            if (global["opponent"]["opponent_0"][0] != 0) {
+            if (global["opponent"]["opponent_0"][0] != 0 && global["area"] != 0 ) {
 
                 var speedInt = getRandomInt(0, 3);
 
