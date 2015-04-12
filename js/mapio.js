@@ -12,15 +12,35 @@ console.log(userid);
 
 var map = L.map('map').setView([51, 5.1], 19);
 
-L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
-	maxZoom: 19,
-	// attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
-	// 	'<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-	// 	'Imagery © <a href="http://mapbox.com">Mapbox</a>',
-	// id: 'examples.map-i875mjb7'
-	id: 'qdraw.lkkkolkj'
-}).addTo(map); 
+// // MapBox
+// L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
+// 	maxZoom: 19,
+// 	// attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+// 	// 	'<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+// 	// 	'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+// 	// id: 'examples.map-i875mjb7'
+// 	// id: 'qdraw.lkkkolkj'
+// 	// id: 'examples.map-szwdot65'
+// 	id: 'lxbarth.map-n8gsdqn4'
+// }).addTo(map); 
 
+// // arcgisonline MAX zooom == 18
+// L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+// 	maxZoom: 18
+// }).addTo(map); 
+
+
+// Nokia Here Maps, Thanks: http://leaflet-extras.github.io/leaflet-providers/preview/
+L.tileLayer('http://{s}.{base}.maps.cit.api.here.com/maptile/2.1/maptile/{mapID}/satellite.day/{z}/{x}/{y}/256/png8?app_id={app_id}&app_code={app_code}', {
+	// attribution: 'Map &copy; 1987-2014 <a href="http://developer.here.com">HERE</a>',
+	subdomains: '1234',
+	mapID: 'newest',
+	app_id: 'Y8m9dK2brESDPGJPdrvs',
+	app_code: 'dq2MYIvjAotR8tHvY8Q_Dg',
+	base: 'aerial',
+	minZoom: 0,
+	maxZoom: 20
+}).addTo(map);
 
 
 if (!navigator.geolocation){

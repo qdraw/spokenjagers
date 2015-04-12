@@ -762,8 +762,9 @@ function toRad(Value){
 }
 
 
-console.log("> Script loaded");
 
+
+// Display only the local ip!! in TERMINAL
 var os = require('os');
 
 var interfaces = os.networkInterfaces();
@@ -779,6 +780,4 @@ for (var k in interfaces) {
 console.log("> Local IP: " + addresses);
 
 
-
-
-
+console.log("> Script loaded");
