@@ -332,10 +332,10 @@ io.sockets.on('connection', function(socket){
             // } 
 
             outbound = {
-                    "topLeft":[latmin+0.0006,longmin-0.0006,0],
-                    "topRight":[latmin+0.0006,longmax+0.0006,0],
-                    "bottomLeft":[latmin-0.0006,longmin-0.0006,0],
-                    "bottomRight":[latmin-0.0006,longmax+0.0006,0],
+                "topLeft":[latmax+0.0006,longmin-0.0006,0],
+                "topRight":[latmax+0.0006,longmax+0.0006,0],
+                "bottomLeft":[latmin-0.0006,longmin-0.0006,0],
+                "bottomRight":[latmin-0.0006,longmax+0.0006,0]                                                    
             }
             return outbound;
         }
@@ -343,16 +343,19 @@ io.sockets.on('connection', function(socket){
             return 0;
         }
 
-
     }//e/writeOutbound
 
     setInterval(function(){
         // to add + make the area bigger
 
-        if (typeof global["area"] != "object") {
-            global["area"] = writeOutbound();
-            socket.emit('outbound', global["area"]);
-        };
+        global["area"] = writeOutbound();
+        socket.emit('outbound', global["area"]);
+
+        // if (typeof global["area"] != "object") {
+        //     global["area"] = writeOutbound();
+        //     socket.emit('outbound', global["area"]);
+        // };
+
     }, 1000);
 
 
@@ -397,7 +400,6 @@ io.sockets.on('connection', function(socket){
     
 
     setInterval(function(){
-        socket.emit('outbound', global["area"]);
 
         var oneORzero = getRandomInt(0, 1); 
 
