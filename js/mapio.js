@@ -403,8 +403,11 @@ function onMapClick(e) {
 
 document.getElementById("points").innerHTML = 0;
 socket.on('score', function(score){
+	scoreInPoints = Math.ceil(score["points"]*10);
+	scoreInPoints = scoreInPoints/10;
+
 	console.log(score["points"]);
-	document.getElementById("points").innerHTML = score["points"];
+	document.getElementById("points").innerHTML = scoreInPoints;
 }); //e/score
 
 

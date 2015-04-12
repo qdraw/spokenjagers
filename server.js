@@ -82,7 +82,6 @@ server = http.createServer(function(req, res){
 
 
         // MIME TYPES serve
-
         if (path.indexOf(".js") >= 0 ) {
             res.writeHead(200,{'Content-Type':'text/javascript'});
         };
@@ -258,6 +257,7 @@ io.sockets.on('connection', function(socket){
 
 
     // Kill Bill function, kicking user out of the map, every 5 seconds
+    // http://i61.tinypic.com/2s6k9qd.jpg
     setInterval(function(){
 
         Object.keys(latestConnectionTime).forEach(function(key) {
@@ -277,7 +277,7 @@ io.sockets.on('connection', function(socket){
 
 
     }, 5000);
-
+    // No need to check if the user is active, sessions will be aborted automaticly and killed by "Kill Bill"
 
 
 
@@ -355,7 +355,6 @@ io.sockets.on('connection', function(socket){
     //         "bottomLeft":[Longitude ,latitude],
     //         "bottomRight":[Longitude ,latitude]
     // } 
-
     function writeOutbound () {
         
         // use theCanvas!
@@ -491,6 +490,9 @@ io.sockets.on('connection', function(socket){
 
                 // Make it less random to the right top
                 if ((global["area"]["topLeft"][oneORzero] > newPosition)&& (Number(global["area"]["topLeft"][oneORzero]-0.00006) < newPosition)) {
+                    if (i%3 === 2) {
+                        value -= Number(0.000037/1.5);
+                    };///e/fi
                 }//e/fi
                 else {
                     if (i%3 === 2) {
@@ -531,6 +533,45 @@ io.sockets.on('connection', function(socket){
                 if (global["opponent"]["opponent_" +i][3] < 0) {
                     newOpponent (i);
                 };
+
+                var posLat = global["opponent"]["opponent_" + i][0];
+                var posLng = global["opponent"]["opponent_" + i][1];
+
+
+
+                // Object.keys(userData[c]).forEach(function(key) {
+                // });
+
+
+                // 0.0199883 === the isInBox
+                // 0.006 === shooterea user
+
+                try {
+                    if (calcCrow(userData[c][userid][0], userData[c][userid][1], posLat, posLng) < 0.006) {
+                        console.log(i);
+
+
+
+                        if (isNaN(global["score"][userid] + 1)) {
+                            console.log("WARNING: Score restart");
+                            global["score"][userid] = 0;
+                        };
+
+
+                        // Give -1 to the user
+                        global["score"][userid] = Number(global["score"][userid] - 0.1);
+
+                        // send score to user:
+                        socket.emit('score', {"points": global["score"][userid]});
+                        console.log(global["score"][userid]);
+
+
+                    }//e/fi
+                    
+                }catch(e){}
+
+
+
                
             };
         };
@@ -690,11 +731,10 @@ io.sockets.on('connection', function(socket){
         };///e/userid
 
     }, 20000);
-
-
     // end of logger
 
-});
+
+});///e/connection
 
 
 function writeApacheLog(path,res,httpcode) {
