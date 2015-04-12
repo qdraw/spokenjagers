@@ -437,7 +437,7 @@ io.sockets.on('connection', function(socket){
             // loop for new Opponents
             // [lat,long,score, offEarthScore]
             for (var i = 0; i < opponent_lenght; i++) {
-                global["opponent"]["opponent_" + i] = [getRandomArbitrary(latmin-0.0006, latmax+0.0006),getRandomArbitrary(longmin-0.0006, longmax+0.0006),10,15];
+                global["opponent"]["opponent_" + i] = [getRandomArbitrary(latmin-0.0006, latmax+0.0006),getRandomArbitrary(longmin-0.0006, longmax+0.0006),10,30];
             };
 
         };
@@ -454,7 +454,7 @@ io.sockets.on('connection', function(socket){
             var longmax = theCanvas[1][1];
 
             // [lat,long,score, offEarthScore]
-            global["opponent"]["opponent_" + i] = [getRandomArbitrary(latmin-0.0006, latmax+0.0006),getRandomArbitrary(longmin-0.0006, longmax+0.0006),10,15];
+            global["opponent"]["opponent_" + i] = [getRandomArbitrary(latmin-0.0006, latmax+0.0006),getRandomArbitrary(longmin-0.0006, longmax+0.0006),10,30];
     }
     
 
@@ -488,6 +488,17 @@ io.sockets.on('connection', function(socket){
                 }
                 var speedNeg = speed * -1;
                 var value = getRandomArbitrary(speedNeg, speed);
+
+                // Make it less random to the right top
+                if ((global["area"]["topLeft"][oneORzero] > newPosition)&& (Number(global["area"]["topLeft"][oneORzero]-0.00006) < newPosition)) {
+                }//e/fi
+                else {
+                    if (i%3 === 2) {
+                        value += Number(0.000037/1.5);
+                    };///e/fi
+                }
+
+
 
                 var position = Number(opponent["opponent_" + i][oneORzero]);
                 var newPosition = Number(value + position);
@@ -523,6 +534,7 @@ io.sockets.on('connection', function(socket){
                
             };
         };
+
 
         // Send oponnents to the user:
         socket.emit('opponent', global["opponent"]);
@@ -687,8 +699,13 @@ io.sockets.on('connection', function(socket){
 
 function writeApacheLog(path,res,httpcode) {
  
-    var ip = res.connection.remoteAddress || res.socket.remoteAddress || res.connection.socket.remoteAddress;
-    // req.header('x-forwarded-for') ||
+    try {
+        var ip = res.connection.remoteAddress || res.socket.remoteAddress || res.connection.socket.remoteAddress;
+        // req.header('x-forwarded-for') ||
+    }
+    catch(e){
+        var ip = 0;
+    }
 
      // 127.0.0.1 - frank [10/Oct/2000:13:55:36 -0700] "GET /apache_pb.gif HTTP/1.0" 200 2326 
 
@@ -725,12 +742,12 @@ function writeApacheLog(path,res,httpcode) {
 
 
 
-}
+}//e/apache
 
 
 // START opponent as global variables to avoid diffececes between users:
 global["opponent"] = {};
-var opponent_lenght = 5;
+var opponent_lenght = 10;
 
 startOpponent();
 function startOpponent() {
