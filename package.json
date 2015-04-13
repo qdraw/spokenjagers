@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "description": "Avans Individueel project game",
   "dependencies": {
-    "socket.io": "latest",
-    "sqlite3": "^3.0.5"
+    "socket.io": "latest"
   },
   "author": "Dion @Qdraw",
   "readme": "README",
