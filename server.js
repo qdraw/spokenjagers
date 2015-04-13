@@ -136,8 +136,10 @@ send404 = function(path,res){
     });
 };
 
-// the server port
-server.listen(8080);
+// the server port 
+// process.env.PORT= heroku
+var port = process.env.PORT || 8080;
+server.listen(port);
 
 // use socket.io
 var io = require('socket.io').listen(server);
