@@ -41,7 +41,7 @@ server = http.createServer(function(req, res){
             return send404(path,res);
         }
 
-        writeApacheLog(path,res,200);
+        writeApacheLog(path,req,res,200);
 
         // Ban List User Agent Strings
         banList = ["Abrave Spider", "GingerCrawler", "HTTrack", "ichiro", "Image Stripper", "Image Sucker", "ISC Systems iRc", "JadynAveBot", "Java", "LexxeBot", "lwp::", "lwp-", "LinkWalker", "libwww-perl", "localbot", "Mass Downloader", "Missigua", "Locator", "Offline", "OpenAnything", "Purebot", "PycURL", "python", "python", "Python-xmlrpc", "SiteSnagger", "SiteSucker", "SuperBot", "swish-e", "Web Image Collector", "Web Sucker", "WebAuto", "WebCopier", "webcollage", "WebFetch", "WebLeacher", "WebReaper", "Website eXtractor", "WebStripper", "WebWhacker", "WebZIP", "Mail.ru", "Yandex", "WinHTTP", "bazqux"]
@@ -737,10 +737,12 @@ io.sockets.on('connection', function(socket){
 });///e/connection
 
 
-function writeApacheLog(path,res,httpcode) {
+function writeApacheLog(path,req,httpcode) {
+
+
  
     try {
-        var ip = res.connection.remoteAddress || res.socket.remoteAddress || res.connection.socket.remoteAddress;
+        var ip = req.connection.remoteAddress || req.socket.remoteAddress || req.connection.socket.remoteAddress;
         // req.header('x-forwarded-for') ||
     }
     catch(e){
@@ -767,7 +769,7 @@ function writeApacheLog(path,res,httpcode) {
     var stats = fs.statSync(__dirname + path);
     var fileSizeInBytes = stats["size"]    
 
-    var log = ip + " -  - ["+ day +"/" + month_names_short[d.getMonth()] + "/" + d.getFullYear() + ":" + myDate + " " + u + "] " + '"' + "GET " + path + " HTTP/1.0"+ '"' + " " + httpcode + " " + fileSizeInBytes + "\n";
+    var log = ip + " -  - ["+ day +"/" + month_names_short[d.getMonth()] + "/" + d.getFullYear() + ":" + myDate + " " + u + "] " + '"' + "GET " + path + " HTTP/1.1"+ '"' + " " + httpcode + " " + fileSizeInBytes + ' "-" ' + '"' + req.headers['user-agent'] + '"' + "\n";
 
     try {
         fs.appendFile("logs/access.log", log, function (err) {
