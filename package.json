@@ -1,9 +1,12 @@
 {
-    "name": "SocketioExample",
-    "version": "0.0.1",
-    "description": "SocketioExample",
-    "dependencies": {
-        "socket.io": "latest"
-    },
-    "author": "me"
+  "name": "Avans-Individueel-project-game",
+  "version": "1.0.0",
+  "description": "Avans Individueel project game",
+  "dependencies": {
+    "socket.io": "latest",
+    "sqlite3": "^3.0.5"
+  },
+  "author": "Dion @Qdraw",
+  "readme": "README",
+  "repository": "https://github.com/qdraw/avans-individueel-verdieping-blok11-12/"
 }

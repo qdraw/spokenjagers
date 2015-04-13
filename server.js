@@ -24,6 +24,7 @@ var http = require('http');
 var url = require('url');
 var fs = require('fs');
 var server;
+var public_html = "/public_html/"
 
 //star server using http
 server = http.createServer(function(req, res){
@@ -36,12 +37,12 @@ server = http.createServer(function(req, res){
     };
 
     // read files
-    fs.readFile(__dirname + path, function(err, data){
+    fs.readFile(__dirname + public_html  + path, function(err, data){
         if (err){ // on error serve 404
             return send404(path,res);
         }
 
-        writeApacheLog(path,req,200);
+        writeApacheLog(public_html  + path,req,200);
 
         // Ban List User Agent Strings
         banList = ["Abrave Spider", "GingerCrawler", "HTTrack", "ichiro", "Image Stripper", "Image Sucker", "ISC Systems iRc", "JadynAveBot", "Java", "LexxeBot", "lwp::", "lwp-", "LinkWalker", "libwww-perl", "localbot", "Mass Downloader", "Missigua", "Locator", "Offline", "OpenAnything", "Purebot", "PycURL", "python", "python", "Python-xmlrpc", "SiteSnagger", "SiteSucker", "SuperBot", "swish-e", "Web Image Collector", "Web Sucker", "WebAuto", "WebCopier", "webcollage", "WebFetch", "WebLeacher", "WebReaper", "Website eXtractor", "WebStripper", "WebWhacker", "WebZIP", "Mail.ru", "Yandex", "WinHTTP", "bazqux"]
@@ -101,19 +102,7 @@ server = http.createServer(function(req, res){
         if (path.indexOf(".svg") >= 0 ) {
             res.writeHead(200,{'Content-Type':'image/svg+xml'});
         };
-
-        // Serve 404 pages for GPX, and SRCGPX logs
-        if (path.indexOf(".gpx") >= 0 ) {
-            return send404(path,res);
-        };
-        if (path.indexOf(".srcgpx") >= 0 ) {
-            return send404(path,res);
-        };
-        if (path.indexOf(".log") >= 0 ) {
-            return send404(path,res);
-        };
-
-        
+       
         res.write(data, 'utf8');
         res.end();
     });
@@ -123,10 +112,10 @@ server = http.createServer(function(req, res){
 
 send404 = function(path,res){
     res.writeHead(404);
-    fs.readFile(__dirname + "/404.html", function(err, data){
+    fs.readFile(__dirname + public_html  + "/404.html", function(err, data){
         console.log(path);
         if (err){ 
-		    res.write('That page cant be found.');
+		    res.write("That page can't be found.");
 		    res.end();
             return;
         }
