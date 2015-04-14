@@ -7,7 +7,9 @@
     "npm": ">= 1.0.0"
   },
   "dependencies": {
-    "socket.io": "latest"
+    "socket.io": "latest",
+    "sqlite3": "latest"
+
   },
   "devDependencies": {},
   "bundleDependencies": [],
