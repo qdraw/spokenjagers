@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "socket.io": "latest",
-    "sqlite3": "latest"
+    "dblite": "latest"
 
   },
   "devDependencies": {},

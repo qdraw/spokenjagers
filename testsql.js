@@ -2,7 +2,7 @@
 
 var sqlite3 = require('sqlite3').verbose();
 var dbname = "server.sqlite"
-var db = new sqlite3.cached.Database(dbname);  //':memory:'
+var db = new sqlite3.Database(dbname);  //':memory:'
 
 
 var runQuery = function(request) {
@@ -33,6 +33,7 @@ var runQuery = function(request) {
 
     db.each( query, params, function(err, row) {
         console.log( 'id:', row.id, row.firstName, row.lastName );
+
     }); 
 };
 
