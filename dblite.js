@@ -1,5 +1,5 @@
 var dblite = require('dblite'),
-    db = dblite('file.sqlite');
+    db = dblite('db.sqlite');
 
 db.query('CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, userid TEXT, health INTEGER, score INTEGER, money INTEGER, value TEXT)');
 
@@ -10,8 +10,7 @@ function checkIfUserExist (userid) {
 
 	global["rows_" + userid] = NaN;
 
-	db.query(
-	  'SELECT * FROM users WHERE userid = ?',
+	db.query('SELECT * FROM users WHERE userid = ?',
 	  [userid],
 	  {
 	    id: Number,
@@ -50,6 +49,7 @@ function checkIfUserExist (userid) {
 
 
 function addNewUser (userid) {
+	// NEVER USE THIS FUNCTION DIRECTLY!
 
 	// First Check if user exist
 	
@@ -72,8 +72,7 @@ function addNewUser (userid) {
 			latestid = global["latestid_" + userid];
 			latestid++;
 
-			db.query(
-			  'INSERT INTO users VALUES (?, ?, ?, ?, ?, ?)',
+			db.query('INSERT INTO users VALUES (?, ?, ?, ?, ?, ?)',
 			  [latestid, userid, 100, 0, 0, null]
 			);
 

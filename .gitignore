@@ -6,3 +6,16 @@ node_modules/
 .DS_Store
 ._.DS_Store
 logs/
+db.sqlite
+
+# Runtime data
+pids
+*.pid
+*.seed
+
+# node-waf configuration
+.lock-wscript
+
+# Logs
+logs
+*.log
