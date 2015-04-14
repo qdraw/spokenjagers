@@ -127,7 +127,8 @@ send404 = function(path,res){
 
 // the server port
 // process.env.PORT= heroku
-var port = process.env.PORT || 8080;
+// var port = process.env.PORT || 8080;
+var port = 8080;
 server.listen(port);
 
 // use socket.io
