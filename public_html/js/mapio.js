@@ -11,8 +11,13 @@ function isPhoneGap () {
 	}
 }
 
+setInterval(function (){
+	console.log(isPhoneGap ());
+},500)
+
+
 // Ask for WebSocket Connection
-if (isPhoneGap()) {    
+if (isPhoneGap()) { 
 	var socket = io.connect('xserve.qdraw.eu');
 } else {
 	var socket = io.connect();
