@@ -55,10 +55,10 @@
     <feature name="http://api.phonegap.com/1.0/network" />
     <feature name="http://api.phonegap.com/1.0/notification" />
     
-    <content src="app/index.html" />
+    <content src="/app/index.html" />
     <gap:platform name="ios" />
-    <gap:platform name="android" />
-
+<!--     <gap:platform name="android" />
+ -->
 
     
     <gap:plugin name="org.apache.cordova.camera" version="0.3.2" />
