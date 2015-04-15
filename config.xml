@@ -55,7 +55,7 @@
     <feature name="http://api.phonegap.com/1.0/network" />
     <feature name="http://api.phonegap.com/1.0/notification" />
     
-    <content src="/app/index.html" />
+    <content src="app.html" />
     <gap:platform name="ios" />
 <!--     <gap:platform name="android" />
  -->
