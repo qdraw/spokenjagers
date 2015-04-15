@@ -2,21 +2,24 @@
 // Requries userid
 
 
-/**
- * Determine whether the file loaded from PhoneGap or not
- */
-function isPhoneGap() {
-    return (cordova || PhoneGap || phonegap) 
-    && /^file:\/{3}[^\/]/i.test(window.location.href) 
-    && /ios|iphone|ipod|ipad|android/i.test(navigator.userAgent);
+function isPhoneGap () {
+	try {
+		if (window.isCordovaApp) {return true } else { return false};
+	}
+	catch(e){
+		return false;
+	}
 }
 
-
 // Ask for WebSocket Connection
-var socket = io.connect();
-
+if (isPhoneGap()) {    
+	var socket = io.connect('xserve.qdraw.eu');
+} else {
+	var socket = io.connect();
+}
 
 console.log(userid);
+console.log(isPhoneGap());
 
 var maxZoom = 20;
 
