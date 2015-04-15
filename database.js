@@ -4,7 +4,7 @@ var dblite = require('dblite'),
 db.query('CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, userid TEXT, health INTEGER, score INTEGER, money INTEGER, value TEXT)');
 
 
-checkIfUserExist ("dion's");
+// checkIfUserExist("dion's");
 
 function checkIfUserExist (userid) {
 
@@ -84,6 +84,12 @@ function addNewUser (userid) {
 }
 
 
+readScore("dion's")
+
+function readScore (userid) {
+
+
+}//e//readScore
 
 // Read Score + on Login
 

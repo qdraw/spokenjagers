@@ -26,6 +26,9 @@ var fs = require('fs');
 var server;
 var public_html = "/public_html/"
 
+
+var database = require('./database');
+
 //star server using http
 server = http.createServer(function(req, res){
     // your normal server code
