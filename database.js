@@ -4,11 +4,12 @@ var dblite = require('dblite'),
 db.query('CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, userid TEXT, health INTEGER, score INTEGER, money INTEGER, value TEXT)');
 
 
-// checkIfUserExist("dion's");
+checkIfUserExist("dion's");
 
 function checkIfUserExist (userid) {
 
 	global["rows_" + userid] = NaN;
+	global["checkIfUserExist_" + userid] = false;
 
 	db.query('SELECT * FROM users WHERE userid = ?',
 	  [userid],
@@ -31,6 +32,10 @@ function checkIfUserExist (userid) {
             	console.log(rows[key]);
             	i++;
             });
+
+            if (i == 1) {
+				global["checkIfUserExist_" + userid] = true;
+            };
 
             if (i > 1 ) {
             	console.log("XXXXXX  ERROR more than one user with the same name");
@@ -75,7 +80,7 @@ function addNewUser (userid) {
 			db.query('INSERT INTO users VALUES (?, ?, ?, ?, ?, ?)',
 			  [latestid, userid, 100, 0, 0, null]
 			);
-
+			global["checkIfUserExist_" + userid] = true;
 			clearInterval(refreshIntervalId);
 
 		}
@@ -85,8 +90,31 @@ function addNewUser (userid) {
 
 
 readScore("dion's")
+global["score"] = {};
+global["health"] = {};
+global["money"] = {};
 
 function readScore (userid) {
+	var refreshIntervalId = setInterval(function () {
+		if (global["checkIfUserExist_" + userid]) {
+
+			db.query('SELECT * FROM users WHERE userid = ?', [userid], {
+			  id: Number,
+			  userid: String,
+			  health: Number,
+			  score: Number,
+			  money: Number
+			}, function (err, rows) {
+			  var record = rows[0];
+			  global["score"][userid] = record.score;
+			  global["health"][userid] = record.health;
+			  global["money"][userid] = record.money;
+			});
+
+			clearInterval(refreshIntervalId);
+
+		};
+	},10)
 
 
 }//e//readScore
@@ -96,8 +124,19 @@ function readScore (userid) {
 
 // Write Score Read Score +1
 
+function addPoints (type,addition,userid) {
+
+	var refreshIntervalId = setInterval(function () {
+		if (global["checkIfUserExist_" + userid]) {
+			if (type === "score") {
+				
+
+			};//e/score
+		};
+	},10)
 
 
+}//e/e/addPoints
 
 
 
