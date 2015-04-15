@@ -2,6 +2,16 @@
 // Requries userid
 
 
+/**
+ * Determine whether the file loaded from PhoneGap or not
+ */
+function isPhoneGap() {
+    return (cordova || PhoneGap || phonegap) 
+    && /^file:\/{3}[^\/]/i.test(window.location.href) 
+    && /ios|iphone|ipod|ipad|android/i.test(navigator.userAgent);
+}
+
+
 // Ask for WebSocket Connection
 var socket = io.connect();
 
@@ -59,6 +69,7 @@ function FirstFindGeoLocation () {
 	function success(position) {
 		var latitude  = position.coords.latitude;
 		var longitude = position.coords.longitude;
+		console.log(latitude,longitude);
 		map.panTo(L.latLng(latitude, longitude));
 	}
 	function error() {
@@ -283,7 +294,9 @@ setInterval(function(){
 setInterval(function(){
 	if (window["data"].longitude === 0) {
 		console.log("FAIL");
-		window.location = "geolocation.html"
+		if ( isPhoneGap() == false) {
+			window.location = "geolocation.html"
+		}
 	};
 }, 20000);
 
