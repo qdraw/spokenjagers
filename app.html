@@ -5,7 +5,22 @@
 	<title>Dion van Velde</title>
 	<link rel="stylesheet" href="app/css/reset.css" />	
 	<link rel="stylesheet" href="app/css/style.css" />	
-	 <script type="text/javascript" src="phonegap.js"></script>
+	<script type="text/javascript" src="phonegap.js"></script>
+	<script type="text/javascript" charset="utf-8">
+
+	    // Wait for device API libraries to load
+	    //
+	    document.addEventListener("deviceready", onDeviceReady, false);
+
+	    // device APIs are available
+	    //
+	    function onDeviceReady() {
+	        navigator.geolocation.getCurrentPosition(onSuccess, onError);
+	    }
+	    function onError(error) {
+	    }
+        function onSuccess(position) {
+        }
 </head>
 <body>
 	<iframe src="http://xserve.qdraw.eu" border="0"></iframe>
