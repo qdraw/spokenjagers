@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<widget xmlns     = "http://www.w3.org/ns/widgets"
+    xmlns:cdv = "http://cordova.apache.org/ns/1.0"
+    id        = "nl.avans.GameProject.GameProject"
+    version   = "0.0.1">
+    <preference name="phonegap-version" value="3.7.0" />
+	<name>GameProject</name>
+	<description>GameProject</description>
+	<author href="http://qdraw.nl" email="dion@qdraw.nl">
+        Dion van Velde 2065114
+    </author>
+    <preference name="permissions" value="none" />
+    <preference name="orientation" value="default" />
+    <preference name="target-device" value="universal" />
+    <preference name="fullscreen" value="false" />
+    <preference name="webviewbounce" value="true" />
+    <preference name="prerendered-icon" value="true" />
+    <preference name="stay-in-webview" value="false" />
+    <preference name="ios-statusbarstyle" value="black-opaque" />
+    <preference name="detect-data-types" value="true" />
+    <preference name="exit-on-suspend" value="false" />
+    <preference name="show-splash-screen-spinner" value="true" />
+    <preference name="auto-hide-splash-screen" value="true" />
+    <preference name="disable-cursor" value="false" />
+    <preference name="android-minSdkVersion" value="7" />
+    <preference name="android-installLocation" value="auto" />
+	
+	<icon src="icon.png" />
+	    <icon gap:density="ldpi" gap:platform="android" src="res/icon/android/icon-36-ldpi.png" />
+	    <icon gap:density="mdpi" gap:platform="android" src="res/icon/android/icon-48-mdpi.png" />
+	    <icon gap:density="hdpi" gap:platform="android" src="res/icon/android/icon-72-hdpi.png" />
+	    <icon gap:density="xhdpi" gap:platform="android" src="res/icon/android/icon-96-xhdpi.png" />
+
+	    <icon gap:platform="ios" height="57" src="res/icon/ios/icon-57.png" width="57" />s
+	    <icon gap:platform="ios" height="72" src="res/icon/ios/icon-72.png" width="72" />
+	    <icon gap:platform="ios" height="114" src="res/icon/ios/icon-57-2x.png" width="114" />
+	    <icon gap:platform="ios" height="144" src="res/icon/ios/icon-72-2x.png" width="144" />
+	   
+	    <gap:splash gap:density="ldpi" gap:platform="android" src="res/screen/android/screen-ldpi-portrait.jpg" />
+	    <gap:splash gap:density="mdpi" gap:platform="android" src="res/screen/android/screen-mdpi-portrait.jpg" />
+	    <gap:splash gap:density="hdpi" gap:platform="android" src="res/screen/android/screen-hdpi-portrait.jpg" />
+	    <gap:splash gap:density="xhdpi" gap:platform="android" src="res/screen/android/screen-xhdpi-portrait.jpg" />
+	    <gap:splash gap:platform="ios" height="480" src="res/screen/ios/screen-iphone-portrait.jpg" width="320" />
+	    <gap:splash gap:platform="ios" height="960" src="res/screen/ios/screen-iphone-portrait-2x.jpg" width="640" />
+	    <gap:splash gap:platform="ios" height="1024" src="res/screen/ios/screen-ipad-portrait.jpg" width="768" />
+	    <gap:splash gap:platform="ios" height="768" src="res/screen/ios/screen-ipad-landscape.jpg" width="1024" />
+		<!-- zonder oude telefoons en blackberry, want screw blackberry-->
+	    <access origin="*" />
+
+    <feature name="http://api.phonegap.com/1.0/camera" />
+    <feature name="http://api.phonegap.com/1.0/contacts" />
+    <feature name="http://api.phonegap.com/1.0/file" />
+    <feature name="http://api.phonegap.com/1.0/geolocation" />
+    <feature name="http://api.phonegap.com/1.0/media" />
+    <feature name="http://api.phonegap.com/1.0/network" />
+    <feature name="http://api.phonegap.com/1.0/notification" />
+    
+    <content src="app/index.html" />
+    <gap:platform name="ios" />
+    <gap:platform name="android" />
+
+
+    
+    <gap:plugin name="org.apache.cordova.camera" version="0.3.2" />
+    <gap:plugin name="org.apache.cordova.vibration" version="0.3.0" />
+    <gap:plugin name="org.apache.cordova.dialogs" version="0.2.2" />
+    <gap:plugin name="org.apache.cordova.media" version="0.2.13" />
+    <gap:plugin name="org.apache.cordova.inappbrowser" version="0.1.0" />
+
+</widget>
