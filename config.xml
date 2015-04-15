@@ -130,4 +130,7 @@
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
     </platform>
+    <content src="app.html" />
+    <gap:platform name="ios" />
+
 </widget>
