@@ -128,7 +128,8 @@ send404 = function(path,res){
 
 // the server port
 // process.env.PORT= heroku
-var port = process.env.PORT || 8080;
+// process.env.OPENSHIFT_NODEJS_PORT = red hat openshift
+var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080;
 server.listen(port);
 
 // use socket.io
@@ -915,7 +916,7 @@ function(err, result){
 
 
 // Only if you run d*b.js directly
-checkIfUserExist ("dion");
+// checkIfUserExist ("dion");
 
 function checkIfUserExist (userid) {
     global["rows_" + userid] = NaN;
@@ -996,7 +997,7 @@ function addNewUser (userid) {
 }
 
 // only for running d*b.js directly
-readScore("dion");
+// readScore("dion");
 
 global["score"] = {};
 global["health"] = {};

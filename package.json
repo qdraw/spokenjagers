@@ -17,5 +17,8 @@
   	"readme": "README",
   	"repository": "https://github.com/qdraw/avans-individueel-verdieping-blok11-12/",
    	"private": true,
+   	"scripts": {
+  		"start": "node server.js"
+	},
     "main": "server.js"
 }
