@@ -880,33 +880,51 @@ console.log("> Script loaded");
 
 
 
-
-
 // db.js
 
-var dblite = require('dblite'),
-    db = dblite('db.sqlite');
+var mysql      = require('mysql');
+var db = mysql.createConnection({
+    // debug: true,
+    host     : 's84.webhostingserver.nl',
+    user     : 'deb40577_game',
+    password : 'Gpw5KPrE',
+    database: 'deb40577_game'
+});
 
-db.query('CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, userid TEXT, health INTEGER, score INTEGER, money INTEGER, useragent TEXT, value TEXT)');
+
+db.connect(function(err) {
+    if (err) {
+        console.error('error connecting: ' + err.stack);
+        return;
+    }
+
+    console.log('> connected as id ' + db.threadId);
+});
+
+
+db.query('CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, userid TEXT, health INTEGER, score INTEGER, money INTEGER, useragent TEXT, value TEXT)',
+function(err, result){
+    // Case there is an error during the creation
+    if(err) {
+        console.log(err);
+    } else {
+        console.log("> Table users Created");
+    }
+});
+
+
 
 // Only if you run d*b.js directly
-// checkIfUserExist ("dion");
+checkIfUserExist ("dion");
 
 function checkIfUserExist (userid) {
     global["rows_" + userid] = NaN;
     global["checkIfUserExist_" + userid] = false;
 
-    db.query('SELECT * FROM users WHERE userid = ?',
-      [userid],
-      {
-        id: Number,
-        userid: String
-      },
-      function (rows) {
-        global["rows_" + userid] = rows;
-      }
-    );
-
+    db.query('SELECT * FROM users WHERE userid = ?', [userid], function(err, results) {
+        global["rows_" + userid] = results;
+        // console.log(results);
+    });
 
     var refreshIntervalId = setInterval(function () {
         if (typeof global["rows_" + userid] == "object") {
@@ -914,7 +932,7 @@ function checkIfUserExist (userid) {
 
             var i = 0;
             Object.keys(rows).forEach(function(key) {
-                console.log(rows[key]);
+                // console.log(rows[key]);
                 i++;
             });
 
@@ -923,7 +941,7 @@ function checkIfUserExist (userid) {
             };
 
             if (i > 1 ) {
-                console.log("XXXXXX  ERROR more than one user with the same name");
+                console.log("> XXXXXX  ERROR more than one user with the same name");
             };
 
             if (i < 1) {
@@ -947,8 +965,12 @@ function addNewUser (userid) {
 
     var latestid = NaN;
 
-    db.query('SELECT MAX(id) FROM users', function (err, rows) {
-        latestid = rows[0][0]
+    db.query('SELECT id from users ORDER BY id DESC LIMIT 1', function (err, results) {
+        console.log(results);
+
+        latestid = results[0].id;
+        console.log(latestid);
+
         if (isNaN(latestid) ) {
             console.log("error NaN");
             latestid = 5000;
@@ -974,7 +996,7 @@ function addNewUser (userid) {
 }
 
 // only for running d*b.js directly
-// readScore("dion");
+readScore("dion");
 
 global["score"] = {};
 global["health"] = {};
@@ -986,13 +1008,7 @@ function readScore (userid) {
     var refreshIntervalId = setInterval(function () {
         if (global["checkIfUserExist_" + userid]) {
 
-            db.query('SELECT * FROM users WHERE userid = ?', [userid], {
-                id: Number,
-                userid: String,
-                health: Number,
-                score: Number,
-                money: Number
-            }, function (err, rows) {
+            db.query('SELECT * FROM users WHERE userid = ?', [userid], function (err, rows) {
                 var record = rows[0];
                 
                 if (isNaN(record.score)) {
@@ -1017,6 +1033,9 @@ function readScore (userid) {
                 // global["score"][userid] = record.score;
                 // global["health"][userid] = record.health;
                 // global["money"][userid] = record.money;
+                console.log( global["score"][userid] );
+                console.log( global["health"][userid] );
+                console.log( global["money"][userid] );
 
             });
 
@@ -1055,5 +1074,14 @@ function updatePoints (type,userid) {
     },10)
 
 }//e/e/updatePoints
+
+
+
+
+
+
+
+
+
 
 
