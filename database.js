@@ -17,7 +17,7 @@ module.exports = {
 };
 
 // Only if you run d*b.js directly
-// checkIfUserExist ("dion");
+checkIfUserExist ("dion");
 
 function checkIfUserExist (userid) {
 	global["rows_" + userid] = NaN;
@@ -160,9 +160,9 @@ function readScore (userid) {
 
 // Write Score Read Score +1
 
-// setTimeout( function () {
-// 		updatePoints ("score","dion");
-// },40);
+setTimeout( function () {
+		updatePoints ("score","dion");
+},40);
 
 
 function updatePoints (type,userid) {

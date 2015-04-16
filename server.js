@@ -27,7 +27,7 @@ var server;
 var public_html = "/public_html/"
 
 // Include:
-var database = require('./database');
+var database = require('./database.js');
 
 
 
@@ -758,8 +758,6 @@ io.sockets.on('connection', function(socket){
     // Special trick to backup files, maybe insecure:
 
     socket.on('backup', function(backup){
-        console.log(backup);
-
         if (backup === "51818fea2aa8671c9ac0767e02782b90") {
             util = require("util");
             function base64Image(src) {
@@ -767,9 +765,7 @@ io.sockets.on('connection', function(socket){
                 return util.format("data:%s;base64,%s", "application/octet-stream", data);
             }
             socket.emit('backup', base64Image("db.sqlite") );
-
         };
-
     });///e/shoot
 
 });///e/connection
