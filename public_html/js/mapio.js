@@ -2,33 +2,38 @@
 // Requries userid
 
 
+// // PhoneGap Combality to remove this shit use:
+// 	var public_html = "";
+// 	var socket = io.connect();
+// 	function isPhoneGap() { return false; }
+
+
 function isPhoneGap() {
 	return (window.cordova || window.PhoneGap || window.phonegap)
 	&& /^file:\/{3}[^\/]/i.test(window.location.href)
 	&& /ios|iphone|ipod|ipad|android/i.test(navigator.userAgent);
 }
 
-
 // Loading Images
 if (isPhoneGap()) { 
-	var public_html = "public_html/"
+	var public_html = "public_html/";
 } else {
-	var public_html = ""
+	var public_html = "";
 }
-
-setInterval(function (){
-	console.log(isPhoneGap ());
-},500)
 
 
 // Ask for WebSocket Connection
 if (isPhoneGap()) { 
-	// var socket = io.connect('xserve.qdraw.eu:80');
-} else {
-	// var socket = io.connect();
 	var socket = io.connect('http://xserve.qdraw.eu:80');
-
+} else {
+	var socket = io.connect();
 }
+
+//e/PhoneGap support
+
+
+
+
 
 console.log(userid);
 console.log(isPhoneGap());
