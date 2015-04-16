@@ -314,9 +314,7 @@ setInterval(function(){
 setInterval(function(){
 	if (window["data"].longitude === 0) {
 		console.log("FAIL");
-		if ( isPhoneGap() == false) {
-			window.location = "geolocation.html"
-		}
+		window.location = "geolocation.html"
 	};
 }, 20000);
 
@@ -404,7 +402,7 @@ socket.on('opponent', function(opponent){
 
 socket.on('outbound', function(outbound){
 
-	if (outbound != null) {
+	if ((outbound != null ) && (outbound != 0 )) {
 
 		Object.keys(outbound).forEach(function(key) {
 			

@@ -21,7 +21,7 @@ var userLang = navigator.language || navigator.userLanguage;
 
 
 
-var userid = String(navigator.userAgent)  + String(plugins) + userLang + screen.colorDepth + navigator.doNotTrack;
+var userid = String(navigator.userAgent)  + "," + String(plugins) + "," + navigator.systemLanguage + "," + userLang + "," + "colorDepth: " + screen.colorDepth + "," + navigator.doNotTrack + "," + navigator.product + ","  + navigator.appName + "," + navigator.cpuClass + "," + navigator.oscpu + "," + navigator.platform + "," + navigator.browserLanguage + ",";
 
 var canvas = document.createElement("canvas");
 canvas.style.display = "none";
@@ -49,7 +49,7 @@ else {
 	userid += webglinfo;
 
 }
-
+console.log(navigator.buildID);
 
 
 console.log(userid);

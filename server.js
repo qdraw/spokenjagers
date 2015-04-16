@@ -798,12 +798,13 @@ function writeApacheLog(path,req,httpcode) {
     }
     catch(e){}
 
+    // // requires database.js
+    // updatePoints("score", userid);
+
     // var today = new Date().toJSON().slice(0,10);
     // console.log("today " + today);
     // var toda1y = new Date();
     // console.log("toda1y " + toda1y);
-
-
 
 }//e/apache
 
@@ -962,27 +963,34 @@ function addNewUser (userid) {
         latestid = results[0].id;
         console.log(latestid);
 
-        if (isNaN(latestid) ) {
-            console.log("error NaN");
-            latestid = 5000;
-        };
         global["latestid_" + userid] = latestid;
     });
 
-    var refreshIntervalId = setInterval(function () {
-        if (!isNaN(global["latestid_" + userid]) ) {
+    var r2efreshIntervalId = setInterval(function () {
+        if (isNaN(global["latestid_" + userid]) ) {
+            console.log("> Fatal error NaN");
+            global["latestid_" + userid] = 5000;
+            console.log("> latestid " +  global["latestid_" + userid]);
+            clearInterval(r2efreshIntervalId);
+            var refreshIntervalId = setInterval(function () {
+                if (!isNaN(global["latestid_" + userid]) ) {
 
-            latestid = global["latestid_" + userid];
-            latestid++;
+                    latestid = global["latestid_" + userid];
+                    latestid++;
 
-            db.query('INSERT INTO users VALUES (?, ?, ?, ?, ?, ?, ?)',
-              [latestid, userid, 100, 0, 0, null, null]
-            );
-            global["checkIfUserExist_" + userid] = true;
-            clearInterval(refreshIntervalId);
+                    db.query('INSERT INTO users VALUES (?, ?, ?, ?, ?, ?, ?)',
+                      [latestid, userid, 100, 0, 0, null, null]
+                    );
+                    global["checkIfUserExist_" + userid] = true;
+                    clearInterval(refreshIntervalId);
 
-        }
+                }
+            },10);
+    
+        };
     },10)
+
+
 
 }
 
@@ -1065,14 +1073,6 @@ function updatePoints (type,userid) {
     },10)
 
 }//e/e/updatePoints
-
-
-
-
-
-
-
-
 
 
 
