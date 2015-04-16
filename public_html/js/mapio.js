@@ -8,6 +8,14 @@ function isPhoneGap() {
 	&& /ios|iphone|ipod|ipad|android/i.test(navigator.userAgent);
 }
 
+
+// Loading Images
+if (isPhoneGap()) { 
+	var public_html = "public_html/"
+} else {
+	var public_html = ""
+}
+
 setInterval(function (){
 	console.log(isPhoneGap ());
 },500)
@@ -15,9 +23,11 @@ setInterval(function (){
 
 // Ask for WebSocket Connection
 if (isPhoneGap()) { 
-	var socket = io.connect('xserve.qdraw.eu');
+	// var socket = io.connect('xserve.qdraw.eu:80');
 } else {
-	var socket = io.connect();
+	// var socket = io.connect();
+	var socket = io.connect('http://xserve.qdraw.eu:80');
+
 }
 
 console.log(userid);
@@ -168,8 +178,8 @@ function sendToQ (data) {
 // Decleration of the icons i'm using
 
 var blackIcon = L.icon({
-    iconUrl: 'images/fa-map-marker.svg',
-    shadowUrl: 'js/images/marker-shadow.png',
+    iconUrl: public_html + 'images/fa-map-marker.svg',
+    shadowUrl: public_html + 'js/images/marker-shadow.png',
 
     iconSize:     [50, 50], // size of the icon
     shadowSize:   [50, 50], // size of the shadow
@@ -180,8 +190,8 @@ var blackIcon = L.icon({
 
 
 var blueIcon = L.icon({
-    iconUrl: 'images/fa-map-marker-blue.svg',
-    shadowUrl: 'js/images/marker-shadow.png',
+    iconUrl: public_html + 'images/fa-map-marker-blue.svg',
+    shadowUrl: public_html + 'js/images/marker-shadow.png',
 
     iconSize:     [50, 50], // size of the icon
     shadowSize:   [50, 50], // size of the shadow
@@ -191,8 +201,8 @@ var blueIcon = L.icon({
 });
 
 var whiteIcon = L.icon({
-    iconUrl: 'images/fa-map-marker-white.svg',
-    shadowUrl: 'js/images/marker-shadow.png',
+    iconUrl: public_html + 'images/fa-map-marker-white.svg',
+    shadowUrl: public_html + 'js/images/marker-shadow.png',
 
     iconSize:     [50, 50], // size of the icon
     shadowSize:   [50, 50], // size of the shadow
