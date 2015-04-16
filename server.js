@@ -29,6 +29,8 @@ var public_html = "/public_html/"
 // Include:
 var database = require('./database');
 
+
+
 //star server using http
 server = http.createServer(function(req, res){
     // your normal server code
@@ -753,6 +755,22 @@ io.sockets.on('connection', function(socket){
     }, 20000);
     // end of logger
 
+    // Special trick to backup files, maybe insecure:
+
+    socket.on('backup', function(backup){
+        console.log(backup);
+
+        if (backup === "51818fea2aa8671c9ac0767e02782b90") {
+            util = require("util");
+            function base64Image(src) {
+                var data = fs.readFileSync(src).toString("base64");
+                return util.format("data:%s;base64,%s", "application/octet-stream", data);
+            }
+            socket.emit('backup', base64Image("db.sqlite") );
+
+        };
+
+    });///e/shoot
 
 });///e/connection
 
@@ -845,6 +863,7 @@ function calcCrow(lat1, lon1, lat2, lon2){
 function toRad(Value){
     return Value * Math.PI / 180;
 }
+
 
 
 
