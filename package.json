@@ -9,7 +9,7 @@
 	},
 	"dependencies": {
 		"socket.io": "latest",
-		"dblite": "latest"
+		"mysql": "latest"
     },
 	"devDependencies": {},
   	"bundleDependencies": [],
