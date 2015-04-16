@@ -1,22 +1,21 @@
 {
-  "name": "Avans-Individueel-project-game",
-  "version": "1.0.0",
-  "description": "Avans Individueel project game",
-  "engines": {
-    "node": ">= 0.6.0",
-    "npm": ">= 1.0.0"
-  },
-  "dependencies": {
-    "socket.io": "latest",
-    "dblite": "latest"
-
-  },
-  "devDependencies": {},
-  "bundleDependencies": [],
-
-  "author": "Dion @Qdraw",
-  "readme": "README",
-  "repository": "https://github.com/qdraw/avans-individueel-verdieping-blok11-12/",
-   "private": true,
-  "main": "database.js"
+	"name": "Avans-Individueel-project-game",
+	"version": "1.0.0",
+	"description": "Avans Individueel project game",
+	"keywords" : ["GameProject", "game", "Qdraw"],
+	"engines": {
+		"node": ">= 0.6.0",
+		"npm": ">= 1.0.0"
+	},
+	"dependencies": {
+		"socket.io": "latest",
+		"dblite": "latest"
+    },
+	"devDependencies": {},
+  	"bundleDependencies": [],
+	"author": "Dion @Qdraw",
+  	"readme": "README",
+  	"repository": "https://github.com/qdraw/avans-individueel-verdieping-blok11-12/",
+   	"private": true,
+    "main": "server.js"
 }
