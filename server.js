@@ -26,7 +26,7 @@ var fs = require('fs');
 var server;
 var public_html = "/public_html/"
 
-
+// Include:
 var database = require('./database');
 
 //star server using http
@@ -179,6 +179,11 @@ io.sockets.on('connection', function(socket){
             userData[0][userid] = [ data.latitude, data.longitude, data.accuracy, data.altitude, data.speed];
             userData[1][userid] = [ data.latitude, data.longitude, data.accuracy, data.altitude, data.speed];
             userData[2][userid] = [ data.latitude, data.longitude, data.accuracy, data.altitude, data.speed];
+
+            // Score first time user login
+            // requires database.js
+            database.checkIfUserExist(userid);
+
             isFirstRun = false;
         };
 
@@ -554,6 +559,11 @@ io.sockets.on('connection', function(socket){
 
                         // Give -1 to the user
                         global["score"][userid] = Number(global["score"][userid] - 0.1);
+                        // send score to db
+
+                        // requires database.js
+                        database.updatePoints("score", userid);
+
 
                         // send score to user:
                         socket.emit('score', {"points": global["score"][userid]});
@@ -581,6 +591,22 @@ io.sockets.on('connection', function(socket){
     // Score HANDELING , kill the opponent, seperate channel
 
     global["score"][userid] = 0;
+    global["readScore_" + userid] = false;
+
+    var r1efreshIntervalId = setInterval(function () {
+        if (global["checkIfUserExist_" + userid]) {
+            database.readScore(userid);
+            clearInterval(r1efreshIntervalId);
+        };
+    },10)
+
+    var refreshIntervalId = setInterval(function () {
+        if (global["readScore_" + userid]) {
+            console.log('global["score"][userid] ' + global["score"][userid] );
+            socket.emit('score', {"points": global["score"][userid]});
+            clearInterval(refreshIntervalId);
+        };
+    },10)
 
     socket.on('shoot', function(shoot){
 

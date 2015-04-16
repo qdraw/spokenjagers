@@ -1,13 +1,25 @@
 var dblite = require('dblite'),
     db = dblite('db.sqlite');
 
-db.query('CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, userid TEXT, health INTEGER, score INTEGER, money INTEGER, value TEXT)');
+db.query('CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, userid TEXT, health INTEGER, score INTEGER, money INTEGER, useragent TEXT, value TEXT)');
 
+// Table of Contents:
+module.exports = {
+  checkIfUserExist: function (userid) {
+	  checkIfUserExist(userid)
+  },
+  readScore: function (userid) {
+	  readScore(userid)
+  },
+  updatePoints: function (type,userid) {
+	  updatePoints(type,userid)
+  }
+};
 
-checkIfUserExist("dion's");
+// Only if you run d*b.js directly
+// checkIfUserExist ("dion");
 
 function checkIfUserExist (userid) {
-
 	global["rows_" + userid] = NaN;
 	global["checkIfUserExist_" + userid] = false;
 
@@ -77,8 +89,8 @@ function addNewUser (userid) {
 			latestid = global["latestid_" + userid];
 			latestid++;
 
-			db.query('INSERT INTO users VALUES (?, ?, ?, ?, ?, ?)',
-			  [latestid, userid, 100, 0, 0, null]
+			db.query('INSERT INTO users VALUES (?, ?, ?, ?, ?, ?, ?)',
+			  [latestid, userid, 100, 0, 0, null, null]
 			);
 			global["checkIfUserExist_" + userid] = true;
 			clearInterval(refreshIntervalId);
@@ -88,27 +100,51 @@ function addNewUser (userid) {
 
 }
 
+// only for running d*b.js directly
+// readScore("dion");
 
-readScore("dion's")
 global["score"] = {};
 global["health"] = {};
 global["money"] = {};
 
 function readScore (userid) {
+	global["readScore_" + userid] = false;
+
 	var refreshIntervalId = setInterval(function () {
 		if (global["checkIfUserExist_" + userid]) {
 
 			db.query('SELECT * FROM users WHERE userid = ?', [userid], {
-			  id: Number,
-			  userid: String,
-			  health: Number,
-			  score: Number,
-			  money: Number
+			    id: Number,
+			    userid: String,
+			    health: Number,
+				score: Number,
+				money: Number
 			}, function (err, rows) {
-			  var record = rows[0];
-			  global["score"][userid] = record.score;
-			  global["health"][userid] = record.health;
-			  global["money"][userid] = record.money;
+				var record = rows[0];
+		  		
+		  		if (isNaN(record.score)) {
+					global["score"][userid] = 0;
+		  		} else {
+			  		global["score"][userid] = record.score;
+		  		}
+
+		  		if (isNaN(record.health)) {
+					global["health"][userid] = 0;
+		  		} else {
+			  		global["health"][userid] = record.health;
+		  		}
+
+		  		if (isNaN(record.money)) {
+					global["money"][userid] = 0;
+		  		} else {
+			  		global["money"][userid] = record.money;
+		  		}
+	  			global["readScore_" + userid] = true;
+
+				// global["score"][userid] = record.score;
+				// global["health"][userid] = record.health;
+				// global["money"][userid] = record.money;
+
 			});
 
 			clearInterval(refreshIntervalId);
@@ -124,19 +160,28 @@ function readScore (userid) {
 
 // Write Score Read Score +1
 
-function addPoints (type,addition,userid) {
+// setTimeout( function () {
+// 		updatePoints ("score","dion");
+// },40);
+
+
+function updatePoints (type,userid) {
 
 	var refreshIntervalId = setInterval(function () {
 		if (global["checkIfUserExist_" + userid]) {
-			if (type === "score") {
-				
+			
+			if (type === "score" || type === "health" || type === "money" || type === "useragent") {
+				db.query("UPDATE users SET "+ type +" = '" + global["score"][userid] + "' WHERE userid = '" + userid +"'");
 
+				// http://www.tutorialspoint.com/sql/sql-update-query.htm
+				// UPDATE CUSTOMERS SET ADDRESS = 'Pune' WHERE ID = 6;
+
+				clearInterval(refreshIntervalId);
 			};//e/score
 		};
 	},10)
 
-
-}//e/e/addPoints
+}//e/e/updatePoints
 
 
 
@@ -183,7 +228,7 @@ function addPoints (type,addition,userid) {
 	// });
 
 
-	console.log("----");
+	// console.log("----");
 
 
 
