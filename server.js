@@ -955,43 +955,56 @@ function addNewUser (userid) {
     
     global["latestid_" + userid] = NaN;
 
-    var latestid = NaN;
-
     db.query('SELECT id from users ORDER BY id DESC LIMIT 1', function (err, results) {
+    
+        console.log("userid " + userid);
         console.log(results);
 
         latestid = results[0].id;
-        console.log(latestid);
+        console.log("latestid " + latestid);
 
         global["latestid_" + userid] = latestid;
     });
 
     var r2efreshIntervalId = setInterval(function () {
-        if (isNaN(global["latestid_" + userid]) ) {
-            console.log("> Fatal error NaN");
-            global["latestid_" + userid] = 5000;
-            console.log("> latestid " +  global["latestid_" + userid]);
-            clearInterval(r2efreshIntervalId);
-            var refreshIntervalId = setInterval(function () {
-                if (!isNaN(global["latestid_" + userid]) ) {
+        if (!isNaN(global["latestid_" + userid]) ) {
 
-                    latestid = global["latestid_" + userid];
-                    latestid++;
+            latestid = global["latestid_" + userid];
+            latestid++;
 
-                    db.query('INSERT INTO users VALUES (?, ?, ?, ?, ?, ?, ?)',
-                      [latestid, userid, 100, 0, 0, null, null]
-                    );
-                    global["checkIfUserExist_" + userid] = true;
-                    clearInterval(refreshIntervalId);
+            db.query('INSERT INTO users VALUES (?, ?, ?, ?, ?, ?, ?)',
+              [latestid, userid, 100, 0, 0, null, null]
+            );
+            global["checkIfUserExist_" + userid] = true;
 
-                }
-            },10);
-    
+        clearInterval(r2efreshIntervalId);
         };
     },10)
 
 
+    // var r2efreshIntervalId = setInterval(function () {
+    //     if (!isNaN(global["latestid_" + userid]) ) {
+    //         console.log("> Fatal error NaN");
+    //         global["latestid_" + userid] = 5000;
+    //         console.log("> latestid " +  global["latestid_" + userid]);
+    //         clearInterval(r2efreshIntervalId);
+    //         var refreshIntervalId = setInterval(function () {
+    //             if (!isNaN(global["latestid_" + userid]) ) {
 
+    //                 latestid = global["latestid_" + userid];
+    //                 latestid++;
+
+    //                 db.query('INSERT INTO users VALUES (?, ?, ?, ?, ?, ?, ?)',
+    //                   [latestid, userid, 100, 0, 0, null, null]
+    //                 );
+    //                 global["checkIfUserExist_" + userid] = true;
+    //                 clearInterval(refreshIntervalId);
+
+    //             }
+    //         },10);
+
+    //     };
+    // },10)
 }
 
 // only for running d*b.js directly
