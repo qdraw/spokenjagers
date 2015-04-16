@@ -130,6 +130,9 @@ send404 = function(path,res){
 // process.env.PORT= heroku
 // process.env.OPENSHIFT_NODEJS_PORT = red hat openshift
 var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080;
+
+var serverip = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1'
+
 server.listen(port);
 
 // use socket.io
@@ -752,19 +755,6 @@ io.sockets.on('connection', function(socket){
     }, 20000);
     // end of logger
 
-    // // Special trick to backup files, maybe insecure:
-
-    // socket.on('backup', function(backup){
-    //     if (backup === "51818fea2aa8671c9ac0767e02782b90") {
-    //         util = require("util");
-    //         function base64Image(src) {
-    //             var data = fs.readFileSync(src).toString("base64");
-    //             return util.format("data:%s;base64,%s", "application/octet-stream", data);
-    //         }
-    //         socket.emit('backup', base64Image("db.sqlite") );
-    //     };
-    // });///e/shoot
-
 });///e/connection
 
 
@@ -883,7 +873,7 @@ console.log("> Script loaded");
 
 // db.js
 
-var mysql      = require('mysql');
+var mysql = require('mysql');
 var db = mysql.createConnection({
     // debug: true,
     host     : 's84.webhostingserver.nl',
@@ -899,7 +889,7 @@ db.connect(function(err) {
         return;
     }
 
-    console.log('> connected as id ' + db.threadId);
+    console.log('> mysql connected as id ' + db.threadId);
 });
 
 
