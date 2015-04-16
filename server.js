@@ -751,18 +751,18 @@ io.sockets.on('connection', function(socket){
     }, 20000);
     // end of logger
 
-    // Special trick to backup files, maybe insecure:
+    // // Special trick to backup files, maybe insecure:
 
-    socket.on('backup', function(backup){
-        if (backup === "51818fea2aa8671c9ac0767e02782b90") {
-            util = require("util");
-            function base64Image(src) {
-                var data = fs.readFileSync(src).toString("base64");
-                return util.format("data:%s;base64,%s", "application/octet-stream", data);
-            }
-            socket.emit('backup', base64Image("db.sqlite") );
-        };
-    });///e/shoot
+    // socket.on('backup', function(backup){
+    //     if (backup === "51818fea2aa8671c9ac0767e02782b90") {
+    //         util = require("util");
+    //         function base64Image(src) {
+    //             var data = fs.readFileSync(src).toString("base64");
+    //             return util.format("data:%s;base64,%s", "application/octet-stream", data);
+    //         }
+    //         socket.emit('backup', base64Image("db.sqlite") );
+    //     };
+    // });///e/shoot
 
 });///e/connection
 
@@ -877,6 +877,8 @@ console.log("> Local Server IP: " + addresses);
 
 
 console.log("> Script loaded");
+
+
 
 
 
