@@ -74,11 +74,13 @@ if (__dirname.indexOf("avans-individueel-verdieping-blok11-12")) {
     console.log("> callbackURL > localhost");
 	global["callbackURL"] = "http://" + "localhost" + ":8080" + "/auth/facebook/callback"
 }
-else if(__dirname.indexOf("/mnt/data") ) {
+
+if(__dirname.indexOf("/mnt/data/avans-individueel-verdieping-blok11-12") ) {
     console.log("> callbackURL > /mnt/data");
 	global["callbackURL"] = "http://" + "xserve.qdraw.eu" + "/auth/facebook/callback"
 }
-else {
+
+if (!(__dirname.indexOf("avans-individueel-verdieping-blok11-12")) || !(__dirname.indexOf("/mnt/data/avans-individueel-verdieping-blok11-12") ) {
     console.log("> callbackURL > herokuapp");
 	global["callbackURL"] = "https://" + "qdraw.herokuapp.com" + "/auth/facebook/callback"
 }
