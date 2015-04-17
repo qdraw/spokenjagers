@@ -156,7 +156,6 @@ var isFirstRun = true;
 io.sockets.on('connection', function(socket){
     // Every User has one connection
     var userid = 0;
-    global["userid"] = 0;
 
     //recieve client data
     // I receive this object from the user:
@@ -183,7 +182,7 @@ io.sockets.on('connection', function(socket){
             userData[2][userid] = [ data.latitude, data.longitude, data.accuracy, data.altitude, data.speed];
 
             // Score first time user login
-            // requires database.js
+            // requires database
             checkIfUserExist(userid);
 
             isFirstRun = false;
@@ -563,7 +562,7 @@ io.sockets.on('connection', function(socket){
                         global["score"][userid] = Number(global["score"][userid] - 0.1);
                         // send score to db
 
-                        // requires database.js
+                        // requires database
                         updatePoints("score", userid);
 
 
@@ -595,20 +594,12 @@ io.sockets.on('connection', function(socket){
     global["score"][userid] = 0;
     global["readScore_" + userid] = false;
 
-    var r1efreshIntervalId = setInterval(function () {
-        if (global["checkIfUserExist_" + userid]) {
-            readScore(userid);
-            clearInterval(r1efreshIntervalId);
-        };
-    },10)
+ 
 
-    var refreshIntervalId = setInterval(function () {
-        if (global["readScore_" + userid]) {
-            console.log('global["score"][userid] ' + global["score"][userid] );
-            socket.emit('score', {"points": global["score"][userid]});
-            clearInterval(refreshIntervalId);
-        };
-    },10)
+    readScoreInterval (userid);
+    updatePointsInterval("score", userid);
+    sendScoreInterval (userid);
+
 
     socket.on('shoot', function(shoot){
 
@@ -650,6 +641,9 @@ io.sockets.on('connection', function(socket){
                         global["opponent"]["opponent_" + i][0] = newOpponent (i); 
                         global["opponent"]["opponent_" + i][1] = newOpponent (i);
                     };
+
+                    readScoreInterval (userid);
+                    sendScoreInterval (userid);
 
 
                     if (isNaN(global["score"][userid] + 1)) {
@@ -1010,6 +1004,20 @@ function addNewUser (userid) {
 // only for running d*b.js directly
 // readScore("dion");
 
+
+
+function readScoreProxy (userid) {
+    // read it
+    var r1efreshIntervalId = setInterval(function () {
+        if (global["checkIfUserExist_" + userid]) {
+            readScore(userid);
+            clearInterval(r1efreshIntervalId);
+        };
+    },10)
+
+}//e/readScoreProxy
+
+
 global["score"] = {};
 global["health"] = {};
 global["money"] = {};
@@ -1045,9 +1053,9 @@ function readScore (userid) {
                 // global["score"][userid] = record.score;
                 // global["health"][userid] = record.health;
                 // global["money"][userid] = record.money;
-                console.log( global["score"][userid] );
-                console.log( global["health"][userid] );
-                console.log( global["money"][userid] );
+                console.log( "> Score " + global["score"][userid] );
+                console.log( "> health " +  global["health"][userid] );
+                console.log( "> money " +  global["money"][userid] );
 
             });
 
@@ -1069,6 +1077,21 @@ function readScore (userid) {
 // },40);
 
 
+function updatePointsProxy (type,userid) {
+
+    // send it to client
+    var refresh4IntervalId = setInterval(function () {
+        if (global["readScore_" + userid]) {
+            updatePoints(type, userid);
+            clearInterval(refresh4IntervalId);
+        }
+        else {
+            console.log("> readScore_ is not ready");
+        }
+    },10)
+
+}//e/sendScoreInterval  
+
 function updatePoints (type,userid) {
 
     var refreshIntervalId = setInterval(function () {
@@ -1086,6 +1109,25 @@ function updatePoints (type,userid) {
     },10)
 
 }//e/e/updatePoints
+
+
+// Troubles down here:
+
+function sendScoreInterval (userid) {
+
+    // send it to client
+    var refreshIntervalId = setInterval(function () {
+        if (global["readScore_" + userid]) {
+            console.log('global["score"][userid] ' + global["score"][userid] );
+            socket.emit('score', {"points": global["score"][userid]});
+            clearInterval(refreshIntervalId);
+        }
+        else {
+            console.log("> readScore_ is not ready");
+        }
+    },10)
+
+}//e/sendScoreInterval
 
 
 
