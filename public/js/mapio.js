@@ -4,14 +4,6 @@
 var socket = io.connect();
 
 
-// var socket = io.connect('http://localhost:8080', {
-//   'query': 'token=' + your_jwt
-// });
-
-// var socket = io.connect('', {
-//   query: 'token=' + token
-// });
-
 var maxZoom = 20;
 
 // var userid = 0;
