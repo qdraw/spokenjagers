@@ -792,7 +792,7 @@ io.on('connection', function(socket){
             socket.emit('score', {"points": global["score"][userid]});
             clearInterval(DisplayScore);
         };
-		console.log(global["score"]);
+		// console.log(global["score"]);
 
 	}, 100);
 
@@ -800,82 +800,82 @@ io.on('connection', function(socket){
 
 
     // // Logger --> /logs/*.scrgpx
-    // setInterval(function(){
+    setInterval(function(){
 
-    //     if (userid != 0) {
-    //         try {
-    //             if ((userData[c][userid][0] != 0) && (userData[c][userid][0] != undefined)) {
-    //                 var lat = userData[c][userid][0];
-    //             };
-    //             if ((userData[c][userid][1] != 0) && (userData[c][userid][1] != undefined)) {
-    //                 var lng = userData[c][userid][1];
-    //                 var altitude = userData[c][userid][3];
-    //                 var speed = userData[c][userid][4];
+        if (userid != 0) {
+            try {
+                if ((userData[c][userid][0] != 0) && (userData[c][userid][0] != undefined)) {
+                    var lat = userData[c][userid][0];
+                };
+                if ((userData[c][userid][1] != 0) && (userData[c][userid][1] != undefined)) {
+                    var lng = userData[c][userid][1];
+                    var altitude = userData[c][userid][3];
+                    var speed = userData[c][userid][4];
 
-    //                 if (altitude === 0 || altitude == undefined) {
-    //                     altitude = -1000;
-    //                 };
+                    if (altitude === 0 || altitude == undefined) {
+                        altitude = -1000;
+                    };
 
-    //                 if (speed ===  null) {
-    //                     speed = 0;
-    //                 };
+                    if (speed ===  null) {
+                        speed = 0;
+                    };
 
-    //                 var myDate = new Date().toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
-    //                 var today = new Date().toJSON().slice(0,10);
+                    var myDate = new Date().toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
+                    var today = new Date().toJSON().slice(0,10);
 
-    //                 var logfilename = "logs/" + userid + ".srcgpx";
+                    var logfilename = "logs/" + userid + ".srcgpx";
 
-    //                 var appendData = '<trkpt lat="'+ lat +'" lon="'+ lng +'">' + "\n" + "<ele>" + altitude + "</ele>\n" + "<time>" + today + "T" + myDate + "Z" +"</time>" + "\n<extensions>\n<speed>" + speed +"</speed>\n</extensions>\n"+ "</trkpt> \n";
-    //                 var appendData = appendData;
+                    var appendData = '<trkpt lat="'+ lat +'" lon="'+ lng +'">' + "\n" + "<ele>" + altitude + "</ele>\n" + "<time>" + today + "T" + myDate + "Z" +"</time>" + "\n<extensions>\n<speed>" + speed +"</speed>\n</extensions>\n"+ "</trkpt> \n";
+                    var appendData = appendData;
 
-    //                 if ( (lat != 0) && (lng != 0 ) && (userid != 0 )) {
-    //                     fs.appendFile(logfilename, appendData, function (err) {
-    //                     });                    
-    //                 };
-    //             };
+                    if ( (lat != 0) && (lng != 0 ) && (userid != 0 )) {
+                        fs.appendFile(logfilename, appendData, function (err) {
+                        });                    
+                    };
+                };
 
-    //         }
-    //         catch(e) {
-    //             console.log("srcgpx writer fails under: " + userid);
-    //         }
-    //     };///e/userid
+            }
+            catch(e) {
+                console.log("srcgpx writer fails under: " + userid);
+            }
+        };///e/userid
 
-    // }, 2000);
+    }, 2000);
 
-    // setInterval(function(){
-    //     if (userid != 0) {
-    //         try {
-    //             // var fs = require('fs');
-    //             var logfilename = "logs/" + userid + ".srcgpx";
+    setInterval(function(){
+        if (userid != 0) {
+            try {
+                // var fs = require('fs');
+                var logfilename = "logs/" + userid + ".srcgpx";
 
-    //             var file = "";
-    //             fs.readFile(logfilename, 'utf8', function (err,data) {
-    //               if (err) {
-    //                 return console.log(err);
-    //               }
-    //               // console.log(data);
-    //               global["file_" + userid ] = data;
-    //             });
+                var file = "";
+                fs.readFile(logfilename, 'utf8', function (err,data) {
+                  if (err) {
+                    return console.log(err);
+                  }
+                  // console.log(data);
+                  global["file_" + userid ] = data;
+                });
 
-    //             var logfilename = "logs/" + userid + ".gpx";
+                var logfilename = "logs/" + userid + ".gpx";
 
-    //             var prevAppendData = '<?xml version="1.0" encoding="UTF-8" ?>' + "\n" + '<gpx xmlns="http://www.topografix.com/GPX/1/1" version="1.1" creator="Qdraw" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd ">' + "\n" + "<trk>" +"\n" + "<name>Qdraw " + userid + "</name> \n <trkseg> \n\n";
-    //             var afterAppendData = "</trkseg></trk></gpx>";
-    //             writeFile = prevAppendData + global["file_" + userid ] + afterAppendData;
-    //             fs.writeFile(logfilename, writeFile, function(err) {
-    //                 if(err) {
-    //                     return console.log(err);
-    //                 }
-    //             });
-    //             global["file_" + userid ] = "";  
-    //         }
-    //         catch(e) {
-    //             console.log("gpx writer fails");
-    //         }
-    //     };///e/userid
+                var prevAppendData = '<?xml version="1.0" encoding="UTF-8" ?>' + "\n" + '<gpx xmlns="http://www.topografix.com/GPX/1/1" version="1.1" creator="Qdraw" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd ">' + "\n" + "<trk>" +"\n" + "<name>Qdraw " + userid + "</name> \n <trkseg> \n\n";
+                var afterAppendData = "</trkseg></trk></gpx>";
+                writeFile = prevAppendData + global["file_" + userid ] + afterAppendData;
+                fs.writeFile(logfilename, writeFile, function(err) {
+                    if(err) {
+                        return console.log(err);
+                    }
+                });
+                global["file_" + userid ] = "";  
+            }
+            catch(e) {
+                console.log("gpx writer fails");
+            }
+        };///e/userid
 
-    // }, 20000);
-    // // end of logger
+    }, 20000);
+    // end of logger
 
 });///e/connection
 
