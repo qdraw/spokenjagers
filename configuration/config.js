@@ -13,3 +13,5 @@ module.exports={
 	"password"				:	"Gpw5KPrE",
 	"database"				:	"deb40577_game"
 }
+
+// https://developers.facebook.com/apps/1377681645895429/settings/

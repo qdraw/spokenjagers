@@ -135,6 +135,8 @@ var serverip = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1'
 
 server.listen(port);
 
+
+
 // use socket.io
 var io = require('socket.io').listen(server);
 
