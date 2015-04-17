@@ -1,14 +1,22 @@
 // Requries socket.io
 
 
-// var socket = io.connect();
+var socket = io.connect();
 
-var socket = io.connect('http://localhost:8080', {
-  'query': 'token=' + your_jwt
-});
 
+// var socket = io.connect('http://localhost:8080', {
+//   'query': 'token=' + your_jwt
+// });
+
+// var socket = io.connect('', {
+//   query: 'token=' + token
+// });
 
 var maxZoom = 20;
+
+// var userid = 0;
+
+var public_html = "";
 
 var map = L.map('map').setView([51, 5.1], maxZoom);
 
@@ -77,7 +85,7 @@ var lastTime = new Date().getTime();
 
 // This format will be send to the server!
 var data = {
-	userid: "none",
+	userid: userid,
 	longitude: 0,
 	latitude: 0,
 	accuracy: 0,

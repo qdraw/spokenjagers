@@ -127,23 +127,6 @@ app.get('/game', ensureAuthenticated, function(req, res){
 	console.log( req.user.id  );
 
 
-	io.use(function ioSession(socket, next) {
-	  // create the fake req that cookieParser will expect                          
-	  var req = {
-	    "headers": {
-	      "cookie": socket.request.headers.cookie,
-	    },
-	  };
-	 
-	  // run the parser and store the sessionID
-	  cookieParser(config.session.secret)(req, null, function() {});
-	  var name = config.session.name;
-	  socket.sessionID = req.signedCookies[name] || req.cookies[name];
-	  console.log(socket.sessionID);
-	  next();
-	});
-
-
 	console.log( req.isAuthenticated()  );
 
 	res.render('game', { user: req.user });
@@ -226,12 +209,12 @@ var latestConnectionTime = {};
 // fill userData with all lat,long
 var isFirstRun = true;
 
+
 // define interactions with client
 io.on('connection', function(socket){
 
 	console.log("	");
-
-	var	userid = 0
+	var userid = 0;
 	
 	// console.log(userid);
 
@@ -255,7 +238,7 @@ io.on('connection', function(socket){
 
     // Excute data:
     function procesData(data) {
-        // userid = data.userid;
+        userid = data.userid;
 
         if (isFirstRun) {
             userData[0][userid] = [ data.latitude, data.longitude, data.accuracy, data.altitude, data.speed];
@@ -724,12 +707,12 @@ io.on('connection', function(socket){
                     // };
 
                     // Read Score from database
-                    readScore (userid);
+                    // readScore (userid);
 
                     // Send it to User
-                    sendScore (socket,userid);
+                    // sendScore (socket,userid);
 
-                    updatePoints ("score",1,userid)
+                    // updatePoints ("score",1,userid)
 
 
                     // // Give +1 to the user
