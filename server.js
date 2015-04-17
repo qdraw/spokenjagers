@@ -231,20 +231,30 @@ io.on('connection', function(socket){
     //     altitude: altitude,
     //     speed: speed
     // }
-
     socket.on('data', function(data){
         procesData(data);
     });
 
+
+    var isFirstRun = true;
     // Excute data:
     function procesData(data) {
         userid = data.userid;
+
 
         if (isFirstRun) {
             userData[0][userid] = [ data.latitude, data.longitude, data.accuracy, data.altitude, data.speed];
             userData[1][userid] = [ data.latitude, data.longitude, data.accuracy, data.altitude, data.speed];
             userData[2][userid] = [ data.latitude, data.longitude, data.accuracy, data.altitude, data.speed];
             isFirstRun = false;
+        };
+
+        if (isFirstUserRun) {
+
+	        global["score"][userid] = 0;
+			readScore ();
+            isFirstUserRun = false;
+
         };
 
         userData[c][userid] = [ data.latitude, data.longitude, data.accuracy, data.altitude, data.speed];
@@ -607,28 +617,36 @@ io.on('connection', function(socket){
 
                 try {
                     if (calcCrow(userData[c][userid][0], userData[c][userid][1], posLat, posLng) < 0.006) {
-                        console.log(i);
+                        console.log("hit by " + i);
 
-
-
-                        if (isNaN(global["score"][userid] + 1)) {
-                            console.log("WARNING: Score restart");
-                            global["score"][userid] = 0;
-                        };
 
 
                         // Give -1 to the user
-                        global["score"][userid] = Number(global["score"][userid] - 0.1);
+                        global["score"][userid] = Number(global["score"][userid] - 1);
                         // send score to db
 
-                        // requires database
-                        updatePoints("score", userid);
+
+	        			if(config.use_database==='true'){
+							connection.query("SELECT * from users where userid="+ userid ,function(err,rows,fields){
+							if(err) throw err;
+							if(rows.length===1){
+								console.log("update score  -> " +  global["score"][userid]);
+								// connection.query("INSERT into users(score) VALUES('" + global["score"][userid] + "')");
+								// 'SELECT * FROM users WHERE userid = ?', [userid]
+				                connection.query("UPDATE users SET "+ "score" +" = '" + global["score"][userid] + "' WHERE userid = '" + userid +"'");
+
+							}
+							else{
+									console.log("User already exists in database");
+								}
+							});
+						}
+
+
 
 
                         // send score to user:
                         socket.emit('score', {"points": global["score"][userid]});
-                        console.log(global["score"][userid]);
-
 
                     }//e/fi
                     
@@ -650,15 +668,66 @@ io.on('connection', function(socket){
 
     // Score HANDELING , kill the opponent, seperate channel
 
-    global["score"][userid] = 0;
-    global["readScore_" + userid] = false;
+    function readScore () {
+
+
+		if(config.use_database==='true'){
+			connection.query("SELECT * from users where userid="+ userid ,function(err,rows,fields){
+			if(err) throw err;
+			if(rows.length===1){
+				console.log(" <> rows");
+				global["score"][userid] = rows[0].score;
+
+				// console.log("update score  -> " +  global["score"][userid]);
+				// global["score"][userid] = 
+
+				// // connection.query("INSERT into users(score) VALUES('" + global["score"][userid] + "')");
+				// // 'SELECT * FROM users WHERE userid = ?', [userid]
+	   			//          connection.query("UPDATE users SET "+ "score" +" = '" + global["score"][userid] + "' WHERE userid = '" + userid +"'");
+
+			}
+			else{
+					console.log("User already exists in database");
+				}
+			});
+		}
+
+        // connection.query('SELECT score FROM users WHERE userid = ' + userid , function (err, rows) {
+        //     console.log(record);
+        //     var record = rows[0];
+            
+        //     if (isNaN(record.score)) {
+        //         global["score"][userid] = 0;
+        //     } else {
+        //         global["score"][userid] = record.score;
+        //     }
+
+        //     // if (isNaN(record.health)&&  (typeof record.health != undefined)) {
+        //     //     global["health"][userid] = 0;
+        //     // } else {
+        //     //     global["health"][userid] = record.health;
+        //     // }
+
+        //     // if (isNaN(record.money)) {
+        //     //     global["money"][userid] = 0;
+        //     // } else {
+        //     //     global["money"][userid] = record.money;
+        //     // }
+
+        //     // global["score"][userid] = record.score;
+        //     // global["health"][userid] = record.health;
+        //     // global["money"][userid] = record.money;
+        //     // console.log( global["score"][userid] );
+        //     // console.log( global["health"][userid] );
+        //     // console.log( global["money"][userid] );
+
+        // });
+
+
+    }///e/readScore
+
 
  
-
-    // readScore (userid);
-    // sendScore (socket,userid);
-    // updatePoints (type,points,userid)
-
 
     socket.on('shoot', function(shoot){
 
@@ -684,13 +753,9 @@ io.on('connection', function(socket){
                 if (calcCrow(shoot.lat, shoot.lng, posLat, posLng) < 0.006) {
 
 
-                    // Check Not a Number > give three points
-                    if (isNaN(global["opponent"]["opponent_" + i][2])) {
-                        global["opponent"]["opponent_" + i][2] = 3;
-                    };
 
                     // Give -1 to opponent
-                    global["opponent"]["opponent_" + i][2]--;
+                    // global["opponent"]["opponent_" + i][2]--;
 
                     // display in terminal
                     console.log("> User: " + userid + " -> opponent " + i + ", score: " + global["opponent"]["opponent_" + i][2] );
@@ -701,10 +766,10 @@ io.on('connection', function(socket){
                         global["opponent"]["opponent_" + i][1] = newOpponent (i);
                     };
 
-                    // if (isNaN(global["score"][userid] + 1)) {
-                    //     console.log("WARNING: Score restart");
-                    //     global["score"][userid] = 0;
-                    // };
+                    if (isNaN(global["score"][userid] + 1)) {
+                        console.log("WARNING: Score restart");
+                        global["score"][userid] = 0;
+                    };
 
                     // Read Score from database
                     // readScore (userid);
@@ -714,13 +779,28 @@ io.on('connection', function(socket){
 
                     // updatePoints ("score",1,userid)
 
-
                     // // Give +1 to the user
-                    // global["score"][userid]++;
+                    global["score"][userid] = Number(global["score"][userid] + 1);
 
+
+        			if(config.use_database==='true'){
+						connection.query("SELECT * from users where userid="+ userid ,function(err,rows,fields){
+						if(err) throw err;
+						if(rows.length===1){
+							console.log("update score  -> " +  global["score"][userid]);
+							// connection.query("INSERT into users(score) VALUES('" + global["score"][userid] + "')");
+							// 'SELECT * FROM users WHERE userid = ?', [userid]
+			                connection.query("UPDATE users SET "+ "score" +" = '" + global["score"][userid] + "' WHERE userid = '" + userid +"'");
+
+						}
+						else{
+								console.log("User already exists in database");
+							}
+						});
+					}
 
                     // // send score to user:
-                    // socket.emit('score', {"points": global["score"][userid]});
+                    socket.emit('score', {"points": global["score"][userid]});
                 };
 
                 var posLat;
@@ -733,6 +813,11 @@ io.on('connection', function(socket){
         };//e/isInBox
 
     });///e/shoot
+
+	
+	setInterval(function(){
+		console.log(global["score"]);
+	}, 100);
 
 
 
