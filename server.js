@@ -103,6 +103,8 @@ passport.use(new FacebookStrategy({
 				}
 				else{
 						console.log("User already exists in database");
+                        global["score"][profile.id] = 0;
+                        readScore (profile.id);
 					}
 				});
 			}
@@ -236,7 +238,6 @@ io.on('connection', function(socket){
     });
 
 
-    var isFirstRun = true;
     // Excute data:
     function procesData(data) {
         userid = data.userid;
@@ -249,13 +250,6 @@ io.on('connection', function(socket){
             isFirstRun = false;
         };
 
-        if (isFirstUserRun) {
-
-	        global["score"][userid] = 0;
-			readScore ();
-            isFirstUserRun = false;
-
-        };
 
         userData[c][userid] = [ data.latitude, data.longitude, data.accuracy, data.altitude, data.speed];
 
@@ -668,29 +662,6 @@ io.on('connection', function(socket){
 
     // Score HANDELING , kill the opponent, seperate channel
 
-    function readScore () {
-
-
-		if(config.use_database==='true'){
-			connection.query("SELECT * from users where userid="+ userid ,function(err,rows,fields){
-			if(err) throw err;
-			if(rows.length===1){
-				console.log(" <> rows");
-				global["score"][userid] = rows[0].score;
-
-				// console.log("update score  -> " +  global["score"][userid]);
-				// global["score"][userid] = 
-
-				// // connection.query("INSERT into users(score) VALUES('" + global["score"][userid] + "')");
-				// // 'SELECT * FROM users WHERE userid = ?', [userid]
-	   			//          connection.query("UPDATE users SET "+ "score" +" = '" + global["score"][userid] + "' WHERE userid = '" + userid +"'");
-
-			}
-			else{
-					console.log("User already exists in database");
-				}
-			});
-		}
 
         // connection.query('SELECT score FROM users WHERE userid = ' + userid , function (err, rows) {
         //     console.log(record);
@@ -724,7 +695,6 @@ io.on('connection', function(socket){
         // });
 
 
-    }///e/readScore
 
 
  
@@ -814,9 +784,16 @@ io.on('connection', function(socket){
 
     });///e/shoot
 
-	
-	setInterval(function(){
+
+    var DisplayScore = setInterval(function(){
+
+        if (!isNaN(global["score"][userid])) {
+            // // send score to user:
+            socket.emit('score', {"points": global["score"][userid]});
+            clearInterval(DisplayScore);
+        };
 		console.log(global["score"]);
+
 	}, 100);
 
 
@@ -969,6 +946,40 @@ function startOpponent() {
 // Global object Score:
 global["score"] = {};
 
+
+function readScore (userid) {
+
+    console.log("userid > " +userid);
+
+
+    if(config.use_database==='true'){
+        connection.query("SELECT * from users where userid="+ userid ,function(err,rows,fields){
+        if(err) throw err;
+        if(rows.length===1){
+            console.log(" <> rows");
+            global["score"][userid] = rows[0].score;
+
+
+            if (isNaN(global["score"][userid] + 1)) {
+                console.log("WARNING: Score restart");
+                global["score"][userid] = 0;
+            };
+
+
+            // console.log("update score  -> " +  global["score"][userid]);
+            // global["score"][userid] = 
+
+            // // connection.query("INSERT into users(score) VALUES('" + global["score"][userid] + "')");
+            // // 'SELECT * FROM users WHERE userid = ?', [userid]
+            //          connection.query("UPDATE users SET "+ "score" +" = '" + global["score"][userid] + "' WHERE userid = '" + userid +"'");
+
+        }
+        else{
+                console.log("User already exists in database");
+            }
+        });
+    }
+}///e/readScore
 
 
 
