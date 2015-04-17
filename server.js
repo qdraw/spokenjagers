@@ -29,7 +29,7 @@ var express				=		require('express')
 	, mysql				=		require('mysql')
 
 	, app				=		express()
-	, http 			= 		require('http').Server(app)
+	, http 				= 		require('http').Server(app)
 	, io 				= 		require('socket.io')(http)
 	, useragent			=		require('express-useragent')
 	, fs				=		require('fs');
@@ -71,14 +71,47 @@ app.use(useragent.express());
 
 // Domain options, for testing
 if (__dirname.indexOf("avans-individueel-verdieping-blok11-12")) {
-	global["host"] = "http://" + "localhost" + ":8080" + "/auth/facebook/callback"
+	global["callbackURL"] = "http://" + "localhost" + ":8080" + "/auth/facebook/callback"
 }
 else if(__dirname.indexOf("/mnt/data") ) {
-	global["host"] = "http://" + "xserve.qdraw.eu" + "/auth/facebook/callback"
+	global["callbackURL"] = "http://" + "xserve.qdraw.eu" + "/auth/facebook/callback"
 }
 else {
-	global["host"] = "https://" + "qdraw.herokuapp.com" + "/auth/facebook/callback"
+	global["callbackURL"] = "https://" + "qdraw.herokuapp.com" + "/auth/facebook/callback"
 }
+
+
+// Use the FacebookStrategy within Passport.
+passport.use(new FacebookStrategy({
+		clientID: config.facebook_api_key,
+		clientSecret:config.facebook_api_secret ,
+		callbackURL: global["callbackURL"]
+	},
+	function(accessToken, refreshToken, profile, done) {
+		// console.log("profile");
+		// console.log(profile);
+		// console.log("profile");
+
+		process.nextTick(function () {
+			//Check whether the User exists or not using profile.id
+			if(config.use_database==='true'){
+				connection.query("SELECT * from users where userid="+profile.id,function(err,rows,fields){
+				if(err) throw err;
+				if(rows.length===0){
+					console.log("There is no such user, adding now");
+					connection.query("INSERT into users(userid,displayname) VALUES('"+profile.id+"','"+profile.displayName+"')");
+				}
+				else{
+						console.log("User already exists in database");
+					}
+				});
+			}
+			return done(null, profile);
+		});
+	}
+));
+
+
 
 app.get('/', function(req, res){
 	global["host"] = "http://" + req.headers.host + "/auth/facebook/callback";
@@ -90,6 +123,29 @@ app.get('/account', ensureAuthenticated, function(req, res){
 });
 
 app.get('/game', ensureAuthenticated, function(req, res){
+	console.log("ensureAuthenticated");
+	console.log( req.user.id  );
+
+
+	io.use(function ioSession(socket, next) {
+	  // create the fake req that cookieParser will expect                          
+	  var req = {
+	    "headers": {
+	      "cookie": socket.request.headers.cookie,
+	    },
+	  };
+	 
+	  // run the parser and store the sessionID
+	  cookieParser(config.session.secret)(req, null, function() {});
+	  var name = config.session.name;
+	  socket.sessionID = req.signedCookies[name] || req.cookies[name];
+	  console.log(socket.sessionID);
+	  next();
+	});
+
+
+	console.log( req.isAuthenticated()  );
+
 	res.render('game', { user: req.user });
 });
 
@@ -124,35 +180,6 @@ passport.deserializeUser(function(obj, done) {
 });
 
 
-// Use the FacebookStrategy within Passport.
-passport.use(new FacebookStrategy({
-		clientID: config.facebook_api_key,
-		clientSecret:config.facebook_api_secret ,
-		callbackURL: global["host"]
-	},
-	function(accessToken, refreshToken, profile, done) {
-		// console.log("profile");
-		// console.log(profile);
-		// console.log("profile");
-
-		process.nextTick(function () {
-			//Check whether the User exists or not using profile.id
-			if(config.use_database==='true'){
-				connection.query("SELECT * from users where userid="+profile.id,function(err,rows,fields){
-				if(err) throw err;
-				if(rows.length===0){
-					console.log("There is no such user, adding now");
-					connection.query("INSERT into users(userid,displayname) VALUES('"+profile.id+"','"+profile.displayName+"')");
-				}
-				else{
-						console.log("User already exists in database");
-					}
-				});
-			}
-			return done(null, profile);
-		});
-	}
-));
 
 // not app.listen
 http.listen(app.get('port'));
@@ -201,8 +228,15 @@ var isFirstRun = true;
 
 // define interactions with client
 io.on('connection', function(socket){
+
+	console.log("	");
+
+	var	userid = 0
+	
+	// console.log(userid);
+
     // Every User has one connection
-    var userid = 0;
+    // var userid = 0;
 
     //recieve client data
     // I receive this object from the user:
@@ -221,7 +255,7 @@ io.on('connection', function(socket){
 
     // Excute data:
     function procesData(data) {
-        userid = data.userid;
+        // userid = data.userid;
 
         if (isFirstRun) {
             userData[0][userid] = [ data.latitude, data.longitude, data.accuracy, data.altitude, data.speed];
@@ -720,83 +754,83 @@ io.on('connection', function(socket){
 
 
 
-    // Logger --> /logs/*.scrgpx
-    setInterval(function(){
+    // // Logger --> /logs/*.scrgpx
+    // setInterval(function(){
 
-        if (userid != 0) {
-            try {
-                if ((userData[c][userid][0] != 0) && (userData[c][userid][0] != undefined)) {
-                    var lat = userData[c][userid][0];
-                };
-                if ((userData[c][userid][1] != 0) && (userData[c][userid][1] != undefined)) {
-                    var lng = userData[c][userid][1];
-                    var altitude = userData[c][userid][3];
-                    var speed = userData[c][userid][4];
+    //     if (userid != 0) {
+    //         try {
+    //             if ((userData[c][userid][0] != 0) && (userData[c][userid][0] != undefined)) {
+    //                 var lat = userData[c][userid][0];
+    //             };
+    //             if ((userData[c][userid][1] != 0) && (userData[c][userid][1] != undefined)) {
+    //                 var lng = userData[c][userid][1];
+    //                 var altitude = userData[c][userid][3];
+    //                 var speed = userData[c][userid][4];
 
-                    if (altitude === 0 || altitude == undefined) {
-                        altitude = -1000;
-                    };
+    //                 if (altitude === 0 || altitude == undefined) {
+    //                     altitude = -1000;
+    //                 };
 
-                    if (speed ===  null) {
-                        speed = 0;
-                    };
+    //                 if (speed ===  null) {
+    //                     speed = 0;
+    //                 };
 
-                    var myDate = new Date().toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
-                    var today = new Date().toJSON().slice(0,10);
+    //                 var myDate = new Date().toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
+    //                 var today = new Date().toJSON().slice(0,10);
 
-                    var logfilename = "logs/" + userid + ".srcgpx";
+    //                 var logfilename = "logs/" + userid + ".srcgpx";
 
-                    var appendData = '<trkpt lat="'+ lat +'" lon="'+ lng +'">' + "\n" + "<ele>" + altitude + "</ele>\n" + "<time>" + today + "T" + myDate + "Z" +"</time>" + "\n<extensions>\n<speed>" + speed +"</speed>\n</extensions>\n"+ "</trkpt> \n";
-                    var appendData = appendData;
+    //                 var appendData = '<trkpt lat="'+ lat +'" lon="'+ lng +'">' + "\n" + "<ele>" + altitude + "</ele>\n" + "<time>" + today + "T" + myDate + "Z" +"</time>" + "\n<extensions>\n<speed>" + speed +"</speed>\n</extensions>\n"+ "</trkpt> \n";
+    //                 var appendData = appendData;
 
-                    if ( (lat != 0) && (lng != 0 ) && (userid != 0 )) {
-                        fs.appendFile(logfilename, appendData, function (err) {
-                        });                    
-                    };
-                };
+    //                 if ( (lat != 0) && (lng != 0 ) && (userid != 0 )) {
+    //                     fs.appendFile(logfilename, appendData, function (err) {
+    //                     });                    
+    //                 };
+    //             };
 
-            }
-            catch(e) {
-                console.log("srcgpx writer fails under: " + userid);
-            }
-        };///e/userid
+    //         }
+    //         catch(e) {
+    //             console.log("srcgpx writer fails under: " + userid);
+    //         }
+    //     };///e/userid
 
-    }, 2000);
+    // }, 2000);
 
-    setInterval(function(){
-        if (userid != 0) {
-            try {
-                // var fs = require('fs');
-                var logfilename = "logs/" + userid + ".srcgpx";
+    // setInterval(function(){
+    //     if (userid != 0) {
+    //         try {
+    //             // var fs = require('fs');
+    //             var logfilename = "logs/" + userid + ".srcgpx";
 
-                var file = "";
-                fs.readFile(logfilename, 'utf8', function (err,data) {
-                  if (err) {
-                    return console.log(err);
-                  }
-                  // console.log(data);
-                  global["file_" + userid ] = data;
-                });
+    //             var file = "";
+    //             fs.readFile(logfilename, 'utf8', function (err,data) {
+    //               if (err) {
+    //                 return console.log(err);
+    //               }
+    //               // console.log(data);
+    //               global["file_" + userid ] = data;
+    //             });
 
-                var logfilename = "logs/" + userid + ".gpx";
+    //             var logfilename = "logs/" + userid + ".gpx";
 
-                var prevAppendData = '<?xml version="1.0" encoding="UTF-8" ?>' + "\n" + '<gpx xmlns="http://www.topografix.com/GPX/1/1" version="1.1" creator="Qdraw" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd ">' + "\n" + "<trk>" +"\n" + "<name>Qdraw " + userid + "</name> \n <trkseg> \n\n";
-                var afterAppendData = "</trkseg></trk></gpx>";
-                writeFile = prevAppendData + global["file_" + userid ] + afterAppendData;
-                fs.writeFile(logfilename, writeFile, function(err) {
-                    if(err) {
-                        return console.log(err);
-                    }
-                });
-                global["file_" + userid ] = "";  
-            }
-            catch(e) {
-                console.log("gpx writer fails");
-            }
-        };///e/userid
+    //             var prevAppendData = '<?xml version="1.0" encoding="UTF-8" ?>' + "\n" + '<gpx xmlns="http://www.topografix.com/GPX/1/1" version="1.1" creator="Qdraw" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd ">' + "\n" + "<trk>" +"\n" + "<name>Qdraw " + userid + "</name> \n <trkseg> \n\n";
+    //             var afterAppendData = "</trkseg></trk></gpx>";
+    //             writeFile = prevAppendData + global["file_" + userid ] + afterAppendData;
+    //             fs.writeFile(logfilename, writeFile, function(err) {
+    //                 if(err) {
+    //                     return console.log(err);
+    //                 }
+    //             });
+    //             global["file_" + userid ] = "";  
+    //         }
+    //         catch(e) {
+    //             console.log("gpx writer fails");
+    //         }
+    //     };///e/userid
 
-    }, 20000);
-    // end of logger
+    // }, 20000);
+    // // end of logger
 
 });///e/connection
 

@@ -14,7 +14,9 @@
 		"ejs": "latest",
 		"express": "latest",
 		"express-session": "latest",
-		"express-useragent": "latest",
+		"express-session": "latest",
+		"socketio-jwt": "latest",
+		"jsonwebtoken": "latest",
 		"mysql": "latest",
 		"passport": "latest",
 		"passport-facebook": "latest"

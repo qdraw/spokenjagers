@@ -1,47 +1,16 @@
 // Requries socket.io
-// Requries userid
 
 
-// // PhoneGap Combality to remove this shit use:
-// 	var public_html = "";
-// 	var socket = io.connect();
-// 	function isPhoneGap() { return false; }
+// var socket = io.connect();
 
+var socket = io.connect('http://localhost:8080', {
+  'query': 'token=' + your_jwt
+});
 
-function isPhoneGap() {
-	return (window.cordova || window.PhoneGap || window.phonegap)
-	&& /^file:\/{3}[^\/]/i.test(window.location.href)
-	&& /ios|iphone|ipod|ipad|android/i.test(navigator.userAgent);
-}
-
-// Loading Images
-if (isPhoneGap()) { 
-	var public_html = "public_html/";
-} else {
-	var public_html = "";
-}
-
-
-// Ask for WebSocket Connection
-if (isPhoneGap()) { 
-	var socket = io.connect('http://xserve.qdraw.eu:80');
-} else {
-	var socket = io.connect();
-}
-
-//e/PhoneGap support
-
-
-
-
-
-console.log(userid);
-console.log(isPhoneGap());
 
 var maxZoom = 20;
 
 var map = L.map('map').setView([51, 5.1], maxZoom);
-
 
 
 // // MapBox
@@ -108,7 +77,7 @@ var lastTime = new Date().getTime();
 
 // This format will be send to the server!
 var data = {
-	userid: userid,
+	userid: "none",
 	longitude: 0,
 	latitude: 0,
 	accuracy: 0,
