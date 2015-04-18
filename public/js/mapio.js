@@ -10,7 +10,7 @@ var maxZoom = 20;
 
 var public_html = "";
 
-var map = L.map('map').setView([51, 5.1], maxZoom);
+var map = L.map('map', { zoomControl:false }).setView([51, 5.1], maxZoom);
 
 
 // // MapBox

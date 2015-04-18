@@ -6,6 +6,10 @@
 	height: 100vh;
 }
 
+.leaflet-control-attribution {
+	display: none;
+}
+
 #debug {
 	position: absolute;
 	bottom: 15px;
