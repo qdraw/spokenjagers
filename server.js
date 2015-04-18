@@ -22,6 +22,7 @@ var express				=		require('express')
 	, passport			=		require('passport')
 	, util				=		require('util')
 	, FacebookStrategy	=		require('passport-facebook').Strategy
+	, GoogleStrategy	=		require('passport-google-oauth').OAuth2Strategy
 	, session			=		require('express-session')
 	, cookieParser		=		require('cookie-parser')
 	, bodyParser		=		require('body-parser')
@@ -47,7 +48,7 @@ var connection = mysql.createConnection({
 if(config.use_database==='true'){
 	connection.connect();
 
-	connection.query('CREATE TABLE IF NOT EXISTS users (id MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY, userid TEXT, displayname TEXT, health INTEGER, score INTEGER, money INTEGER, useragent TEXT, value TEXT)',
+	connection.query('CREATE TABLE IF NOT EXISTS users (id MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY, userid TEXT, displayname TEXT, email TEXT, health INTEGER, score INTEGER, money INTEGER, useragent TEXT, value TEXT)',
 	function(err, result){
 	    // Case there is an error during the creation
 	    if(err) {
@@ -88,26 +89,26 @@ if ( __dirname.indexOf("avans-individueel-verdieping-blok11-12") == -1) {
 }
 
 
-// // Use the TwitterStrategy within Passport.
-// http://codeforgeek.com/2014/09/twitter-login-using-node/
+// GoogleStrategy 
+passport.use(new GoogleStrategy({
+		clientID: config.google_api_key,
+		clientSecret:config.google_api_secret ,
+		callbackURL: global["callbackURL"].replace("facebook","google")
+	},
+	function(accessToken, refreshToken, profile, done) {
 
-// passport.use(new TwitterStrategy({
-// consumerKey: config.twitter_api_key,
-// consumerSecret:config.twitter_api_secret ,
-// callbackURL: config.callback_url
-// },
-// function(token, tokenSecret, profile, done) {
-// process.nextTick(function () {
-// //Check whether the User exists or not using profile.id
-// if(config.use_database==='true')
-// {
-// //Perform MySQL operations.
-// });
-// }
-// return done(null, profile);
-// });
-// }
-// ));
+		// profile + email
+		authenticateUser (profile);
+
+		process.nextTick(function () {
+
+			return done(null, profile);
+		});
+	}
+));
+
+
+
 
 
 // Use the FacebookStrategy within Passport.
@@ -117,31 +118,37 @@ passport.use(new FacebookStrategy({
 		callbackURL: global["callbackURL"]
 	},
 	function(accessToken, refreshToken, profile, done) {
-		// console.log("profile");
-		// console.log(profile);
-		// console.log("profile");
+		
+		console.log(profile);
+
+		authenticateUser (profile);
+
 
 		process.nextTick(function () {
-			//Check whether the User exists or not using profile.id
-			if(config.use_database==='true'){
-				connection.query("SELECT * from users where userid="+profile.id,function(err,rows,fields){
-				if(err) throw err;
-				if(rows.length===0){
-					console.log("There is no such user, adding now");
-					connection.query("INSERT into users(userid,displayname) VALUES('"+profile.id+"','"+profile.displayName+"')");
-				}
-				else{
-						console.log("User already exists in database");
-                        global["score"][profile.id] = 0;
-                        readScore (profile.id);
-					}
-				});
-			}
+
 			return done(null, profile);
 		});
 	}
 ));
 
+function authenticateUser (profile) {
+	//Check whether the User exists or not using profile.id
+	if(config.use_database==='true'){
+		connection.query("SELECT * from users where userid="+profile.id,function(err,rows,fields){
+		if(err) throw err;
+		if(rows.length===0){
+			console.log("There is no such user, adding now");
+			connection.query("INSERT into users(userid,displayname,email) VALUES('"+ profile.id + "','" + profile.displayName + "','" + profile.emails[0].value + "')");
+		}
+		else{
+				console.log("User already exists in database");
+                global["score"][profile.id] = 0;
+                readScore (profile.id);
+			}
+		});
+	}
+
+}//e/authenticateUser
 
 
 app.get('/', function(req, res){
@@ -162,6 +169,7 @@ app.get('/game', ensureAuthenticated, function(req, res){
 	res.render('game', { user: req.user });
 });
 
+// Facebook
 app.get('/auth/facebook', passport.authenticate('facebook',{scope:'email'}));
 
 
@@ -170,6 +178,23 @@ app.get('/auth/facebook/callback',
 	function(req, res) {
 		res.redirect('/');
 	});
+
+//e/fb
+
+//google
+app.get('/auth/google',
+  passport.authenticate('google', { scope: 
+    [ 'https://www.googleapis.com/auth/plus.login',
+    , 'https://www.googleapis.com/auth/plus.profile.emails.read' ] }));
+
+app.get('/auth/google/callback', 
+  passport.authenticate('google', { failureRedirect: '/login' }),
+  function(req, res) {
+    // Successful authentication, redirect home.
+    res.redirect('/');
+  });
+//e/google
+
 
 app.get('/logout', function(req, res){
 	req.logout();

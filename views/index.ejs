@@ -6,16 +6,20 @@
 <% if (!user) { %>
 
 	<h2>Hello, </h2>
-	<h2><a href="/auth/facebook">LOGIN</a></h2>
+	<h2><a href="/auth/facebook">LOGIN FACEBOOK</a></h2>
+	<h2><a href="/auth/google">LOGIN GOOGLE</a></h2>
 
  
   <div style="width:500px;height:180px;background-color:#ececec;padding:80px;margin-left:22%;margin-top:9%;">
 	<h2 style="font-size:40px;">Welcome! Please log in.</h2>
-	<a href="/auth/facebook"><img src="fb-login.jpg" width="151" height="24"></a>
 	</div>
 <% } else { %>
 	<h2>Hello, <%= user.displayName %>.</h2>
 	<h2><a href="../game">START THE GAME</a></h2>
+
+
+	<a href="/account">account info</a><br />
+	<a href="/logout">logout</a>
 
 <% } %>
 </body>

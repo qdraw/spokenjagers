@@ -6,6 +6,8 @@ module.exports={
 
 	"facebook_api_key" 		: 	"1377681645895429",
 	"facebook_api_secret"	:	"0244633f6bde3cd4043186b8499ed303",
+	"google_api_key" 		: 	"936362512301-o2oq44a3s0mkukf1evhfcep7tfimeulv.apps.googleusercontent.com",
+	"google_api_secret"		:	"0mPITFRDIa1Wp9zyDvTrhz8i",
 	"callback_url"			:	"http://localhost:8080/auth/facebook/callback",
 	"use_database"			:	"true",
 	"host"					:	"s84.webhostingserver.nl",
