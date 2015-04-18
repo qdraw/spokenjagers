@@ -160,12 +160,6 @@ app.get('/account', ensureAuthenticated, function(req, res){
 });
 
 app.get('/game', ensureAuthenticated, function(req, res){
-	console.log("ensureAuthenticated");
-	console.log( req.user.id  );
-
-
-	console.log( req.isAuthenticated()  );
-
 	res.render('game', { user: req.user });
 });
 
@@ -173,11 +167,34 @@ app.get('/game', ensureAuthenticated, function(req, res){
 app.get('/auth/facebook', passport.authenticate('facebook',{scope:'email'}));
 
 
-app.get('/auth/facebook/callback',
-	passport.authenticate('facebook', { successRedirect : '/', failureRedirect: '/login' }),
-	function(req, res) {
-		res.redirect('/');
-	});
+// app.get('/auth/facebook/callback',
+// 	passport.authenticate('facebook', { successRedirect : '/', failureRedirect: '/' }),
+// 	function(req, res) {
+// 		res.redirect('/');
+// 	});
+
+// Thanks: http://stackoverflow.com/questions/9885711/custom-returnurl-on-node-js-passports-google-strategy
+app.get('/auth/facebook/callback', function(req, res, next){
+  passport.authenticate('facebook', function(err, user, info){
+    // This is the default destination upon successful login.
+    var redirectUrl = '/';
+
+    if (err) { return next(err); }
+    if (!user) { return res.redirect('/'); }
+
+    // If we have previously stored a redirectUrl, use that, 
+    // otherwise, use the default.
+    if (req.session.redirectUrl) {
+      redirectUrl = req.session.redirectUrl;
+      req.session.redirectUrl = null;
+    }
+    req.logIn(user, function(err){
+      if (err) { return next(err); }
+    });
+    res.redirect(redirectUrl);
+  })(req, res, next);
+});
+
 
 //e/fb
 
@@ -187,12 +204,28 @@ app.get('/auth/google',
     [ 'https://www.googleapis.com/auth/plus.login',
     , 'https://www.googleapis.com/auth/plus.profile.emails.read' ] }));
 
-app.get('/auth/google/callback', 
-  passport.authenticate('google', { failureRedirect: '/login' }),
-  function(req, res) {
-    // Successful authentication, redirect home.
-    res.redirect('/');
-  });
+app.get('/auth/google/callback', function(req, res, next){
+  passport.authenticate('google', function(err, user, info){
+    // This is the default destination upon successful login.
+    var redirectUrl = '/';
+
+    if (err) { return next(err); }
+    if (!user) { return res.redirect('/'); }
+
+    // If we have previously stored a redirectUrl, use that, 
+    // otherwise, use the default.
+    if (req.session.redirectUrl) {
+      redirectUrl = req.session.redirectUrl;
+      req.session.redirectUrl = null;
+    }
+    req.logIn(user, function(err){
+      if (err) { return next(err); }
+    });
+    res.redirect(redirectUrl);
+  })(req, res, next);
+});
+
+
 //e/google
 
 
@@ -204,7 +237,8 @@ app.get('/logout', function(req, res){
 
 function ensureAuthenticated(req, res, next) {
 	if (req.isAuthenticated()) { return next(); }
-	res.redirect('/')
+    req.session.redirectUrl = req.url;
+	res.redirect('/');
 }
 
 
