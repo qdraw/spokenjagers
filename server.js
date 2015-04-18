@@ -96,8 +96,8 @@ passport.use(new GoogleStrategy({
 		callbackURL: global["callbackURL"].replace("facebook","google")
 	},
 	function(accessToken, refreshToken, profile, done) {
+		console.log(profile);
 
-		// profile + email
 		authenticateUser (profile);
 
 		process.nextTick(function () {
@@ -115,15 +115,15 @@ passport.use(new GoogleStrategy({
 passport.use(new FacebookStrategy({
 		clientID: config.facebook_api_key,
 		clientSecret:config.facebook_api_secret ,
+        profileFields: ['id', 'name', 'gender', 'emails', 'profileUrl', 'displayName', 'photos'],
 		callbackURL: global["callbackURL"]
 	},
 	function(accessToken, refreshToken, profile, done) {
 		
 		console.log(profile);
+		// graph.facebook.com/10153168999049854/picture?type=large
 
 		authenticateUser (profile);
-
-
 		process.nextTick(function () {
 
 			return done(null, profile);

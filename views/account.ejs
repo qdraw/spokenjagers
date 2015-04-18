@@ -1,4 +1,21 @@
+<h2><a href="../">home</a></h2>
+
+
 <p>ID: <%= user.id %></p>
-<p>Username: <%= user.displayName %></p>
+<p>Provider: <%= user.provider %></p>
 <p>Name :<%= user.displayName %></p>
-<p>Name :<%= user.email %></p>
+
+<p> familyName : <%= user.name.familyName %> <br />
+ givenName : <%= user.name.givenName %> <br />
+</p>
+<p>gender: <%= user.gender  %></p>
+
+<p>Email: <%= user.emails[0].value %></p>
+<p>Image:
+	<img src="<%= user.photos[0].value %>" width="50px" height="50px" alt="<%= user.displayName %>"/></p>
+</p>
+<br />
+--<br />
+That’s all we know.
+<br />
+-- So no Likes, e-mails, posts
