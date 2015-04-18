@@ -68,7 +68,7 @@ app.use(passport.session());
 app.use(express.static(__dirname + '/public'));
 app.set('port', process.env.PORT || 8080);
 
-app.use(useragent.express());
+// app.use(useragent.express());
 
 // Domain options, for testing
 console.log( "Dirname " + __dirname);
@@ -131,6 +131,8 @@ passport.use(new FacebookStrategy({
 	}
 ));
 
+
+global["sessionEnabled"] = {};
 function authenticateUser (profile) {
 	//Check whether the User exists or not using profile.id
 	if(config.use_database==='true'){
@@ -139,11 +141,15 @@ function authenticateUser (profile) {
 		if(rows.length===0){
 			console.log("There is no such user, adding now");
 			connection.query("INSERT into users(userid,displayname,email) VALUES('"+ profile.id + "','" + profile.displayName + "','" + profile.emails[0].value + "')");
+			global["sessionEnabled"][profile.id] = true;
 		}
 		else{
 				console.log("User already exists in database");
                 global["score"][profile.id] = 0;
                 readScore (profile.id);
+
+                console.log(profile.id);
+                global["sessionEnabled"][profile.id] = true;
 			}
 		});
 	}
@@ -230,6 +236,7 @@ app.get('/auth/google/callback', function(req, res, next){
 
 
 app.get('/logout', function(req, res){
+	global["sessionEnabled"][req.user.id] = false;
 	req.logout();
 	res.redirect('/');
 });
@@ -336,6 +343,12 @@ io.on('connection', function(socket){
             userData[2][userid] = [ data.latitude, data.longitude, data.accuracy, data.altitude, data.speed];
             isFirstRun = false;
         };
+
+        if (global["sessionEnabled"][userid] != true) {
+        	global["sessionEnabled"][userid] = false;
+        	socket.emit('sessionEnabled', global["sessionEnabled"]);
+        };
+
 
 
         userData[c][userid] = [ data.latitude, data.longitude, data.accuracy, data.altitude, data.speed];
@@ -700,31 +713,31 @@ io.on('connection', function(socket){
                     if (calcCrow(userData[c][userid][0], userData[c][userid][1], posLat, posLng) < 0.006) {
                         console.log("hit by " + i);
 
+	                    if (!(isNaN(global["score"][userid] + 1))) {
+
+	                        // Give -1 to the user
+	                        global["score"][userid] = Number(global["score"][userid] - 1);
+	                        // send score to db
 
 
-                        // Give -1 to the user
-                        global["score"][userid] = Number(global["score"][userid] - 1);
-                        // send score to db
+		        			if(config.use_database==='true'){
+								connection.query("SELECT * from users where userid="+ userid ,function(err,rows,fields){
+								if(err) throw err;
+								if(rows.length===1){
+									console.log("update score  -> " +  global["score"][userid]);
+									// connection.query("INSERT into users(score) VALUES('" + global["score"][userid] + "')");
+									// 'SELECT * FROM users WHERE userid = ?', [userid]
+					                connection.query("UPDATE users SET "+ "score" +" = '" + global["score"][userid] + "' WHERE userid = '" + userid +"'");
 
-
-	        			if(config.use_database==='true'){
-							connection.query("SELECT * from users where userid="+ userid ,function(err,rows,fields){
-							if(err) throw err;
-							if(rows.length===1){
-								console.log("update score  -> " +  global["score"][userid]);
-								// connection.query("INSERT into users(score) VALUES('" + global["score"][userid] + "')");
-								// 'SELECT * FROM users WHERE userid = ?', [userid]
-				                connection.query("UPDATE users SET "+ "score" +" = '" + global["score"][userid] + "' WHERE userid = '" + userid +"'");
-
-							}
-							else{
-									console.log("User already exists in database");
 								}
-							});
-						}
+								else{
+										console.log("User already exists in database");
+									}
+								});
+							}
 
 
-
+						}//e/NaN
 
                         // send score to user:
                         socket.emit('score', {"points": global["score"][userid]});
@@ -823,10 +836,10 @@ io.on('connection', function(socket){
                         global["opponent"]["opponent_" + i][1] = newOpponent (i);
                     };
 
-                    if (isNaN(global["score"][userid] + 1)) {
-                        console.log("WARNING: Score restart");
-                        global["score"][userid] = 0;
-                    };
+                    // if (isNaN(global["score"][userid] + 1)) {
+                    //     console.log("WARNING: Score restart");
+                    //     global["score"][userid] = 0;
+                    // };
 
                     // Read Score from database
                     // readScore (userid);
@@ -837,24 +850,28 @@ io.on('connection', function(socket){
                     // updatePoints ("score",1,userid)
 
                     // // Give +1 to the user
-                    global["score"][userid] = Number(global["score"][userid] + 1);
+                    if (!(isNaN(global["score"][userid] + 1))) {
+
+	                    global["score"][userid] = Number(global["score"][userid] + 1);
 
 
-        			if(config.use_database==='true'){
-						connection.query("SELECT * from users where userid="+ userid ,function(err,rows,fields){
-						if(err) throw err;
-						if(rows.length===1){
-							console.log("update score  -> " +  global["score"][userid]);
-							// connection.query("INSERT into users(score) VALUES('" + global["score"][userid] + "')");
-							// 'SELECT * FROM users WHERE userid = ?', [userid]
-			                connection.query("UPDATE users SET "+ "score" +" = '" + global["score"][userid] + "' WHERE userid = '" + userid +"'");
+	        			if(config.use_database==='true'){
+							connection.query("SELECT * from users where userid="+ userid ,function(err,rows,fields){
+							if(err) throw err;
+							if(rows.length===1){
+								console.log("update score  -> " +  global["score"][userid]);
+								// connection.query("INSERT into users(score) VALUES('" + global["score"][userid] + "')");
+								// 'SELECT * FROM users WHERE userid = ?', [userid]
+				                connection.query("UPDATE users SET "+ "score" +" = '" + global["score"][userid] + "' WHERE userid = '" + userid +"'");
 
-						}
-						else{
-								console.log("User already exists in database");
 							}
-						});
-					}
+							else{
+									console.log("User already exists in database");
+								}
+							});
+						}//e/fi
+
+					}//e/NaN
 
                     // // send score to user:
                     socket.emit('score', {"points": global["score"][userid]});

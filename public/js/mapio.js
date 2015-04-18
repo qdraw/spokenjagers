@@ -323,6 +323,18 @@ setTimeout(function(){
 }, 10000);
 
 
+// Kill Users if server crashes or if you logout
+socket.on('sessionEnabled', function(sessionEnabled){
+	Object.keys(sessionEnabled).forEach(function(key) {
+		if (userid === key) {
+			if (sessionEnabled[userid] == false || sessionEnabled[userid] == null) {
+				window.location = "/game"
+			};
+		}
+	});
+});
+
+
 // // ZOOM START unused
 
 // map.on("zoomstart", function (e) { console.log("ZOOMEND", e); });
