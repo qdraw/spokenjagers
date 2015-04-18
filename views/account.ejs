@@ -1,3 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>Account Info Game</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+	<link rel="stylesheet" href="/css/reset.css" />	
+	<link rel="stylesheet" href="/css/style.css" />	
+	<link rel="stylesheet" href="/css/leaflet.css" />	
+
+</head>
+<body>
+
 <h2><a href="../">home</a></h2>
 
 
@@ -12,10 +25,13 @@
 
 <p>Email: <%= user.emails[0].value %></p>
 <p>Image:
-	<img src="<%= user.photos[0].value %>" width="50px" height="50px" alt="<%= user.displayName %>"/></p>
+	<img src="<%= user.photos[0].value %>" width="50px" height="50px" alt="<%= user.displayName %>"/>
 </p>
 <br />
 --<br />
 That’s all we know.
 <br />
 -- So no Likes, e-mails, posts
+
+</body>
+</html>
