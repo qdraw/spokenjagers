@@ -88,6 +88,28 @@ if ( __dirname.indexOf("avans-individueel-verdieping-blok11-12") == -1) {
 }
 
 
+// // Use the TwitterStrategy within Passport.
+// http://codeforgeek.com/2014/09/twitter-login-using-node/
+
+// passport.use(new TwitterStrategy({
+// consumerKey: config.twitter_api_key,
+// consumerSecret:config.twitter_api_secret ,
+// callbackURL: config.callback_url
+// },
+// function(token, tokenSecret, profile, done) {
+// process.nextTick(function () {
+// //Check whether the User exists or not using profile.id
+// if(config.use_database==='true')
+// {
+// //Perform MySQL operations.
+// });
+// }
+// return done(null, profile);
+// });
+// }
+// ));
+
+
 // Use the FacebookStrategy within Passport.
 passport.use(new FacebookStrategy({
 		clientID: config.facebook_api_key,

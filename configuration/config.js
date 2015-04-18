@@ -15,3 +15,15 @@ module.exports={
 }
 
 // https://developers.facebook.com/apps/1377681645895429/settings/
+
+
+// Google
+//  Client ID
+// 936362512301-o2oq44a3s0mkukf1evhfcep7tfimeulv.apps.googleusercontent.com
+// Email address
+// 936362512301-o2oq44a3s0mkukf1evhfcep7tfimeulv@developer.gserviceaccount.com
+// Client secret
+// 0mPITFRDIa1Wp9zyDvTrhz8i
+
+
+// https://github.com/jaredhanson/passport-instagram
