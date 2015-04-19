@@ -11,6 +11,21 @@
 </head>
 <body>
 
+<header>
+	<div class="back"> <a href="/"></a> </div>
+	<div class="appname"> GhostHunter</div>
+	<div class="user">
+		<a href="/account">
+			<img class="image" src="<%= user.photos[0].value %>" alt="<%= user.displayName %>"/>
+			<span class="text">
+			 	+<%= user.name.givenName %>
+			</span>
+		</a>
+	</div>
+
+</header>
+
+
 <h2><a href="../">home</a></h2>
 
 

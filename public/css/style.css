@@ -1,3 +1,136 @@
+
+/* FONT FACE */
+@font-face {
+  	font-family: 'Arimo';
+  	font-style: normal;
+  	font-weight: 400;
+	src: url(fonts/normal.woff) format("woff"),
+     url(fonts/normal.ttf) format("truetype");
+	}
+
+
+/* typografie */
+html,
+body {
+	font-family: 'Arimo', 'Helvetica Neue', 'HelveticaNeue', 
+	  Helvetica, Arial, 'Lucida Grande', sans-serif;
+    -webkit-print-color-adjust:exact;
+}
+
+
+button,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+  font-family: 'Arimo', "Helvetica Neue", Helvetica, Arial, sans-serif;
+  line-height: 1.1;
+  color: inherit;
+}
+
+h1{
+    font-size: 25pt;
+}
+h2{
+    font-size: 20px;
+    line-height: 1.4;
+
+}
+@media (max-width: 500px) {
+    h1{
+        font-size: 36px;
+    }/*e/h1*/
+    
+    h2{
+        font-size: 16px;
+    }/*e/h1*/
+
+}/*e/mq*/
+
+.txt p {
+    line-height: 1.4;
+}
+.txt ol{
+    list-style-type: decimal;
+    list-style-position: outside;
+    margin-left: 15px;
+    line-height: 1.4;
+}
+
+.txt ul{
+    list-style-type: disc;
+    list-style-position: outside;
+    margin-left: 15px;
+    line-height: 1.4;
+
+}
+
+a{
+	color: black;
+}
+a:hover{
+	color: #302D2B;
+}
+
+
+
+
+header {
+	width: 100%;
+	height: 44px;
+	background-color: #888;
+}
+
+header .back {
+	float: left;
+	width: 33.33%;
+}
+header .back a {
+	background-image: url("../images/fa-caret-left.svg");
+	display: block;
+	height: 44px;
+	width: 44px;
+	background-size: 30px 30px;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+header .appname {
+	float: left;
+	width: 33.33%;
+	text-align: center;
+	padding-top: 13px;
+	color: #fff;
+}
+
+header .user {
+	float: right;
+	width: 33%;
+}
+header .user .text{
+	padding-top: 13px;
+	float: right;
+	color: #fff;
+	padding-right: 10px;
+}
+
+header .user .image {
+	float: right;
+	height: 44px;
+	border-radius: 22px;
+
+}
+
+
+
 #map {
 	width: 500px;
 	height: 500px;
