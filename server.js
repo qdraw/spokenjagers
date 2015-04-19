@@ -59,18 +59,18 @@ if(config.use_database==='true'){
 }// connection
 
 
-// only for locations logger
-if(config.use_database==='true'){
+// // only for locations logger
+// if(config.use_database==='true'){
 
-    connection.query('CREATE TABLE IF NOT EXISTS locations (id MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY)',
-    function(err, result){
-        // Case there is an error during the creation
-        if(err) {
-            console.log(err);
-        }
-    });
+//     connection.query('CREATE TABLE IF NOT EXISTS locations (id MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY)',
+//     function(err, result){
+//         // Case there is an error during the creation
+//         if(err) {
+//             console.log(err);
+//         }
+//     });
 
-}//fi
+// }//fi
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
@@ -158,7 +158,7 @@ function authenticateUser (profile) {
 			global["sessionEnabled"][profile.id] = true;
 
             // only for logger
-            connection.query("ALTER TABLE locations ADD _" + String(profile.id) + "_ TEXT");
+            // connection.query("ALTER TABLE locations ADD _" + String(profile.id) + "_ TEXT");
 
 		}
 		else{
@@ -919,52 +919,52 @@ io.on('connection', function(socket){
 	}, 100);
 
 
-    // logger database
-    if(config.use_database==='true'){
+    // // logger database
+    // if(config.use_database==='true'){
 
-        setInterval(function(){
-
-
-            if (userid != 0) {
-                try {
-                    if ((userData[c][userid][0] != 0) && (userData[c][userid][0] != undefined)) {
-                        var lat = userData[c][userid][0];
-                    };
-                    if ((userData[c][userid][1] != 0) && (userData[c][userid][1] != undefined)) {
-                        var lng = userData[c][userid][1];
-                        var altitude = userData[c][userid][3];
-                        var speed = userData[c][userid][4];
-
-                        if (altitude === 0 || altitude == undefined) {
-                            altitude = -1000;
-                        };
-
-                        if (speed ===  null || speed ===  undefined) {
-                            speed = 0;
-                        };
-
-                        var myDate = new Date().toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
-                        var today = new Date().toJSON().slice(0,10);
-
-                        var appendData = lat + ";" + lng + ";" + altitude + ";" + today + "T" + myDate + "Z" + ";" + speed;
-
-                        if ( (lat != 0) && (lng != 0 ) && (userid != 0 )) {
-                            connection.query("INSERT INTO locations (_" + userid + "_) VALUES('" + appendData + "')"); 
-                            console.log("appendData")                
-                        };
-                    };
-
-                }
-                catch(e) {
-                    console.log("srcgpx writer fails under: " + userid);
-                }
-            };///e/userid
+    //     setInterval(function(){
 
 
+    //         if (userid != 0) {
+    //             try {
+    //                 if ((userData[c][userid][0] != 0) && (userData[c][userid][0] != undefined)) {
+    //                     var lat = userData[c][userid][0];
+    //                 };
+    //                 if ((userData[c][userid][1] != 0) && (userData[c][userid][1] != undefined)) {
+    //                     var lng = userData[c][userid][1];
+    //                     var altitude = userData[c][userid][3];
+    //                     var speed = userData[c][userid][4];
 
-        }, 2000);
+    //                     if (altitude === 0 || altitude == undefined) {
+    //                         altitude = -1000;
+    //                     };
 
-    }
+    //                     if (speed ===  null || speed ===  undefined) {
+    //                         speed = 0;
+    //                     };
+
+    //                     var myDate = new Date().toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
+    //                     var today = new Date().toJSON().slice(0,10);
+
+    //                     var appendData = lat + ";" + lng + ";" + altitude + ";" + today + "T" + myDate + "Z" + ";" + speed;
+
+    //                     if ( (lat != 0) && (lng != 0 ) && (userid != 0 )) {
+    //                         connection.query("INSERT INTO locations (_" + userid + "_) VALUES('" + appendData + "')"); 
+    //                         console.log("appendData")                
+    //                     };
+    //                 };
+
+    //             }
+    //             catch(e) {
+    //                 console.log("srcgpx writer fails under: " + userid);
+    //             }
+    //         };///e/userid
+
+
+
+    //     }, 2000);
+
+    // }
 
 
 
