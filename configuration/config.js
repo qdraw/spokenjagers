@@ -16,6 +16,13 @@ module.exports={
 	"database"				:	"deb40577_game"
 }
 
+// Give permission to:
+// %amazonaws.com
+// for heroku
+// 84.85.122.27
+// for xserve
+
+
 // https://developers.facebook.com/apps/1377681645895429/settings/
 
 
