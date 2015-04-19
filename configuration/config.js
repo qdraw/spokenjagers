@@ -12,7 +12,7 @@ module.exports={
 	"use_database"			:	"true",
 	"host"					:	"s84.webhostingserver.nl",
 	"username"				:	"deb40577_game",
-	"password"				:	"Gpw5KPrE",
+	"password"				:	"Der8Ik4yo1Hec9fold2oL5cob3da",
 	"database"				:	"deb40577_game"
 }
 

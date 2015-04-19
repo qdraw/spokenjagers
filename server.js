@@ -901,6 +901,25 @@ io.on('connection', function(socket){
 	}, 100);
 
 
+    // if(config.use_database==='true'){
+
+    //     setInterval(function(){
+
+
+    //         connection.query('CREATE TABLE IF NOT EXISTS locations (id MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY)',
+    //         function(err, result){
+    //             // Case there is an error during the creation
+    //             if(err) {
+    //                 console.log(err);
+    //             }
+    //             console.log('> mysql connected as id ' + connection.threadId);
+    //         });
+
+            
+
+    //     }, 2000);
+
+    // }
 
 
     // // Logger --> /logs/*.scrgpx
