@@ -163,10 +163,7 @@ function authenticateUser (profile) {
 		}
 		else{
 				console.log("User already exists in database");
-                global["score"][profile.id] = 0;
                 readScore (profile.id);
-
-                console.log(profile.id);
                 global["sessionEnabled"][profile.id] = true;
 			}
 		});
@@ -912,6 +909,9 @@ io.on('connection', function(socket){
         if (!isNaN(global["score"][userid])) {
             // // send score to user:
             socket.emit('score', {"points": global["score"][userid]});
+            socket.emit('money', {"money": global["money"][userid]});
+            socket.emit('health', {"health": global["health"][userid]});
+
             clearInterval(DisplayScore);
         };
 		// console.log(global["score"]);
@@ -1114,7 +1114,8 @@ function startOpponent() {
 
 // Global object Score:
 global["score"] = {};
-
+global["health"] = {};
+global["money"] = {};
 
 function readScore (userid) {
 
@@ -1134,6 +1135,19 @@ function readScore (userid) {
                 global["score"][userid] = 0;
             };
 
+            global["health"][userid] = rows[0].health;
+
+            if (isNaN(global["health"][userid] + 1)) {
+                console.log("WARNING: health restart");
+                global["health"][userid] = 0;
+            };
+            global["money"][userid] = rows[0].money;
+
+
+            if (isNaN(global["money"][userid] + 1)) {
+                console.log("WARNING: money restart");
+                global["money"][userid] = 0;
+            };
 
             // console.log("update score  -> " +  global["score"][userid]);
             // global["score"][userid] = 

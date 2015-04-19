@@ -413,7 +413,6 @@ function onMapClick(e) {
 
 
 
-document.getElementById("points").innerHTML = 0;
 socket.on('score', function(score){
 	scoreInPoints = Math.ceil(score["points"]*10);
 	scoreInPoints = scoreInPoints/10;
@@ -424,3 +423,19 @@ socket.on('score', function(score){
 
 
 
+
+socket.on('health', function(health){
+	scoreInPoints = Math.ceil(health["health"]*10);
+	scoreInPoints = scoreInPoints/10;
+
+	console.log(health["health"]);
+	document.getElementById("health").innerHTML = scoreInPoints + "%";
+}); //e/score
+
+socket.on('money', function(money){
+	scoreInPoints = Math.ceil(money["money"]*10);
+	scoreInPoints = scoreInPoints/10;
+
+	console.log(money["money"]);
+	document.getElementById("money").innerHTML = "$" + scoreInPoints;
+}); //e/score
