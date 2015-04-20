@@ -22,11 +22,14 @@ module.exports={
 // 84.85.122.27
 // for xserve
 
-
+// Facebook
 // https://developers.facebook.com/apps/1377681645895429/settings/
 
 
 // Google
+// https://console.developers.google.com/project/qdrawmediaapp/apiui/credential
+
+
 //  Client ID
 // 936362512301-o2oq44a3s0mkukf1evhfcep7tfimeulv.apps.googleusercontent.com
 // Email address
@@ -35,4 +38,11 @@ module.exports={
 // 0mPITFRDIa1Wp9zyDvTrhz8i
 
 
+// Instagram
 // https://github.com/jaredhanson/passport-instagram
+
+
+// Windows
+// https://account.live.com/developers/applications/create
+
+

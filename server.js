@@ -153,6 +153,8 @@ passport.use(new FacebookStrategy({
 ));
 
 
+
+
 global["sessionEnabled"] = {};
 function authenticateUser (profile) {
 	//Check whether the User exists or not using profile.id
@@ -195,6 +197,7 @@ app.get('/game', ensureAuthenticated, function(req, res){
 
 	res.render('game', { user: req.user });
 });
+
 
 // Facebook
 app.get('/auth/facebook', passport.authenticate('facebook',{scope:'email'}));
