@@ -31,7 +31,7 @@ var map = L.map('map', { zoomControl:false }).setView([51, 5.1], maxZoom);
 // }).addTo(map); 
 
 // Nokia Here Maps, Thanks: http://leaflet-extras.github.io/leaflet-providers/preview/
-L.tileLayer('https://{s}.{base}.maps.cit.api.here.com/maptile/2.1/maptile/{mapID}/satellite.day/{z}/{x}/{y}/256/png8?app_id={app_id}&app_code={app_code}', {
+L.tileLayer('https://{s}.{base}.maps.cit.api.here.com/maptile/2.1/maptile/{mapID}/satellite.day/{z}/{x}/{y}/256/jpg?app_id={app_id}&app_code={app_code}', {
 	// attribution: 'Map &copy; 1987-2014 <a href="http://developer.here.com">HERE</a>',
 	subdomains: '1234',
 	mapID: 'newest',

@@ -27,12 +27,6 @@
 
 	</header>
 
-	<div id="login">
-			<h2><a href="/auth/facebook">LOGIN FACEBOOK</a></h2>
-			<h2><a href="/auth/google">LOGIN GOOGLE</a></h2>		
-	</div>
-
-<!-- 
 	<div id="map"></div>
 
 
@@ -52,9 +46,51 @@
 			maxZoom: 11
 		}).addTo(map);
 
+	// Disable drag and zoom handlers.
+	map.dragging.disable();
+	map.touchZoom.disable();
+	map.doubleClickZoom.disable();
+	map.scrollWheelZoom.disable();
+
+	// Disable tap handler, if present.
+	if (map.tap) map.tap.disable();
+
 
 	</script>
- -->
+
+	<div id="login">
+
+		<% if (cookies.provider === "facebook") { %>
+			<a class="login-facebook" href="/auth/facebook">
+				Log in with Facebook
+			</a>
+			<a class="login-google-low" href="/auth/google">
+				Log in with Google
+			</a>
+
+		<% } else if (cookies.provider === "google") { %>
+			<a class="login-google" href="/auth/google">
+				Log in with Google
+			</a>
+			<a class="login-facebook-low" href="/auth/facebook">
+				Log in with Facebook
+			</a>
+		<% } else { %>
+			<a class="login-facebook" href="/auth/facebook">
+				Log in with Facebook
+			</a>
+			<a class="login-google" href="/auth/google">
+				Log in with Google
+			</a>
+		<% } %>
+
+		This app requires your geo-location and Facebook or Google account number.
+
+
+	</div>
+
+	<script type="text/javascript" src="js/index.js"></script>
+
 <% } else { %>
 
 	<header>
@@ -78,6 +114,9 @@
 	
 	<a href="/account">account info</a><br />
 	<a href="/logout">logout</a>
+
+	<script type="text/javascript" src="js/index.js"></script>
+
 
 <% } %>
 </body>

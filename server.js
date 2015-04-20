@@ -76,7 +76,7 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(session({ secret: 'k12345eyboard cat', key: 's223id'}));
+app.use(session({ secret: 'Lorum Ipsum Dolec, Dion de Hamster', key: 'Qsession'}));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(__dirname + '/public'));
@@ -173,7 +173,8 @@ function authenticateUser (profile) {
 
 
 app.get('/', function(req, res){
-	res.render('index', { user: req.user });
+    // console.log("Cookies: ", req.cookies);
+	res.render('index', { user: req.user, cookies: req.cookies});
 });
 
 app.get('/account', ensureAuthenticated, function(req, res){
@@ -181,6 +182,10 @@ app.get('/account', ensureAuthenticated, function(req, res){
 });
 
 app.get('/game', ensureAuthenticated, function(req, res){
+
+    var expiryDate = new Date(Number(new Date()) + 315360000000); 
+    res.cookie('provider', req.user.provider, { expires: expiryDate, httpOnly: true });
+
 	res.render('game', { user: req.user });
 });
 
