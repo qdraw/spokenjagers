@@ -102,6 +102,13 @@ if ( __dirname.indexOf("avans-individueel-verdieping-blok11-12") == -1) {
 	global["callbackURL"] = "https://" + "qdraw.herokuapp.com" + "/auth/facebook/callback";
 }
 
+// print process.argv ++ use: nodemon server.js ngrok
+process.argv.forEach(function (val, index, array) {
+    if (val === "ngrok") {
+        console.log("> callbackURL > NGROK");
+        global["callbackURL"] = "https://" + "qdraw.ngrok.io" + "/auth/facebook/callback";
+    }
+});
 
 // GoogleStrategy 
 passport.use(new GoogleStrategy({
