@@ -1,0 +1,118 @@
+This file is summary of sources that i've used in my project
+
+Check for dependencies the package.json file
+You can install this packages using $ npm install
+
+# Node.js
+
+https://nodejs.org/download/
+>	install node.js
+
+https://devcenter.heroku.com/articles/getting-started-with-nodejs
+>	getting started with node.js
+
+http://readwrite.com/2013/09/30/understanding-github-a-journey-for-beginners-part-1
+>	understanding github
+
+https://github.com/jay3dec/OpenAuthInNodejs
+>	for oath in node.js
+
+https://github.com/codeforgeek/facebook-login-node-express
+>	for oath in node.js
+
+https://github.com/jaredhanson/passport-facebook/issues/80
+>	profile images in facebook
+
+https://scotch.io/tutorials/easy-node-authentication-setup-and-local
+>	for oath in node.js
+
+https://github.com/mjhea0/passport-examples
+>	passport autorisation in node.js
+
+http://mherman.org/blog/2013/11/10/social-authentication-with-passport-dot-js/
+>	tutorial used for  passport autorisation in node.js
+
+http://codeforgeek.com/2014/09/facebook-login-using-nodejs-express/
+>	passport and mysql autorisation in node.js
+
+https://github.com/jaredhanson/passport-google-oauth/blob/master/README.md
+>	Google Authisation for passport in node.js
+
+http://www.w3schools.com/sql/sql_insert.asp
+>	SQL INSERT INTO Statement for controlling my mysql-db
+
+http://www.w3schools.com/sql/sql_select.asp
+>	SQL SELECT Statement for selecting items in my mysql-db
+
+http://socket.io/get-started/chat/
+>	getting started with socket.io
+
+https://nodesource.com/blog/understanding-socketio
+>	 Understanding Socket.IO 
+
+http://wanasit.github.io/articles/real-time-location-sharing-with-socket-io.html
+>	Real time location sharing with socket.io
+
+http://danielnill.com/nodejs-tutorial-with-socketio/
+>	socket.io connection with server
+
+http://tympanus.net/codrops/2012/10/11/real-time-geolocation-service-with-node-js/
+>	real time location sharing with node.js and socket.io
+
+https://github.com/remy/nodemon
+>	nodemon for debugging node server scripts
+
+http://stackoverflow.com/questions/23281594/configuring-express-4-0-routes-with-socket-io
+>	configure socket.io with express
+
+http://stackoverflow.com/questions/10750303/how-can-i-get-the-local-ip-address-in-node-js
+>	How can I get the local IP address in Node.js
+
+http://stackoverflow.com/questions/7440001/iterate-over-object-keys-in-node-js
+>	Iterate over object keys in node.js
+
+http://stackoverflow.com/questions/1669190/javascript-min-max-array-values
+>	min/max function using prototype statement
+
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
+>	math random float and number
+
+http://www.w3schools.com/sql/sql_update.asp
+>	SQL UPDATE Statement for controlling mysql db
+
+http://nodejs.org/api/globals.html
+>	global object in node.js
+
+http://stackoverflow.com/questions/18883601/function-to-calculate-distance-between-two-coordinates-shows-wrong
+> This function takes in latitude and longitude of two location and returns the distance between them as the crow flies (in km)
+
+# Clientside
+
+https://github.com/leaflet-extras/leaflet-providers
+>	List of leaflet providers
+
+https://www.mapbox.com/mapbox.js/example/v1.0.0/disable-zooming-panning/
+>	Disable zooming and padding
+
+https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/getCurrentPosition
+>	Getting location of the user using this html spec
+
+http://creativejs.com/resources/requestanimationframe/
+>	Using The secret to silky smooth JavaScript animation, requestanimationframe
+
+http://leafletjs.com/examples/custom-icons.html
+>	costomn icon's i've used in leaflet maps
+
+http://leafletjs.com/reference.html
+>	map.removeLayer(YouCircle);
+
+http://stackoverflow.com/questions/6312993/javascript-seconds-to-time-string-with-format-hhmmss
+>	JavaScript seconds to time string with format hh:mm:ss
+
+https://www.google.com/fonts/specimen/Arimo
+>	Arimo-font
+
+https://gist.github.com/paulirish/1579671
+>	Paul irish (Chrome dev) polyfill for requestAnimationFrame
+
+

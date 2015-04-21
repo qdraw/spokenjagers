@@ -1,5 +1,5 @@
 // requestAnimationFrame
-
+// https://gist.github.com/paulirish/1579671
 
 (function() {
     var lastTime = 0;

@@ -17,6 +17,7 @@
                       ,                ,::                            
 */
 
+// Check ./sources for the code snippits that i've used in this code
 
 var express				=		require('express')
 	, passport			=		require('passport')
