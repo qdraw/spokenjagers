@@ -405,9 +405,34 @@ io.on('connection', function(socket){
     }, 500);
 
 
+    // show cpu-load to user
+    var cpuload = null;
+    setInterval(function (argument) {
+	    var os = require("os");
+		var cpu = os.cpus();
+		var counter = 0;
+		var total=0;
+		var free=0;
+		var sys=0;
+		var user=0;
+
+		for (var i = 0; i<cpu.length ; i++) {
+		    total=parseFloat(cpu[i].times.idle)+parseFloat(cpu[i].times.sys)+parseFloat(cpu[i].times.user)+parseFloat(cpu[i].times.irq)+parseFloat(cpu[i].times.nice);
+		    free+=100*(parseFloat(cpu[i].times.idle)/total);
+		    sys+=100*(parseFloat(cpu[i].times.sys)/total);
+		    user+=100*(parseFloat(cpu[i].times.user)/total);
+		};
+		cpuload = Number(user/cpu.length + sys/cpu.length);
+		cpuload  = cpuload * 100
+		cpuload = Math.round(cpuload);
+		cpuload = cpuload /100;
+		// console.log("cpu " + cpuload)
+	},10000)
+
+
     // Send Time to Client
     setInterval(function(){
-        socket.emit('date', {'date': new Date().getTime()});
+        socket.emit('date', {'cpuload': cpuload,'date': new Date().getTime()});
     }, 1000);
 
 

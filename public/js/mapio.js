@@ -278,6 +278,8 @@ startSocket();
 // Ask the Server time
 var date = 0;
 socket.on('date', function(data){
+	document.getElementById("cpuload").innerHTML = "cpuload: " + data.cpuload + "%<br />";
+
 	date = data.date;
 });
 
@@ -297,6 +299,7 @@ setInterval(function(){
 	
 	var myDate = new Date(date).toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
 	document.getElementById("date").innerHTML = "Server time: <br />" + myDate + "<br />";
+
 
  }, 1000);
 
