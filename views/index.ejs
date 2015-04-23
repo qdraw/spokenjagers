@@ -8,6 +8,14 @@
 	<link rel="stylesheet" href="/css/style.css" />	
 	<link rel="stylesheet" href="/css/leaflet.css" />	
 
+<!-- debug feature using c*ies and auto redirect-->
+<% if (!user) { %>
+	<% if (cookies.debug == "true" && (cookies.provider === "facebook" || cookies.provider === "google") ) { %>
+	<meta http-equiv="refresh" content="1; url=/auth/<%= cookies.provider %>">
+	<% } %>
+<% } %>
+
+
 </head>
 <body>
 <% if (!user) { %>

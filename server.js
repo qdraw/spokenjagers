@@ -49,7 +49,7 @@ var connection = mysql.createConnection({
 if(config.use_database==='true'){
 	connection.connect();
 
-	connection.query('CREATE TABLE IF NOT EXISTS users (id MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY, userid TEXT, displayname TEXT, email TEXT, health INTEGER, score INTEGER, money INTEGER, useragent TEXT, value TEXT)',
+	connection.query('CREATE TABLE IF NOT EXISTS users (id MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY, userid TEXT, displayname TEXT, email TEXT, health INTEGER, score INTEGER, money INTEGER, useragent TEXT, value TEXT, latestConnectionTime INT, area TEXT)',
 	function(err, result){
 	    // Case there is an error during the creation
 	    if(err) {
@@ -57,6 +57,16 @@ if(config.use_database==='true'){
 	    }
   		console.log('> mysql connected as id ' + connection.threadId);
 	});
+
+	// GHOST ITEM IN DB
+	connection.query('CREATE TABLE IF NOT EXISTS ghosts (id MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY, area TEXT, arealocation TEXT, spook1 TEXT, spook2 TEXT, spook3 TEXT, spook4 TEXT, spook5 TEXT, spook6 TEXT, spook7 TEXT)',
+	function(err, result){
+	    // Case there is an error during the creation
+	    if(err) {
+	        console.log(err);
+	    }
+	});
+
 }// connection
 
 
@@ -85,9 +95,10 @@ app.set('port', process.env.PORT || 8080);
 
 // app.use(useragent.express());
 
-// Domain options, for testing
+// Domain options, for testing and running on multiple domains
 console.log( "Dirname " + __dirname);
 
+// Just for testing and debugging
 if (__dirname.indexOf("avans-individueel-verdieping-blok11-12")) {
     console.log("> callbackURL > localhost");
 	global["callbackURL"] = "http://" + "localhost" + ":8080" + "/auth/facebook/callback"
@@ -111,7 +122,8 @@ process.argv.forEach(function (val, index, array) {
     }
 });
 
-// GoogleStrategy 
+
+// GoogleStrategy to L:ogin
 passport.use(new GoogleStrategy({
 		clientID: config.google_api_key,
 		clientSecret:config.google_api_secret ,
@@ -193,7 +205,7 @@ app.get('/account', ensureAuthenticated, function(req, res){
 
 app.get('/game', ensureAuthenticated, function(req, res){
 
-    var expiryDate = new Date(Number(new Date()) + 315360000000); 
+    var expiryDate = new Date(Number(new Date()) + 315360000000); // aka now + 10 years
     res.cookie('provider', req.user.provider, { expires: expiryDate, httpOnly: true });
 
 	res.render('game', { user: req.user });
@@ -204,11 +216,6 @@ app.get('/game', ensureAuthenticated, function(req, res){
 app.get('/auth/facebook', passport.authenticate('facebook',{scope:'email'}));
 
 
-// app.get('/auth/facebook/callback',
-// 	passport.authenticate('facebook', { successRedirect : '/', failureRedirect: '/' }),
-// 	function(req, res) {
-// 		res.redirect('/');
-// 	});
 
 // Thanks: http://stackoverflow.com/questions/9885711/custom-returnurl-on-node-js-passports-google-strategy
 app.get('/auth/facebook/callback', function(req, res, next){
@@ -405,7 +412,8 @@ io.on('connection', function(socket){
     }, 500);
 
 
-    // show cpu-load to user
+    // show cpu-load to user 
+    // check if removed the Send Time interval
     var cpuload = null;
     setInterval(function (argument) {
 	    var os = require("os");
@@ -423,11 +431,11 @@ io.on('connection', function(socket){
 		    user+=100*(parseFloat(cpu[i].times.user)/total);
 		};
 		cpuload = Number(user/cpu.length + sys/cpu.length);
-		cpuload  = cpuload * 100
+		cpuload  = cpuload * 100;
 		cpuload = Math.round(cpuload);
 		cpuload = cpuload /100;
 		// console.log("cpu " + cpuload)
-	},10000)
+	},60000)
 
 
     // Send Time to Client
@@ -475,7 +483,7 @@ io.on('connection', function(socket){
     }, 200);
 
 
-    // Kill Bill function, kicking user out of the map, every 5 seconds
+    // Kill Bill function, kicking user out of the map, every 6 seconds
     // http://i61.tinypic.com/2s6k9qd.jpg
     setInterval(function(){
 
@@ -495,7 +503,7 @@ io.on('connection', function(socket){
         });
 
 
-    }, 5000);
+    }, 6000);
     // No need to check if the user is active, sessions will be aborted automaticly and killed by "Kill Bill"
 
 
@@ -513,347 +521,362 @@ io.on('connection', function(socket){
         return Math.min.apply(Math, this);
     };
 
-    // return this type of object: with getCanvas of all active Users
-    // Object {
-    //     [ 
-    //         [0] lowest Latitude (north-south)
-    //         [1] highest Latitude
-    //     ]
-    //     [ 
-    //         [0] lowest Longitude (east-west)
-    //         [1] highest Longitude
-    //     ]
+
+
+    // New Session
+    function isArealistAvailable () {
+    	if (userid != 0) {
+    		clearInterval(isArealistAvailableInterval);
+
+    		connection.query("SELECT COUNT(*) FROM ghosts",function(err, result){
+    			if (result[0]["COUNT(*)"] == 0) {
+
+					connection.query("INSERT into ghosts(area) VALUES('" + "area_1" + "')");
+	                connection.query("UPDATE ghosts SET "+ "arealocation" +" = '" + userData[c][userid][0] + "," + userData[c][userid][1] + "' WHERE area = '" + "area_1" +"'");
+
+	                connection.query("UPDATE users SET "+ "area" +" = '" + "area_1" + "' WHERE userid = '" + userid +"'");
+	                connection.query("UPDATE users SET "+ "latestConnectionTime" +" = '" + Math.floor(Date.now() / 1000) + "' WHERE userid = '" + userid +"'");
+    			}
+    			else {
+    				// make array from all arealocation's
+				    connection.query('SELECT * FROM ghosts',function(err,result)     {
+				    	var AreaListOfGeoLocation = [];
+				    	for (var i = 0; i < result.length; i++) {
+
+				    		var arealocation = result[i]["arealocation"].split(",");
+
+				    		var areaDistance = calcCrow(arealocation[0], arealocation[1], userData[c][userid][0], userData[c][userid][1])
+				    		if (areaDistance < 1) {
+						    	AreaListOfGeoLocation.push(result[i]["arealocation"]);
+				    		};
+				    	};
+					    	console.log(AreaListOfGeoLocation);
+						
+					});
+
+    			}//e/els
+
+			}); //e/select-counter
+
+
+    	};
+    	console.log(userid);
+
+
+    }//e/isArealistAvailable
+    var isArealistAvailableInterval = setInterval(isArealistAvailable,500);
+
+
+
+
+
+
+
+
+    // // return this type of object: with getCanvas of all active Users
+    // // Object {
+    // //     [ 
+    // //         [0] lowest Latitude (north-south)
+    // //         [1] highest Latitude
+    // //     ]
+    // //     [ 
+    // //         [0] lowest Longitude (east-west)
+    // //         [1] highest Longitude
+    // //     ]
+    // // }
+    // function getCanvas() {
+
+    //     var latArray = [];
+    //     var longArray = [];
+
+    //     // Loop though all userData to create a list with all Lat. and Long. to check on lowest/heighest
+    //     Object.keys(userData[c]).forEach(function(key) {
+    //         try {
+    //             if (userData[c][key][0] != 0) {
+    //                 latArray.push(userData[c][key][0]);
+    //             };
+    //             if (userData[c][key][1] != 0) {
+    //                 longArray.push(userData[c][key][1]);
+    //             };
+    //         }
+    //         catch(e) {
+    //         }
+
+    //     });
+
+    //     // extra check to avoid errors
+    //     if (latArray.length != 0) {
+
+    //         var latmin = latArray.min();
+    //         var latmax = latArray.max();
+
+    //         var longmin = longArray.min();
+    //         var longmax = longArray.max();
+
+    //         var latlongArray = [[latmin,latmax], [longmin,longmax]];
+
+
+    //     }
+    //     else {
+    //         var latlongArray = 0
+    //     }
+
+    //     return latlongArray;
     // }
-    function getCanvas() {
-
-        var latArray = [];
-        var longArray = [];
-
-        // Loop though all userData to create a list with all Lat. and Long. to check on lowest/heighest
-        Object.keys(userData[c]).forEach(function(key) {
-            try {
-                if (userData[c][key][0] != 0) {
-                    latArray.push(userData[c][key][0]);
-                };
-                if (userData[c][key][1] != 0) {
-                    longArray.push(userData[c][key][1]);
-                };
-            }
-            catch(e) {
-            }
-
-        });
-
-        // extra check to avoid errors
-        if (latArray.length != 0) {
-
-            var latmin = latArray.min();
-            var latmax = latArray.max();
-
-            var longmin = longArray.min();
-            var longmax = longArray.max();
-
-            var latlongArray = [[latmin,latmax], [longmin,longmax]];
-
-
-        }
-        else {
-            var latlongArray = 0
-        }
-
-        return latlongArray;
-    }
 
  
-    // Active Area where the spooks are active
+    // // Active Area where the spooks are active
 
-    // This function return using this template:
-    // var opponent = {
-    //         "topRight":[Longitude ,latitude],
-    //         "topLeft":[Longitude ,latitude],
-    //         "bottomLeft":[Longitude ,latitude],
-    //         "bottomRight":[Longitude ,latitude]
-    // } 
-    function writeOutbound () {
+    // // This function return using this template:
+    // // var opponent = {
+    // //         "topRight":[Longitude ,latitude],
+    // //         "topLeft":[Longitude ,latitude],
+    // //         "bottomLeft":[Longitude ,latitude],
+    // //         "bottomRight":[Longitude ,latitude]
+    // // } 
+    // function writeOutbound () {
         
-        // use theCanvas!
-        var theCanvas = getCanvas();
-        global["theCanvas"] = theCanvas;
+    //     // use theCanvas!
+    //     var theCanvas = getCanvas();
+    //     global["theCanvas"] = theCanvas;
 
-        // check the Canvas on errors
-        if (theCanvas != 0) {
+    //     // check the Canvas on errors
+    //     if (theCanvas != 0) {
 
-            var latmin = theCanvas[0][0];
-            var latmax = theCanvas[0][1];
-            var longmin = theCanvas[1][0];
-            var longmax = theCanvas[1][1];
+    //         var latmin = theCanvas[0][0];
+    //         var latmax = theCanvas[0][1];
+    //         var longmin = theCanvas[1][0];
+    //         var longmax = theCanvas[1][1];
 
-            outbound = {
-                "topLeft":[latmax+0.0006,longmin-0.0006,0],
-                "topRight":[latmax+0.0006,longmax+0.0006,0],
-                "bottomLeft":[latmin-0.0006,longmin-0.0006,0],
-                "bottomRight":[latmin-0.0006,longmax+0.0006,0]                                                    
-            }
-            return outbound;
-        }
-        else {
-            return 0;
-        }
+    //         outbound = {
+    //             "topLeft":[latmax+0.0006,longmin-0.0006,0],
+    //             "topRight":[latmax+0.0006,longmax+0.0006,0],
+    //             "bottomLeft":[latmin-0.0006,longmin-0.0006,0],
+    //             "bottomRight":[latmin-0.0006,longmax+0.0006,0]                                                    
+    //         }
+    //         return outbound;
+    //     }
+    //     else {
+    //         return 0;
+    //     }
 
-    }//e/writeOutbound
-
-
-    // Random function to create floating numbers
-    function getRandomArbitrary(min, max) {
-        return Math.random() * (max - min) + min;
-    }
-
-    //Random interer
-    function getRandomInt(min, max) {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
+    // }//e/writeOutbound
 
 
-    // Check the area and send it to the user to display, the user display must be turned off
-    setInterval(function(){
-        global["area"] = writeOutbound();
-        socket.emit('outbound', global["area"]);
+    // // Random function to create floating numbers
+    // function getRandomArbitrary(min, max) {
+    //     return Math.random() * (max - min) + min;
+    // }
 
-        // // use this to send it once:
-        // if (typeof global["area"] != "object") {
-        //     global["area"] = writeOutbound();
-        //     socket.emit('outbound', global["area"]);
-        // };
-
-    }, 1000);
+    // //Random interer
+    // function getRandomInt(min, max) {
+    //     return Math.floor(Math.random() * (max - min + 1)) + min;
+    // }
 
 
-    // Create for the first time Opponents
-    setInterval(function(){
+    // // Check the area and send it to the user to display, the user display must be turned off
+    // setInterval(function(){
+    //     global["area"] = writeOutbound();
+    //     socket.emit('outbound', global["area"]);
 
-        // Check if Opponents exist
-        try {
-            if (global["opponent"]["opponent_0"][0] === 0) {
-                var ready = true;
-            };
-        }
-        catch(error){
-            var ready = false;
-        }
+    //     // // use this to send it once:
+    //     // if (typeof global["area"] != "object") {
+    //     //     global["area"] = writeOutbound();
+    //     //     socket.emit('outbound', global["area"]);
+    //     // };
 
-        if ((typeof global["theCanvas"] === "object")&& ready) {
-            var theCanvas = global["theCanvas"];
-
-            console.log("> Create for the first time Opponents");
-            console.log(theCanvas)
-
-            var latmin = theCanvas[0][0];
-            var latmax = theCanvas[0][1];
-            var longmin = theCanvas[1][0];
-            var longmax = theCanvas[1][1];
-
-            // loop for new Opponents
-            // [lat,long,score, offEarthScore]
-            for (var i = 0; i < opponent_lenght; i++) {
-                global["opponent"]["opponent_" + i] = [getRandomArbitrary(latmin-0.0006, latmax+0.0006),getRandomArbitrary(longmin-0.0006, longmax+0.0006),10,30];
-            };
-
-        };
-
-    }, 1000);
+    // }, 1000);
 
 
-    // Create single Opponents, when you kill some, or moved out of canvas
-    function newOpponent (i) {
-            var theCanvas = global["theCanvas"];
-            var latmin = theCanvas[0][0];
-            var latmax = theCanvas[0][1];
-            var longmin = theCanvas[1][0];
-            var longmax = theCanvas[1][1];
+    // // Create for the first time Opponents
+    // setInterval(function(){
 
-            // [lat,long,score, offEarthScore]
-            global["opponent"]["opponent_" + i] = [getRandomArbitrary(latmin-0.0006, latmax+0.0006),getRandomArbitrary(longmin-0.0006, longmax+0.0006),10,30];
-    }
+    //     // Check if Opponents exist
+    //     try {
+    //         if (global["opponent"]["opponent_0"][0] === 0) {
+    //             var ready = true;
+    //         };
+    //     }
+    //     catch(error){
+    //         var ready = false;
+    //     }
+
+    //     if ((typeof global["theCanvas"] === "object")&& ready) {
+    //         var theCanvas = global["theCanvas"];
+
+    //         console.log("> Create for the first time Opponents");
+    //         console.log(theCanvas)
+
+    //         var latmin = theCanvas[0][0];
+    //         var latmax = theCanvas[0][1];
+    //         var longmin = theCanvas[1][0];
+    //         var longmax = theCanvas[1][1];
+
+    //         // loop for new Opponents
+    //         // [lat,long,score, offEarthScore]
+    //         for (var i = 0; i < opponent_lenght; i++) {
+    //             global["opponent"]["opponent_" + i] = [getRandomArbitrary(latmin-0.0006, latmax+0.0006),getRandomArbitrary(longmin-0.0006, longmax+0.0006),10,30];
+    //         };
+
+    //     };
+
+    // }, 1000);
+
+
+    // // Create single Opponents, when you kill some, or moved out of canvas
+    // function newOpponent (i) {
+    //         var theCanvas = global["theCanvas"];
+    //         var latmin = theCanvas[0][0];
+    //         var latmax = theCanvas[0][1];
+    //         var longmin = theCanvas[1][0];
+    //         var longmax = theCanvas[1][1];
+
+    //         // [lat,long,score, offEarthScore]
+    //         global["opponent"]["opponent_" + i] = [getRandomArbitrary(latmin-0.0006, latmax+0.0006),getRandomArbitrary(longmin-0.0006, longmax+0.0006),10,30];
+    // }
     
 
-    // Move Opponents on the canvas
-    setInterval(function(){
+    // // Move Opponents on the canvas
+    // setInterval(function(){
 
-        // move left|right or down|up
-        var oneORzero = getRandomInt(0, 1); 
+    //     // move left|right or down|up
+    //     var oneORzero = getRandomInt(0, 1); 
 
-        // all Opponents loop
-        for (var i = 0; i < opponent_lenght; i++) {
+    //     // all Opponents loop
+    //     for (var i = 0; i < opponent_lenght; i++) {
 
-            // error if statement
-            if (global["opponent"]["opponent_0"][0] != 0 && global["area"] != 0 ) {
+    //         // error if statement
+    //         if (global["opponent"]["opponent_0"][0] != 0 && global["area"] != 0 ) {
 
-                // Gearbox, change the speed
-                var speedInt = getRandomInt(0, 3);
-                switch (speedInt){
-                    case 0:
-                        var speed = 0.000037/2;
-                        break;
-                    case 1:
-                        var speed = 0.000057/2;
-                        break;
-                    case 2:
-                        var speed = 0.00009/2;
-                        break;
-                    case 3:
-                        var speed = 0.0001/2;
-                        break;
-                }
-                var speedNeg = speed * -1;
-                var value = getRandomArbitrary(speedNeg, speed);
+    //             // Gearbox, change the speed
+    //             var speedInt = getRandomInt(0, 3);
+    //             switch (speedInt){
+    //                 case 0:
+    //                     var speed = 0.000037/2;
+    //                     break;
+    //                 case 1:
+    //                     var speed = 0.000057/2;
+    //                     break;
+    //                 case 2:
+    //                     var speed = 0.00009/2;
+    //                     break;
+    //                 case 3:
+    //                     var speed = 0.0001/2;
+    //                     break;
+    //             }
+    //             var speedNeg = speed * -1;
+    //             var value = getRandomArbitrary(speedNeg, speed);
 
-                // Make it less random to the right top
-                if ((global["area"]["topLeft"][oneORzero] > newPosition)&& (Number(global["area"]["topLeft"][oneORzero]-0.00006) < newPosition)) {
-                    if (i%3 === 2) {
-                        value -= Number(0.000037/1.5);
-                    };///e/fi
-                }//e/fi
-                else {
-                    if (i%3 === 2) {
-                        value += Number(0.000037/1.5);
-                    };///e/fi
-                }
-
-
-
-                var position = Number(opponent["opponent_" + i][oneORzero]);
-                var newPosition = Number(value + position);
-
-                // Box protection
-                if (oneORzero === 0) {
-                    if ((global["area"]["topLeft"][0] > newPosition)&& (global["area"]["bottomRight"][0] < newPosition)) {
-                    }
-                    else {
-                        // offEarthScore -1
-                        newPosition = position;
-                        global["opponent"]["opponent_" +i ][3] = Number(global["opponent"]["opponent_" +i][3] -1)
-                    }
-                }
-                else {
-                    if ((global["area"]["topLeft"][1] < newPosition)&& (global["area"]["bottomRight"][1] > newPosition)) {
-                    }
-                    else {
-                        // offEarthScore -1
-                        newPosition = position;
-                        global["opponent"]["opponent_" +i][3] = Number(global["opponent"]["opponent_" +i][3] -1)
-                    }
-                }
-
-                // write the new posistion:
-                global["opponent"]["opponent_" + i][oneORzero] = newPosition;
-
-
-                // Kill the offEarthScore
-                if (global["opponent"]["opponent_" +i][3] < 0) {
-                    newOpponent (i);
-                };
-
-                var posLat = global["opponent"]["opponent_" + i][0];
-                var posLng = global["opponent"]["opponent_" + i][1];
+    //             // Make it less random to the right top
+    //             if ((global["area"]["topLeft"][oneORzero] > newPosition)&& (Number(global["area"]["topLeft"][oneORzero]-0.00006) < newPosition)) {
+    //                 if (i%3 === 2) {
+    //                     value -= Number(0.000037/1.5);
+    //                 };///e/fi
+    //             }//e/fi
+    //             else {
+    //                 if (i%3 === 2) {
+    //                     value += Number(0.000037/1.5);
+    //                 };///e/fi
+    //             }
 
 
 
-                // Object.keys(userData[c]).forEach(function(key) {
-                // });
+    //             var position = Number(opponent["opponent_" + i][oneORzero]);
+    //             var newPosition = Number(value + position);
+
+    //             // Box protection
+    //             if (oneORzero === 0) {
+    //                 if ((global["area"]["topLeft"][0] > newPosition)&& (global["area"]["bottomRight"][0] < newPosition)) {
+    //                 }
+    //                 else {
+    //                     // offEarthScore -1
+    //                     newPosition = position;
+    //                     global["opponent"]["opponent_" +i ][3] = Number(global["opponent"]["opponent_" +i][3] -1)
+    //                 }
+    //             }
+    //             else {
+    //                 if ((global["area"]["topLeft"][1] < newPosition)&& (global["area"]["bottomRight"][1] > newPosition)) {
+    //                 }
+    //                 else {
+    //                     // offEarthScore -1
+    //                     newPosition = position;
+    //                     global["opponent"]["opponent_" +i][3] = Number(global["opponent"]["opponent_" +i][3] -1)
+    //                 }
+    //             }
+
+    //             // write the new posistion:
+    //             global["opponent"]["opponent_" + i][oneORzero] = newPosition;
 
 
-                // 0.0199883 === the isInBox
-                // 0.006 === shooterea user
+    //             // Kill the offEarthScore
+    //             if (global["opponent"]["opponent_" +i][3] < 0) {
+    //                 newOpponent (i);
+    //             };
 
-                try {
-                    if (calcCrow(userData[c][userid][0], userData[c][userid][1], posLat, posLng) < 0.006) {
-                        console.log("hit by " + i);
-
-	                    if (!(isNaN(global["score"][userid] + 1))) {
-
-	                        // Give -1 to the user
-	                        global["score"][userid] = Number(global["score"][userid] - 1);
-	                        // send score to db
+    //             var posLat = global["opponent"]["opponent_" + i][0];
+    //             var posLng = global["opponent"]["opponent_" + i][1];
 
 
-		        			if(config.use_database==='true'){
-								connection.query("SELECT * from users where userid="+ userid ,function(err,rows,fields){
-								if(err) throw err;
-								if(rows.length===1){
-									console.log("update score  -> " +  global["score"][userid]);
-									// connection.query("INSERT into users(score) VALUES('" + global["score"][userid] + "')");
-									// 'SELECT * FROM users WHERE userid = ?', [userid]
-					                connection.query("UPDATE users SET "+ "score" +" = '" + global["score"][userid] + "' WHERE userid = '" + userid +"'");
 
-								}
-								else{
-										console.log("User already exists in database");
-									}
-								});
-							}
+    //             // Object.keys(userData[c]).forEach(function(key) {
+    //             // });
 
 
-						}//e/NaN
+    //             // 0.0199883 === the isInBox
+    //             // 0.006 === shooterea user
 
-                        // send score to user:
-                        socket.emit('score', {"points": global["score"][userid]});
+    //             try {
+    //                 if (calcCrow(userData[c][userid][0], userData[c][userid][1], posLat, posLng) < 0.006) {
+    //                     console.log("hit by " + i);
 
-                    }//e/fi
+	   //                  if (!(isNaN(global["score"][userid] + 1))) {
+
+	   //                      // Give -1 to the user
+	   //                      global["score"][userid] = Number(global["score"][userid] - 1);
+	   //                      // send score to db
+
+
+		  //       			if(config.use_database==='true'){
+				// 				connection.query("SELECT * from users where userid="+ userid ,function(err,rows,fields){
+				// 				if(err) throw err;
+				// 				if(rows.length===1){
+				// 					console.log("update score  -> " +  global["score"][userid]);
+				// 					// connection.query("INSERT into users(score) VALUES('" + global["score"][userid] + "')");
+				// 					// 'SELECT * FROM users WHERE userid = ?', [userid]
+				// 	                connection.query("UPDATE users SET "+ "score" +" = '" + global["score"][userid] + "' WHERE userid = '" + userid +"'");
+
+				// 				}
+				// 				else{
+				// 						console.log("User already exists in database");
+				// 					}
+				// 				});
+				// 			}
+
+
+				// 		}//e/NaN
+
+    //                     // send score to user:
+    //                     socket.emit('score', {"points": global["score"][userid]});
+
+    //                 }//e/fi
                     
-                }catch(e){}
+    //             }catch(e){}
 
 
 
                
-            };
-        };
+    //         };
+    //     };
 
 
-        // Send oponnents to the user:
-        socket.emit('opponent', global["opponent"]);
+    //     // Send oponnents to the user:
+    //     socket.emit('opponent', global["opponent"]);
 
-    }, 250); // doble speed
-
-
-
-    // Score HANDELING , kill the opponent, seperate channel
-
-
-        // connection.query('SELECT score FROM users WHERE userid = ' + userid , function (err, rows) {
-        //     console.log(record);
-        //     var record = rows[0];
-            
-        //     if (isNaN(record.score)) {
-        //         global["score"][userid] = 0;
-        //     } else {
-        //         global["score"][userid] = record.score;
-        //     }
-
-        //     // if (isNaN(record.health)&&  (typeof record.health != undefined)) {
-        //     //     global["health"][userid] = 0;
-        //     // } else {
-        //     //     global["health"][userid] = record.health;
-        //     // }
-
-        //     // if (isNaN(record.money)) {
-        //     //     global["money"][userid] = 0;
-        //     // } else {
-        //     //     global["money"][userid] = record.money;
-        //     // }
-
-        //     // global["score"][userid] = record.score;
-        //     // global["health"][userid] = record.health;
-        //     // global["money"][userid] = record.money;
-        //     // console.log( global["score"][userid] );
-        //     // console.log( global["health"][userid] );
-        //     // console.log( global["money"][userid] );
-
-        // });
+    // }, 250); // doble speed
 
 
 
-
- 
+    // Score HANDELING , kill the opponent, seperate channel 
 
     socket.on('shoot', function(shoot){
 
@@ -957,7 +980,7 @@ io.on('connection', function(socket){
         };
 		// console.log(global["score"]);
 
-	}, 100);
+	}, 500);
 
 
     // // logger database
@@ -1222,6 +1245,7 @@ function calcCrow(lat1, lon1, lat2, lon2){
     var d = R * c;
     return d;
 }
+// 1 == 1km
 
 // Converts numeric degrees to radians
 function toRad(Value){
