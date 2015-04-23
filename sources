@@ -3,7 +3,7 @@ This file is summary of sources that i've used in my project
 Check for dependencies the package.json file
 You can install this packages using $ npm install
 
-# Node.js
+# Node.js/ Server side
 
 https://nodejs.org/download/
 >	install node.js
@@ -52,6 +52,13 @@ https://nodesource.com/blog/understanding-socketio
 
 http://wanasit.github.io/articles/real-time-location-sharing-with-socket-io.html
 >	Real time location sharing with socket.io
+
+https://github.com/voronianski/realtime-geolocation-demo
+>	Real time location sharing with socket.io
+
+http://tympanus.net/codrops/2012/10/11/real-time-geolocation-service-with-node-js/
+>	Toturial using real-time location using socket.io
+
 
 http://danielnill.com/nodejs-tutorial-with-socketio/
 >	socket.io connection with server
