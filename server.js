@@ -524,6 +524,9 @@ io.on('connection', function(socket){
 
 
     // New Session
+    var isArealistAvailableBoolean = false;
+    var currentAreaName = 0;
+    var currentAreaPosition = 0;
     function isArealistAvailable () {
     	if (userid != 0) {
     		clearInterval(isArealistAvailableInterval);
@@ -531,12 +534,12 @@ io.on('connection', function(socket){
     		connection.query("SELECT COUNT(*) FROM ghosts",function(err, result){
     			if (result[0]["COUNT(*)"] == 0) {
 
-    				console.log("> new area created")
+    				console.log("> new area created");
 
-					connection.query("INSERT into ghosts(area) VALUES('" + "area_1" + "')");
+					connection.query("INSERT into ghosts(area) VALUES('" + "area_0" + "')");
 	                connection.query("UPDATE ghosts SET "+ "arealocation" +" = '" + userData[c][userid][0] + "," + userData[c][userid][1] + "' WHERE area = '" + "area_1" +"'");
 
-	                connection.query("UPDATE users SET "+ "area" +" = '" + "area_1" + "' WHERE userid = '" + userid +"'");
+	                connection.query("UPDATE users SET "+ "area" +" = '" + "area_0" + "' WHERE userid = '" + userid +"'");
 	                connection.query("UPDATE users SET "+ "latestConnectionTime" +" = '" + Math.floor(Date.now() / 1000) + "' WHERE userid = '" + userid +"'");
     			}
     			else {
@@ -569,13 +572,36 @@ io.on('connection', function(socket){
 					    		};
 				    		}
 				    		else {
+				    			
+				    			AreaListOfGeoLocation = [-1];
+
 				    			console.log("> ERROR null " + arealocation )
+				    			console.log("> ERROR null " + arealocation )
+				    			console.log("> ERROR null " + arealocation )
+				    			console.log("> ERROR null " + arealocation )
+				    			console.log("> ERROR null " + arealocation )
+				    			console.log("> ERROR null " + arealocation )
+				    			console.log("> ERROR null " + arealocation )
+				    			console.log("> ERROR null " + arealocation )
+				    			console.log("> ERROR null " + arealocation )
+				    			console.log("> ERROR null " + arealocation )
+				    			console.log("> ERROR null " + arealocation )
+				    			console.log("> ERROR null " + arealocation )
+				    			console.log("> ERROR null " + arealocation )
+				    			console.log("> ERROR null " + arealocation )
+				    			console.log("> ERROR null " + arealocation )
+				    			console.log("> ERROR null " + arealocation )
+				    			console.log("> ERROR null " + arealocation )
+				    			console.log("> ERROR null " + arealocation )
+				    			console.log("> ERROR null " + arealocation )
+				    			console.log("> ERROR null " + arealocation )
+
 				    		}//e/ls
 				    	};
 				    	
 				    	console.log(AreaListOfGeoLocation);
 
-				    	if (AreaListOfGeoLocation.length === 0) {
+				    	if (AreaListOfGeoLocation.length === 0 && AreaListOfGeoLocation[0] != -1) {
 				    		// Create a new area
 
 				    		console.log("> Create a new area");
@@ -585,20 +611,31 @@ io.on('connection', function(socket){
 			                connection.query("UPDATE users SET "+ "area" +" = '" + "area_" + newAreaNumber + "' WHERE userid = '" + userid +"'");
 			                connection.query("UPDATE users SET "+ "latestConnectionTime" +" = '" + Math.floor(Date.now() / 1000) + "' WHERE userid = '" + userid +"'");
 
+			                currentAreaName = "area_" + newAreaNumber;
+			                currentAreaPosition = userData[c][userid][0] + "," + userData[c][userid][1];
 
-				    	}//e/fi
 
-				    	if (AreaListOfGeoLocation.length === 1) {
-				    		// link user to that area
-				    		console.log("link user to that area length === 1 ");
-			                connection.query("UPDATE users SET "+ "area" +" = '" + "area_" + currentAreaNumber + "' WHERE userid = '" + userid +"'");
-			                connection.query("UPDATE users SET "+ "latestConnectionTime" +" = '" + Math.floor(Date.now() / 1000) + "' WHERE userid = '" + userid +"'");
+			                isArealistAvailableBoolean = true;
 
 
 				    	}//e/fi
 
-				    	if (AreaListOfGeoLocation.length >= 2) {
+				    	// if (AreaListOfGeoLocation.length === 1) {
+				    	// 	// link user to that area
+				    	// 	console.log("link user to that area length === 1 ");
+			      //           connection.query("UPDATE users SET "+ "area" +" = '" + "area_" + currentAreaNumber + "' WHERE userid = '" + userid +"'");
+			      //           connection.query("UPDATE users SET "+ "latestConnectionTime" +" = '" + Math.floor(Date.now() / 1000) + "' WHERE userid = '" + userid +"'");
+			                
+			      //           currentAreaName = "area_" + currentAreaNumber;
+			      //           currentAreaPosition = result[i]["arealocation"];
+
+
+				    	// }//e/fi
+
+				    	if (AreaListOfGeoLocation.length >= 1 && AreaListOfGeoLocation[0] != -1) {
 				    		// find closest and link user to area 1
+				    		console.log("find closest and link user to area 1");
+
 
 				    		// console.log("AreaListOfGeoLocation");
 				    		// console.log(AreaListOfGeoLocation);
@@ -612,8 +649,17 @@ io.on('connection', function(socket){
 
 			                connection.query("UPDATE users SET "+ "area" +" = '" + "area_" + index + "' WHERE userid = '" + userid +"'");
 			                connection.query("UPDATE users SET "+ "latestConnectionTime" +" = '" + Math.floor(Date.now() / 1000) + "' WHERE userid = '" + userid +"'");
+			                
+			                currentAreaName = "area_" + index;
+			                currentAreaPosition = geo;
+
+			                console.log("currentAreaPosition");
+			                console.log(currentAreaPosition);
+
+			                isArealistAvailableBoolean = true;
 
 				    	};//e/fi
+				    	
 
 						
 					});
@@ -634,9 +680,108 @@ io.on('connection', function(socket){
 
 
 
+    var opponentHandelingStart = setInterval(function () {
+    	if (isArealistAvailableBoolean) {
+    		clearInterval(opponentHandelingStart);
+
+
+		    connection.query('DESCRIBE ghosts',function(err,result) {
+		    	var ghostsNamesArray = [];
+		    	for (var i = 0; i < result.length; i++) {
+		  		  	// console.log(result[i]);
+
+		  		  	if (result[i]["Field"].indexOf("spook") > -1) {
+			  		  	ghostsNamesArray.push(result[i]["Field"])
+		  		  	};
+		    	};
+		    	console.log(ghostsNamesArray);
+
+		    	// making objects
+		    	global["ghosts"] = {};
+            	global["ghosts"][currentAreaName] = {};
+
+
+		    	for (var i = 0; i < ghostsNamesArray.length; i++) {
+
+			    	arealocation = result[i]["arealocation"];
+		    		if (arealocation != null) {
+
+			    		var arealocation = arealocation.split(","); 
+
+			    		var areaDistance = calcCrow(arealocation[0], arealocation[1], userData[c][userid][0], userData[c][userid][1]);
+			    		console.log(areaDistance);
+
+		    		} else {
+		    			console.log("new spook");
+		    			console.log(currentAreaName);
+		    			console.log(currentAreaPosition);
+			                console.log("currentAreaPosition " + currentAreaPosition);
+
+		    			global["ghosts"][currentAreaName][ghostsNamesArray[i]] = {};
+
+		    			newOpponent (currentAreaName,currentAreaPosition,ghostsNamesArray[i]);
+		    		}//e/ls
+
+		    	};//e/for
+
+
+		    });
+
+
+    	};
+    },1000)
+
+
+	// Random function to create floating numbers
+    function getRandomArbitrary(min, max) {
+        return Math.random() * (max - min) + min;
+    }
+
+    //Random interer
+    function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+
+    // Create single Opponents, when you kill some, or moved out of canvas
+    function newOpponent (currentAreaName,currentAreaPosition,ghostsName) {
+
+    		var currentAreaPosition = currentAreaPosition.split(",");
+
+            // [lat,long,score, offEarthScore]
+
+            global["ghosts"][currentAreaName][ghostsName] = [getRandomArbitrary(Number(currentAreaPosition[0])-0.0006, Number(currentAreaPosition[0])+0.0006),getRandomArbitrary(Number(currentAreaPosition[1])-0.0006, Number(currentAreaPosition[1])+0.0006),10,30];
+            
+            // connection.query("UPDATE ghosts SET "+ ghostsName +" = '" + global["ghosts"][currentAreaName][ghostsName] + "' WHERE area = '" + currentAreaName +"'");
+            console.log(global["ghosts"][currentAreaName][ghostsName]);
 
 
 
+            console.log("ghostsName");
+            console.log(ghostsName);
+            // console.log("global[ghosts][currentAreaName][ghostsName]");
+            // console.log(global["ghosts"][currentAreaName][ghostsName]);
+            console.log("currentAreaName");
+            console.log(currentAreaName);
+
+
+            ghostcors =  global["ghosts"][currentAreaName][ghostsName][0] + "," + global["ghosts"][currentAreaName][ghostsName][1]
+            console.log("ghostcors");
+
+            console.log(ghostcors);
+
+            // UPDATE Customers SET ContactName='Alfred Schmidt', City='Hamburg' WHERE CustomerName='Alfreds Futterkiste'; 
+
+            connection.query("UPDATE ghosts SET "+ ghostsName +" = '" + ghostcors + "' WHERE area = '" + currentAreaName +"'");
+
+				// 	                connection.query("UPDATE users SET "+ "score" +" = '" + global["score"][userid] + "' WHERE userid = '" + userid +"'");
+
+
+    }//e/newOpponent
+
+
+
+   
     // // return this type of object: with getCanvas of all active Users
     // // Object {
     // //     [ 
@@ -726,16 +871,6 @@ io.on('connection', function(socket){
 
     // }//e/writeOutbound
 
-
-    // // Random function to create floating numbers
-    // function getRandomArbitrary(min, max) {
-    //     return Math.random() * (max - min) + min;
-    // }
-
-    // //Random interer
-    // function getRandomInt(min, max) {
-    //     return Math.floor(Math.random() * (max - min + 1)) + min;
-    // }
 
 
     // // Check the area and send it to the user to display, the user display must be turned off
@@ -1228,17 +1363,10 @@ function writeApacheLog(path,req,httpcode) {
 }//e/apache
 
 
-// START opponent as global variables to avoid diffececes between users:
-global["opponent"] = {};
-var opponent_lenght = 10;
+// global["spooks"] = {};
 
-startOpponent();
-function startOpponent() {
-    for (var i = 0; i < opponent_lenght; i++) {
-                                            // xy, score offEarth
-        global["opponent"]["opponent_" + i] = [0,0,0,0];
-    };
-}//e/startOpponent
+
+
 
 // Global object Score:
 global["score"] = {};
