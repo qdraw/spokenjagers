@@ -13,6 +13,9 @@ module.exports={
 	"host"					:	"s84.webhostingserver.nl",
 	"username"				:	"deb40577_game",
 	"password"				:	"Der8Ik4yo1Hec9fold2oL5cob3da",
+	// "host"					:	"localhost",
+	// "username"				:	"root",
+	// "username"				:	"root",
 	"database"				:	"deb40577_game"
 }
 

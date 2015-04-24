@@ -531,6 +531,8 @@ io.on('connection', function(socket){
     		connection.query("SELECT COUNT(*) FROM ghosts",function(err, result){
     			if (result[0]["COUNT(*)"] == 0) {
 
+    				console.log("> new area created")
+
 					connection.query("INSERT into ghosts(area) VALUES('" + "area_1" + "')");
 	                connection.query("UPDATE ghosts SET "+ "arealocation" +" = '" + userData[c][userid][0] + "," + userData[c][userid][1] + "' WHERE area = '" + "area_1" +"'");
 
@@ -539,18 +541,80 @@ io.on('connection', function(socket){
     			}
     			else {
     				// make array from all arealocation's
+		    		var newAreaNumber =  Number(result[0]["COUNT(*)"] + 1 );
+		    		var currentAreaNumber = Number(result[0]["COUNT(*)"] );
+
 				    connection.query('SELECT * FROM ghosts',function(err,result)     {
 				    	var AreaListOfGeoLocation = [];
+				    	var AreaListOfIndex = [];
+				    	var AreaListOfAreaDistance = [];
+
 				    	for (var i = 0; i < result.length; i++) {
 
-				    		var arealocation = result[i]["arealocation"].split(",");
+				    		var arealocation = result[i]["arealocation"];
 
-				    		var areaDistance = calcCrow(arealocation[0], arealocation[1], userData[c][userid][0], userData[c][userid][1])
-				    		if (areaDistance < 1) {
-						    	AreaListOfGeoLocation.push(result[i]["arealocation"]);
-				    		};
+				    		if (arealocation != null) {
+					    		var arealocation = arealocation.split(","); 
+
+					    		var areaDistance = calcCrow(arealocation[0], arealocation[1], userData[c][userid][0], userData[c][userid][1]);
+
+					    		// console.log("u: " + userData[c][userid][0], userData[c][userid][1] );
+					    		// console.log("a: " + arealocation[0], arealocation[1] );
+					    		// console.log("areaDistance " + areaDistance);
+
+					    		if (areaDistance < 1) {
+							    	AreaListOfIndex.push(i);
+							    	AreaListOfAreaDistance.push(areaDistance);
+							    	AreaListOfGeoLocation.push(result[i]["arealocation"]);
+					    		};
+				    		}
+				    		else {
+				    			console.log("> ERROR null " + arealocation )
+				    		}//e/ls
 				    	};
-					    	console.log(AreaListOfGeoLocation);
+				    	
+				    	console.log(AreaListOfGeoLocation);
+
+				    	if (AreaListOfGeoLocation.length === 0) {
+				    		// Create a new area
+
+				    		console.log("> Create a new area");
+							connection.query("INSERT into ghosts(area) VALUES('" + "area_" + newAreaNumber  + "')");
+			                connection.query("UPDATE ghosts SET "+ "arealocation" +" = '" + userData[c][userid][0] + "," + userData[c][userid][1] + "' WHERE area = '" + "area_" + newAreaNumber +"'");
+
+			                connection.query("UPDATE users SET "+ "area" +" = '" + "area_" + newAreaNumber + "' WHERE userid = '" + userid +"'");
+			                connection.query("UPDATE users SET "+ "latestConnectionTime" +" = '" + Math.floor(Date.now() / 1000) + "' WHERE userid = '" + userid +"'");
+
+
+				    	}//e/fi
+
+				    	if (AreaListOfGeoLocation.length === 1) {
+				    		// link user to that area
+				    		console.log("link user to that area length === 1 ");
+			                connection.query("UPDATE users SET "+ "area" +" = '" + "area_" + currentAreaNumber + "' WHERE userid = '" + userid +"'");
+			                connection.query("UPDATE users SET "+ "latestConnectionTime" +" = '" + Math.floor(Date.now() / 1000) + "' WHERE userid = '" + userid +"'");
+
+
+				    	}//e/fi
+
+				    	if (AreaListOfGeoLocation.length >= 2) {
+				    		// find closest and link user to area 1
+
+				    		// console.log("AreaListOfGeoLocation");
+				    		// console.log(AreaListOfGeoLocation);
+				    		// console.log("AreaListOfAreaDistance");
+				    		// console.log(AreaListOfAreaDistance);
+
+				    		var lowestnumber =  AreaListOfAreaDistance.min();
+							var lowestnumberkey = AreaListOfAreaDistance.indexOf(lowestnumber);
+							var geo = AreaListOfGeoLocation[lowestnumberkey];
+							var index = AreaListOfIndex[lowestnumberkey];
+
+			                connection.query("UPDATE users SET "+ "area" +" = '" + "area_" + index + "' WHERE userid = '" + userid +"'");
+			                connection.query("UPDATE users SET "+ "latestConnectionTime" +" = '" + Math.floor(Date.now() / 1000) + "' WHERE userid = '" + userid +"'");
+
+				    	};//e/fi
+
 						
 					});
 

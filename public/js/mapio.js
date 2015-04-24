@@ -430,7 +430,7 @@ socket.on('outbound', function(outbound){
 map.on('click', onMapClick);
 
 function onMapClick(e) {
-	// console.log(e.latlng);
+	console.log(e.latlng);
 	socket.emit('shoot', e.latlng);
 }
 
