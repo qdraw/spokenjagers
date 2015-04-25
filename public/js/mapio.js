@@ -67,7 +67,7 @@ L.tileLayer('https://{s}.{base}.maps.cit.api.here.com/maptile/2.1/maptile/{mapID
 
 // Check if user support geolocation, after this load FirstFindGeoLocation
 if (!navigator.geolocation){
-    mapId.innerHTML = "<p>Geolocation is not supported by your browser</p>";
+    alert("Geolocation is not supported by your browser");
 }
 else {
 	FirstFindGeoLocation();
