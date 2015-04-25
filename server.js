@@ -958,7 +958,7 @@ io.on('connection', function(socket){
 
 
 	        // ! is for debug!!!!!!!!
-	        if (isInBox) {
+	        if (!isInBox) {
 
 
 				Object.keys(global["ghosts"]).forEach(function(area) {
