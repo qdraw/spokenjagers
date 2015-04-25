@@ -528,19 +528,32 @@ io.on('connection', function(socket){
     var currentAreaName = 0;
     var currentAreaPosition = 0;
     function isArealistAvailable () {
-    	if (userid != 0) {
+
+
+    	try { if (userData[c][userid][0] != 0) { var go = true;  } 	else { var go = false; }  	}   	catch(e){ 			var go = false;     	}
+
+    	if (userid != 0 && go == true) {
     		clearInterval(isArealistAvailableInterval);
 
     		connection.query("SELECT COUNT(*) FROM ghosts",function(err, result){
     			if (result[0]["COUNT(*)"] == 0) {
 
-    				console.log("> new area created");
+    				console.log("> new area created COUNT(*)===0");
 
-					connection.query("INSERT into ghosts(area) VALUES('" + "area_0" + "')");
-	                connection.query("UPDATE ghosts SET "+ "arealocation" +" = '" + userData[c][userid][0] + "," + userData[c][userid][1] + "' WHERE area = '" + "area_1" +"'");
+    				var newAreaNumber = 1;
+    				var currentAreaNumber = 0;
 
-	                connection.query("UPDATE users SET "+ "area" +" = '" + "area_0" + "' WHERE userid = '" + userid +"'");
+					connection.query("INSERT into ghosts(area) VALUES('" + "area_" + newAreaNumber + "')");
+	                connection.query("UPDATE ghosts SET "+ "arealocation" +" = '" + userData[c][userid][0] + "," + userData[c][userid][1] + "' WHERE area = '" + "area_" + newAreaNumber +"'");
+
+	                connection.query("UPDATE users SET "+ "area" +" = '" + "area_" + newAreaNumber + "' WHERE userid = '" + userid +"'");
 	                connection.query("UPDATE users SET "+ "latestConnectionTime" +" = '" + Math.floor(Date.now() / 1000) + "' WHERE userid = '" + userid +"'");
+
+	                currentAreaName = "area_" + newAreaNumber;
+	                currentAreaPosition = userData[c][userid][0] + "," + userData[c][userid][1];
+
+
+	                isArealistAvailableBoolean = true;
     			}
     			else {
     				// make array from all arealocation's
@@ -572,36 +585,13 @@ io.on('connection', function(socket){
 					    		};
 				    		}
 				    		else {
-				    			
-				    			AreaListOfGeoLocation = [-1];
-
-				    			console.log("> ERROR null " + arealocation )
-				    			console.log("> ERROR null " + arealocation )
-				    			console.log("> ERROR null " + arealocation )
-				    			console.log("> ERROR null " + arealocation )
-				    			console.log("> ERROR null " + arealocation )
-				    			console.log("> ERROR null " + arealocation )
-				    			console.log("> ERROR null " + arealocation )
-				    			console.log("> ERROR null " + arealocation )
-				    			console.log("> ERROR null " + arealocation )
-				    			console.log("> ERROR null " + arealocation )
-				    			console.log("> ERROR null " + arealocation )
-				    			console.log("> ERROR null " + arealocation )
-				    			console.log("> ERROR null " + arealocation )
-				    			console.log("> ERROR null " + arealocation )
-				    			console.log("> ERROR null " + arealocation )
-				    			console.log("> ERROR null " + arealocation )
-				    			console.log("> ERROR null " + arealocation )
-				    			console.log("> ERROR null " + arealocation )
-				    			console.log("> ERROR null " + arealocation )
-				    			console.log("> ERROR null " + arealocation )
-
+			    				console.log("> ERROR null " + arealocation )
 				    		}//e/ls
 				    	};
 				    	
 				    	console.log(AreaListOfGeoLocation);
 
-				    	if (AreaListOfGeoLocation.length === 0 && AreaListOfGeoLocation[0] != -1) {
+				    	if (AreaListOfGeoLocation.length === 0) {
 				    		// Create a new area
 
 				    		console.log("> Create a new area");
@@ -632,20 +622,30 @@ io.on('connection', function(socket){
 
 				    	// }//e/fi
 
-				    	if (AreaListOfGeoLocation.length >= 1 && AreaListOfGeoLocation[0] != -1) {
+				    	if (AreaListOfGeoLocation.length >= 1) {
 				    		// find closest and link user to area 1
-				    		console.log("find closest and link user to area 1");
+				    		console.log("find closest and link user to area #1");
 
 
-				    		// console.log("AreaListOfGeoLocation");
-				    		// console.log(AreaListOfGeoLocation);
-				    		// console.log("AreaListOfAreaDistance");
-				    		// console.log(AreaListOfAreaDistance);
+				    		console.log("AreaListOfGeoLocation");
+				    		console.log(AreaListOfGeoLocation);
+				    		console.log("AreaListOfAreaDistance");
+				    		console.log(AreaListOfAreaDistance);
 
 				    		var lowestnumber =  AreaListOfAreaDistance.min();
 							var lowestnumberkey = AreaListOfAreaDistance.indexOf(lowestnumber);
 							var geo = AreaListOfGeoLocation[lowestnumberkey];
 							var index = AreaListOfIndex[lowestnumberkey];
+							var index = Number(index+1);
+
+				    		// console.log("lowestnumber");
+				    		// console.log(lowestnumber);
+				    		// console.log("lowestnumberkey");
+				    		// console.log(lowestnumberkey);							
+				    		// console.log("geo");
+				    		// console.log(geo);
+				    		// console.log("index");
+				    		// console.log(index);							
 
 			                connection.query("UPDATE users SET "+ "area" +" = '" + "area_" + index + "' WHERE userid = '" + userid +"'");
 			                connection.query("UPDATE users SET "+ "latestConnectionTime" +" = '" + Math.floor(Date.now() / 1000) + "' WHERE userid = '" + userid +"'");
@@ -670,7 +670,7 @@ io.on('connection', function(socket){
 
 
     	};
-    	console.log(userid);
+    	console.log("/e/isArealistAvailable");
 
 
     }//e/isArealistAvailable
@@ -679,57 +679,106 @@ io.on('connection', function(socket){
 
 
 
-
+    var opponentHandelingStartBoolean = false;
     var opponentHandelingStart = setInterval(function () {
     	if (isArealistAvailableBoolean) {
     		clearInterval(opponentHandelingStart);
 
+	    	global["ghosts"] = {};
+        	global["ghosts"][currentAreaName] = {};	
 
-		    connection.query('DESCRIBE ghosts',function(err,result) {
-		    	var ghostsNamesArray = [];
-		    	for (var i = 0; i < result.length; i++) {
-		  		  	// console.log(result[i]);
+		    connection.query('SELECT * FROM ghosts',function(err,selectResult)     {
 
-		  		  	if (result[i]["Field"].indexOf("spook") > -1) {
-			  		  	ghostsNamesArray.push(result[i]["Field"])
-		  		  	};
-		    	};
-		    	console.log(ghostsNamesArray);
-
-		    	// making objects
-		    	global["ghosts"] = {};
-            	global["ghosts"][currentAreaName] = {};
+		    	console.log(selectResult);
 
 
-		    	for (var i = 0; i < ghostsNamesArray.length; i++) {
+		    	// new spooks
+			    connection.query('DESCRIBE ghosts',function(err,result) {
+			    	var ghostsNamesArray = [];
+			    	for (var i = 0; i < result.length; i++) {
+			  		  	// console.log(result[i]);
 
-			    	arealocation = result[i]["arealocation"];
-		    		if (arealocation != null) {
-
-			    		var arealocation = arealocation.split(","); 
-
-			    		var areaDistance = calcCrow(arealocation[0], arealocation[1], userData[c][userid][0], userData[c][userid][1]);
-			    		console.log(areaDistance);
-
-		    		} else {
-		    			console.log("new spook");
-		    			console.log(currentAreaName);
-		    			console.log(currentAreaPosition);
-			                console.log("currentAreaPosition " + currentAreaPosition);
-
-		    			global["ghosts"][currentAreaName][ghostsNamesArray[i]] = {};
-
-		    			newOpponent (currentAreaName,currentAreaPosition,ghostsNamesArray[i]);
-		    		}//e/ls
-
-		    	};//e/for
+			  		  	if (result[i]["Field"].indexOf("spook") > -1) {
+				  		  	ghostsNamesArray.push(result[i]["Field"])
+			  		  	};
+			    	};
+			    	// console.log(ghostsNamesArray);
 
 
-		    });
+
+
+			    	for (var i = 0; i < selectResult.length; i++) {
+
+			  		  	if (selectResult[i]["area"] == currentAreaName) {
+
+			  		  		console.log("if")
+				  		  	console.log(selectResult[i]["area"]);
+
+				  		  	for (var q = 0; q < ghostsNamesArray.length; q++) {
+				  		  		// selectResult[i]["area"][ghostsNamesArray[i]]
+				  		  		currentGhost = ghostsNamesArray[q];
+				  		  		console.log(currentGhost)
+				  		  		console.log(selectResult[i][currentGhost])
+
+				  		  		try{
+				  		  			var trysplit = selectResult[i][currentGhost].split(",");
+				  		  		}catch(e){
+				  		  			var trysplit = false;
+				  		  		}
+				  		  		if (trysplit != false) {
+				  		  			global["ghosts"][currentAreaName][currentGhost] = selectResult[i][currentGhost];
+				  		  			console.log("trysplit");
+				  		  			console.log(global["ghosts"][currentAreaName][currentGhost]);
+				  		  		}//e/fi
+				  		  	};///e/for
+
+				  		};//e/fi
+			    	};//e/for
+
+	  		  		if (trysplit == false) {
+
+				    	// making objects
+				    	global["ghosts"] = {};
+		            	global["ghosts"][currentAreaName] = {};
+
+
+				    	for (var i = 0; i < ghostsNamesArray.length; i++) {
+
+					    	arealocation = result[i]["arealocation"];
+				    		if (arealocation != null) {
+
+					    		var arealocation = arealocation.split(","); 
+
+					    		var areaDistance = calcCrow(arealocation[0], arealocation[1], userData[c][userid][0], userData[c][userid][1]);
+					    		// console.log(areaDistance);
+
+				    		} else {
+				    			// console.log("new spook");
+				    			// console.log(currentAreaName);
+				    			// console.log(currentAreaPosition);
+					      //           console.log("currentAreaPosition " + currentAreaPosition);
+
+				    			global["ghosts"][currentAreaName][ghostsNamesArray[i]] = {};
+
+				    			newOpponent (currentAreaName,currentAreaPosition,ghostsNamesArray[i]);
+				    		}//e/ls
+
+				    	};//e/for
+			    	    opponentHandelingStartBoolean = true;
+
+					} //e/fi
+					else {
+			    	    opponentHandelingStartBoolean = true;
+					};
+
+
+
+			    }); //e/DESCRIBE
+			}); //e/SELECT
 
 
     	};
-    },1000)
+    },1000);
 
 
 	// Random function to create floating numbers
@@ -749,26 +798,27 @@ io.on('connection', function(socket){
     		var currentAreaPosition = currentAreaPosition.split(",");
 
             // [lat,long,score, offEarthScore]
-
-            global["ghosts"][currentAreaName][ghostsName] = [getRandomArbitrary(Number(currentAreaPosition[0])-0.0006, Number(currentAreaPosition[0])+0.0006),getRandomArbitrary(Number(currentAreaPosition[1])-0.0006, Number(currentAreaPosition[1])+0.0006),10,30];
+            // used to be: 0.0006
+            var areaLatLongOffset = 0.01;
+            global["ghosts"][currentAreaName][ghostsName] = [getRandomArbitrary(Number(currentAreaPosition[0])-areaLatLongOffset, Number(currentAreaPosition[0])+areaLatLongOffset),getRandomArbitrary(Number(currentAreaPosition[1])-areaLatLongOffset, Number(currentAreaPosition[1])+areaLatLongOffset),10,30];
             
             // connection.query("UPDATE ghosts SET "+ ghostsName +" = '" + global["ghosts"][currentAreaName][ghostsName] + "' WHERE area = '" + currentAreaName +"'");
             console.log(global["ghosts"][currentAreaName][ghostsName]);
 
 
 
-            console.log("ghostsName");
-            console.log(ghostsName);
+            // console.log("ghostsName");
+            // console.log(ghostsName);
             // console.log("global[ghosts][currentAreaName][ghostsName]");
             // console.log(global["ghosts"][currentAreaName][ghostsName]);
-            console.log("currentAreaName");
-            console.log(currentAreaName);
+            // console.log("currentAreaName");
+            // console.log(currentAreaName);
 
 
             ghostcors =  global["ghosts"][currentAreaName][ghostsName][0] + "," + global["ghosts"][currentAreaName][ghostsName][1]
-            console.log("ghostcors");
+            // console.log("ghostcors");
 
-            console.log(ghostcors);
+            // console.log(ghostcors);
 
             // UPDATE Customers SET ContactName='Alfred Schmidt', City='Hamburg' WHERE CustomerName='Alfreds Futterkiste'; 
 
@@ -778,6 +828,38 @@ io.on('connection', function(socket){
 
 
     }//e/newOpponent
+
+
+
+
+
+
+
+
+    var sendGhostsToUser = setInterval(function () {
+    	if (opponentHandelingStartBoolean) {
+    		socket.emit('ghosts', JSON.stringify(global["ghosts"]));
+    	};
+    },1000);
+
+
+
+    var moveGhosts = setInterval(function () {
+    	if (opponentHandelingStartBoolean) {
+
+			// currentAreaName
+			// currentAreaPosition
+
+			// global["ghosts"][currentAreaName]
+
+
+
+
+    	};
+    },1000);
+
+
+
 
 
 
@@ -1077,109 +1159,109 @@ io.on('connection', function(socket){
 
     // Score HANDELING , kill the opponent, seperate channel 
 
-    socket.on('shoot', function(shoot){
+ //    socket.on('shoot', function(shoot){
 
-        // check if the shooting is inside the circle
-        var isInBox = false;
-        try {
-            if (calcCrow(shoot.lat, shoot.lng, userData[c][userid][0], userData[c][userid][1]) <= 0.0199883) {
-                console.log(shoot);
-                var isInBox = true;
-            };
-        }
-        catch(e) {}
+ //        // check if the shooting is inside the circle
+ //        var isInBox = false;
+ //        try {
+ //            if (calcCrow(shoot.lat, shoot.lng, userData[c][userid][0], userData[c][userid][1]) <= 0.0199883) {
+ //                console.log(shoot);
+ //                var isInBox = true;
+ //            };
+ //        }
+ //        catch(e) {}
 
-        if (isInBox) {
+ //        if (isInBox) {
 
-            // Whitch opponent is in the circle and has been shot?
-            for (var i = 0; i < opponent_lenght; i++) {
+ //            // Whitch opponent is in the circle and has been shot?
+ //            for (var i = 0; i < opponent_lenght; i++) {
 
-                var posLat = global["opponent"]["opponent_" + i][0];
-                var posLng = global["opponent"]["opponent_" + i][1];
+ //                var posLat = global["opponent"]["opponent_" + i][0];
+ //                var posLng = global["opponent"]["opponent_" + i][1];
 
-                // calculate the distance of the opponent related to the point that has been shot
-                if (calcCrow(shoot.lat, shoot.lng, posLat, posLng) < 0.006) {
-
-
-
-                    // Give -1 to opponent
-                    // global["opponent"]["opponent_" + i][2]--;
-
-                    // display in terminal
-                    console.log("> User: " + userid + " -> opponent " + i + ", score: " + global["opponent"]["opponent_" + i][2] );
-
-                    // opponent has lost:
-                    if (global["opponent"]["opponent_" + i][2] <= 0) {
-                        global["opponent"]["opponent_" + i][0] = newOpponent (i); 
-                        global["opponent"]["opponent_" + i][1] = newOpponent (i);
-                    };
-
-                    // if (isNaN(global["score"][userid] + 1)) {
-                    //     console.log("WARNING: Score restart");
-                    //     global["score"][userid] = 0;
-                    // };
-
-                    // Read Score from database
-                    // readScore (userid);
-
-                    // Send it to User
-                    // sendScore (socket,userid);
-
-                    // updatePoints ("score",1,userid)
-
-                    // // Give +1 to the user
-                    if (!(isNaN(global["score"][userid] + 1))) {
-
-	                    global["score"][userid] = Number(global["score"][userid] + 1);
+ //                // calculate the distance of the opponent related to the point that has been shot
+ //                if (calcCrow(shoot.lat, shoot.lng, posLat, posLng) < 0.006) {
 
 
-	        			if(config.use_database==='true'){
-							connection.query("SELECT * from users where userid="+ userid ,function(err,rows,fields){
-							if(err) throw err;
-							if(rows.length===1){
-								console.log("update score  -> " +  global["score"][userid]);
-								// connection.query("INSERT into users(score) VALUES('" + global["score"][userid] + "')");
-								// 'SELECT * FROM users WHERE userid = ?', [userid]
-				                connection.query("UPDATE users SET "+ "score" +" = '" + global["score"][userid] + "' WHERE userid = '" + userid +"'");
 
-							}
-							else{
-									console.log("User already exists in database");
-								}
-							});
-						}//e/fi
+ //                    // Give -1 to opponent
+ //                    // global["opponent"]["opponent_" + i][2]--;
 
-					}//e/NaN
+ //                    // display in terminal
+ //                    console.log("> User: " + userid + " -> opponent " + i + ", score: " + global["opponent"]["opponent_" + i][2] );
 
-                    // // send score to user:
-                    socket.emit('score', {"points": global["score"][userid]});
-                };
+ //                    // opponent has lost:
+ //                    if (global["opponent"]["opponent_" + i][2] <= 0) {
+ //                        global["opponent"]["opponent_" + i][0] = newOpponent (i); 
+ //                        global["opponent"]["opponent_" + i][1] = newOpponent (i);
+ //                    };
 
-                var posLat;
-                var posLng;
+ //                    // if (isNaN(global["score"][userid] + 1)) {
+ //                    //     console.log("WARNING: Score restart");
+ //                    //     global["score"][userid] = 0;
+ //                    // };
 
-            };
+ //                    // Read Score from database
+ //                    // readScore (userid);
 
-        var isInBox = false;
+ //                    // Send it to User
+ //                    // sendScore (socket,userid);
 
-        };//e/isInBox
+ //                    // updatePoints ("score",1,userid)
 
-    });///e/shoot
+ //                    // // Give +1 to the user
+ //                    if (!(isNaN(global["score"][userid] + 1))) {
+
+	//                     global["score"][userid] = Number(global["score"][userid] + 1);
 
 
-    var DisplayScore = setInterval(function(){
+	//         			if(config.use_database==='true'){
+	// 						connection.query("SELECT * from users where userid="+ userid ,function(err,rows,fields){
+	// 						if(err) throw err;
+	// 						if(rows.length===1){
+	// 							console.log("update score  -> " +  global["score"][userid]);
+	// 							// connection.query("INSERT into users(score) VALUES('" + global["score"][userid] + "')");
+	// 							// 'SELECT * FROM users WHERE userid = ?', [userid]
+	// 			                connection.query("UPDATE users SET "+ "score" +" = '" + global["score"][userid] + "' WHERE userid = '" + userid +"'");
 
-        if (!isNaN(global["score"][userid])) {
-            // // send score to user:
-            socket.emit('score', {"points": global["score"][userid]});
-            socket.emit('money', {"money": global["money"][userid]});
-            socket.emit('health', {"health": global["health"][userid]});
+	// 						}
+	// 						else{
+	// 								console.log("User already exists in database");
+	// 							}
+	// 						});
+	// 					}//e/fi
 
-            clearInterval(DisplayScore);
-        };
-		// console.log(global["score"]);
+	// 				}//e/NaN
 
-	}, 500);
+ //                    // // send score to user:
+ //                    socket.emit('score', {"points": global["score"][userid]});
+ //                };
+
+ //                var posLat;
+ //                var posLng;
+
+ //            };
+
+ //        var isInBox = false;
+
+ //        };//e/isInBox
+
+ //    });///e/shoot
+
+
+ //    var DisplayScore = setInterval(function(){
+
+ //        if (!isNaN(global["score"][userid])) {
+ //            // // send score to user:
+ //            socket.emit('score', {"points": global["score"][userid]});
+ //            socket.emit('money', {"money": global["money"][userid]});
+ //            socket.emit('health', {"health": global["health"][userid]});
+
+ //            clearInterval(DisplayScore);
+ //        };
+	// 	// console.log(global["score"]);
+
+	// }, 500);
 
 
     // // logger database

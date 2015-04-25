@@ -18,6 +18,7 @@
 */
 // Check ./sources for the code snippits that i've used in this code
 
+// Set option to debug:    javascript:document.cookie="debug=true"
 
 
 // Requries socket.io
@@ -317,9 +318,9 @@ setInterval(function(){
 // Add auto zoom and panToYou explantion mark
 document.getElementById("update").addEventListener("click", panToYou, false);
 
-setInterval(function(){
-	panToYou ();
-}, 90000);
+// setInterval(function(){
+// 	panToYou ();
+// }, 90000);
 
 function panToYou () {
 	var longitude = window["data"].longitude;
@@ -360,69 +361,76 @@ socket.on('sessionEnabled', function(sessionEnabled){
 });
 
 
-// // ZOOM START unused
-
-// map.on("zoomstart", function (e) { console.log("ZOOMEND", e); });
-
-// map.on("zoomend", function (e) { 
-// 	console.log("ZOOMSTART", e.target._zoom); 
-
-// 	console.log(map.getBounds()._southWest.lat);
-// 	console.log(map.getBounds()._southWest.lng);
-
-// 	if (!window["_southWest"]) {
-//     	window["_southWest"] = L.marker(map.getBounds()._southWest,{icon: blackIcon}).addTo(map);
-// 	}
-// 	window["_southWest"].setLatLng(map.getBounds()._southWest).update();
-
-
-
-// });
 
 
 // The spooks are comming, opponent handeling
+socket.on('ghosts', function(ghosts){
 
-socket.on('opponent', function(opponent){
+	var	ghosts = JSON.parse(ghosts)
 
-	Object.keys(opponent).forEach(function(key) {
+	console.log(ghosts)
 
-		if (opponent[key][0] != 0) {
+	window["ghosts"] = {};
 
-			if (!window[key]) {
-				// if new opponent
-		    	window[key] = L.marker([opponent[key][0],opponent[key][1]],{icon: whiteIcon}).addTo(map);
-		    	// window[key] = L.marker([opponent[key][0],opponent[key][1]],{icon: whiteIcon}).bindPopup( key ).addTo(map);
-			}
-			window[key].setLatLng([opponent[key][0],opponent[key][1]]).update();
+	Object.keys(ghosts).forEach(function(area) {
+		
+		console.log(area);
 
+		window["ghosts"][area] = {};
 
-		};
+		Object.keys(ghosts[area]).forEach(function(ghostsName) {
 
+	  		try{
+	  			var ghostsCors = ghosts[area][ghostsName].split(",");
+	  		}catch(e){
+	  			var ghostsCors = false;
+	  		}
+
+			if (window["ghosts_" + area + "_" +ghostsName] == undefined) {
+  		  		if (ghostsCors != false) {
+					console.log("-L> " + area + " "+ghostsName );
+					console.log(ghosts[area][ghostsName]);
+
+					window["ghosts_" + area + "_" +ghostsName] = L.marker([ghostsCors[0],ghostsCors[1]],{icon: whiteIcon}).addTo(map);
+
+  		  		}//e/fi
+			};
+
+	  		if (ghostsCors != false) {
+				window["ghosts_" + area + "_" + ghostsName].setLatLng([ghostsCors[0],ghostsCors[1]]).update();
+	  		}//e/fi
+
+		});
 
 	});
+
+	console.log(window["ghosts_" + "area_2" + "_" + "spook1"]);
+
+
+
+
+
+
+		// console.log(window["ghosts"]);
+
+
+	// Object.keys(opponent).forEach(function(key) {
+
+	// 	if (opponent[key][0] != 0) {
+
+	// 		if (!window[key]) {
+	// 			// if new opponent
+	// 	    	window[key] = L.marker([opponent[key][0],opponent[key][1]],{icon: whiteIcon}).addTo(map);
+	// 	    	// window[key] = L.marker([opponent[key][0],opponent[key][1]],{icon: whiteIcon}).bindPopup( key ).addTo(map);
+	// 		}
+	// 		window[key].setLatLng([opponent[key][0],opponent[key][1]]).update();
+
+
+	// 	};
+
+
+	// });
 }); //e/opponent
-
-
-
-
-
-socket.on('outbound', function(outbound){
-
-	if ((outbound != null ) && (outbound != 0 )) {
-
-		Object.keys(outbound).forEach(function(key) {
-			
-			// console.log(key);
-
-			if (!window[key]) {
-		    	window[key] = L.marker([outbound[key][0],outbound[key][1]],{icon: whiteIcon}).bindPopup("outbound " + key ).addTo(map);
-			}
-			window[key].setLatLng([outbound[key][0],outbound[key][1]]).update();
-
-		});		
-	};
-
-}); //e/outbound
 
 
 
@@ -464,3 +472,32 @@ socket.on('money', function(money){
 	console.log(money["money"]);
 	document.getElementById("money").innerHTML = "$" + scoreInPoints;
 }); //e/score
+
+
+
+
+
+
+
+
+
+
+
+// // ZOOM START unused
+
+// map.on("zoomstart", function (e) { console.log("ZOOMEND", e); });
+
+// map.on("zoomend", function (e) { 
+// 	console.log("ZOOMSTART", e.target._zoom); 
+
+// 	console.log(map.getBounds()._southWest.lat);
+// 	console.log(map.getBounds()._southWest.lng);
+
+// 	if (!window["_southWest"]) {
+//     	window["_southWest"] = L.marker(map.getBounds()._southWest,{icon: blackIcon}).addTo(map);
+// 	}
+// 	window["_southWest"].setLatLng(map.getBounds()._southWest).update();
+
+
+
+// });
