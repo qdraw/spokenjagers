@@ -49,7 +49,7 @@ var connection = mysql.createConnection({
 if(config.use_database==='true'){
 	connection.connect();
 
-	connection.query('CREATE TABLE IF NOT EXISTS users (id MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY, userid TEXT, displayname TEXT, email TEXT, health INTEGER, score INTEGER, money INTEGER, useragent TEXT, value TEXT, latestConnectionTime INT, area TEXT)',
+	connection.query('CREATE TABLE IF NOT EXISTS users (id MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY, userid TEXT, displayname TEXT, displayimage TEXT, email TEXT, health INTEGER, score INTEGER, money INTEGER, useragent TEXT, value TEXT, latestConnectionTime INT, area TEXT)',
 	function(err, result){
 	    // Case there is an error during the creation
 	    if(err) {
@@ -178,6 +178,8 @@ function authenticateUser (profile) {
 			console.log("There is no such user, adding now");
 			connection.query("INSERT into users(userid,displayname,email) VALUES('"+ profile.id + "','" + profile.displayName + "','" + profile.emails[0].value + "')");
 			global["sessionEnabled"][profile.id] = true;
+
+			url2base64inDatabase(profile.photos[0].value,profile.id);
 
             // only for logger
             // connection.query("ALTER TABLE locations ADD _" + String(profile.id) + "_ TEXT");
@@ -1384,8 +1386,65 @@ function toRad(Value){
 
 
 
+function url2base64inDatabase(url,userid) {
+
+  	var host = 0;
+  	var path = 0;
+
+	var pos = url.indexOf('//')
+	var res = url.substring(0, (pos+2)); 
+
+	if (res === "https://") {
+		var res = url.substring((pos+2), url.lenght); 
+		var pos = res.indexOf('/')
+		var host = res.substring(0, pos);
+		var path = res.substring(pos, pos.lenght);
+	};
+
+	if (path != 0 && host  != 0 ) {
+
+		var http = require('https');
+		var options = {
+		  host: host,
+		  path: path
+		};
+		
+		var base64;
+
+		var req = http.get(options, function(res) {
+		  console.log('STATUS: ' + res.statusCode);
+		  // console.log('HEADERS: ' + JSON.stringify(res.headers));
+
+		  // Buffer the body entirely for processing as a whole.
+		  var bodyChunks = [];
+		  res.on('data', function(chunk) {
 
 
+		    // You can process streamed parts here...
+		    bodyChunks.push(chunk);
+		  }).on('end', function() {
+		    var body = Buffer.concat(bodyChunks);
+		    // console.log('BODY: ' + body);
+		    // // ...and/or process the entire body here.
 
 
+			 var prefix = "data:" + res.headers["content-type"] + ";base64,";
+
+		     var base64 = new Buffer(body, 'binary').toString('base64');
+		     // console.log(prefix + base64);
+
+		     connection.query("UPDATE users SET "+ "displayimage" +" = '" + prefix + base64 + "' WHERE userid = '" + userid +"'");
+
+
+		  })
+		});
+
+		req.on('error', function(e) {
+		  console.log('ERROR: ' + e.message);
+		});
+
+	};//e/path+host
+
+	
+}//e/url
 

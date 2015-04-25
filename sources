@@ -93,6 +93,12 @@ http://nodejs.org/api/globals.html
 http://stackoverflow.com/questions/18883601/function-to-calculate-distance-between-two-coordinates-shows-wrong
 > This function takes in latitude and longitude of two location and returns the distance between them as the crow flies (in km)
 
+https://gist.github.com/jfsiii/804225
+> base64 encoding images in NodeJS
+
+http://stackoverflow.com/questions/9577611/http-get-request-in-node-js-express
+> HTTP GET Request in Node.js Express
+
 # Clientside
 
 https://github.com/leaflet-extras/leaflet-providers
