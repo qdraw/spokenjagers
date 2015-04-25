@@ -368,7 +368,7 @@ socket.on('ghosts', function(ghosts){
 
 	var	ghosts = JSON.parse(ghosts)
 
-	console.log(ghosts["area_2"]["spook5"])
+	// console.log(ghosts["area_1"]["spook5"])
 
 	window["ghosts"] = {};
 
