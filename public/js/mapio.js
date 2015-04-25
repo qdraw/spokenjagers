@@ -368,7 +368,7 @@ socket.on('ghosts', function(ghosts){
 
 	var	ghosts = JSON.parse(ghosts)
 
-	console.log(ghosts)
+	console.log(ghosts["area_2"]["spook5"])
 
 	window["ghosts"] = {};
 
@@ -380,9 +380,6 @@ socket.on('ghosts', function(ghosts){
 
 		Object.keys(ghosts[area]).forEach(function(ghostsName) {
 
-			console.log();
-
-			ghosts[area][ghostsName] =	ghosts[area][ghostsName].split(",")
 
 			if (window["ghosts_" + area + "_" +ghostsName] == undefined) {
 				console.log("-L> " + area + " "+ghostsName );
