@@ -380,7 +380,9 @@ socket.on('ghosts', function(ghosts){
 
 		Object.keys(ghosts[area]).forEach(function(ghostsName) {
 
-			console.log(ghosts[area][ghostsName]);
+			console.log();
+
+			ghosts[area][ghostsName] =	ghosts[area][ghostsName].split(",")
 
 			if (window["ghosts_" + area + "_" +ghostsName] == undefined) {
 				console.log("-L> " + area + " "+ghostsName );

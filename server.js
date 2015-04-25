@@ -653,6 +653,7 @@ io.on('connection', function(socket){
 			                currentAreaName = "area_" + index;
 			                currentAreaPosition = geo;
 
+					
 			                console.log("currentAreaPosition");
 			                console.log(currentAreaPosition);
 
@@ -760,7 +761,7 @@ io.on('connection', function(socket){
 
 				    			global["ghosts"][currentAreaName][ghostsNamesArray[i]] = {};
 
-				    			newOpponent (currentAreaName,currentAreaPosition,ghostsNamesArray[i]);
+				    			newOpponent (currentAreaName,currentAreaPosition.split(","),ghostsNamesArray[i]);
 				    		}//e/ls
 
 				    	};//e/for
@@ -795,7 +796,9 @@ io.on('connection', function(socket){
     // Create single Opponents, when you kill some, or moved out of canvas
     function newOpponent (currentAreaName,currentAreaPosition,ghostsName) {
 
-    		var currentAreaPosition = currentAreaPosition.split(",");
+    		console.log(currentAreaPosition);
+
+    		// var currentAreaPosition = currentAreaPosition.split(",");
 
             // [lat,long,score, offEarthScore]
             // used to be: 0.0006
@@ -809,8 +812,8 @@ io.on('connection', function(socket){
 
             // console.log("ghostsName");
             // console.log(ghostsName);
-            // console.log("global[ghosts][currentAreaName][ghostsName]");
-            // console.log(global["ghosts"][currentAreaName][ghostsName]);
+            console.log("global[ghosts][currentAreaName][ghostsName]");
+            console.log(global["ghosts"][currentAreaName][ghostsName]);
             // console.log("currentAreaName");
             // console.log(currentAreaName);
 
@@ -855,9 +858,9 @@ io.on('connection', function(socket){
 
 			Object.keys(global["ghosts"]).forEach(function(area) {
 				Object.keys(global["ghosts"][area]).forEach(function(ghostsName) {
-					// console.log(ghostsName + " " + ghosts[area][ghostsName]);
+					console.log(ghostsName + " " + ghosts[area][ghostsName]);
 
-					moveOpponent (currentAreaName,currentAreaPosition,ghostsName)
+					// moveOpponent (currentAreaName,currentAreaPosition,ghostsName)
 
 				});
 			});
@@ -880,14 +883,26 @@ io.on('connection', function(socket){
             // console.log(currentAreaName);
 
 
-    		var currentAreaPosition = currentAreaPosition.split(",");
-            var areaLatLongOffset = 0.01;
 
-            global["ghosts"][currentAreaName][ghostsName] = [getRandomArbitrary(Number(currentAreaPosition[0])-areaLatLongOffset, Number(currentAreaPosition[0])+areaLatLongOffset),getRandomArbitrary(Number(currentAreaPosition[1])-areaLatLongOffset, Number(currentAreaPosition[1])+areaLatLongOffset),10,30];
 
-            ghostcors =  global["ghosts"][currentAreaName][ghostsName][0] + "," + global["ghosts"][currentAreaName][ghostsName][1]
+            var speed = 0.000037/2;
+			var speedNeg = speed * -1;
+            var value = getRandomArbitrary(speedNeg, speed);
 
-            connection.query("UPDATE ghosts SET "+ ghostsName +" = '" + ghostcors + "' WHERE area = '" + currentAreaName +"'");
+            var topORleft = getRandomInt(0,1);
+            var topORleft = 0;
+
+            // global["ghosts"][currentAreaName][ghostsName][topORleft] = Number(global["ghosts"][currentAreaName][ghostsName][topORleft] + value);
+
+
+
+                        // var areaLatLongOffset = 0.01;
+
+            // global["ghosts"][currentAreaName][ghostsName] = [getRandomArbitrary(Number(currentAreaPosition[0])-areaLatLongOffset, Number(currentAreaPosition[0])+areaLatLongOffset),getRandomArbitrary(Number(currentAreaPosition[1])-areaLatLongOffset, Number(currentAreaPosition[1])+areaLatLongOffset),10,30];
+
+            // ghostcors =  global["ghosts"][currentAreaName][ghostsName][0] + "," + global["ghosts"][currentAreaName][ghostsName][1]
+
+            // connection.query("UPDATE ghosts SET "+ ghostsName +" = '" + ghostcors + "' WHERE area = '" + currentAreaName +"'");
 
 
     }
