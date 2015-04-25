@@ -380,57 +380,27 @@ socket.on('ghosts', function(ghosts){
 
 		Object.keys(ghosts[area]).forEach(function(ghostsName) {
 
-	  		try{
-	  			var ghostsCors = ghosts[area][ghostsName].split(",");
-	  		}catch(e){
-	  			var ghostsCors = false;
-	  		}
+			console.log(ghosts[area][ghostsName]);
 
 			if (window["ghosts_" + area + "_" +ghostsName] == undefined) {
-  		  		if (ghostsCors != false) {
-					console.log("-L> " + area + " "+ghostsName );
-					console.log(ghosts[area][ghostsName]);
+				console.log("-L> " + area + " "+ghostsName );
+				console.log(ghosts[area][ghostsName]);
 
-					window["ghosts_" + area + "_" +ghostsName] = L.marker([ghostsCors[0],ghostsCors[1]],{icon: whiteIcon}).addTo(map);
+				window["ghosts_" + area + "_" +ghostsName] = L.marker([ghosts[area][ghostsName][0],ghosts[area][ghostsName][1]],{icon: whiteIcon}).addTo(map);
 
-  		  		}//e/fi
 			};
 
-	  		if (ghostsCors != false) {
-				window["ghosts_" + area + "_" + ghostsName].setLatLng([ghostsCors[0],ghostsCors[1]]).update();
-	  		}//e/fi
+			window["ghosts_" + area + "_" + ghostsName].setLatLng([ghosts[area][ghostsName][0],ghosts[area][ghostsName][1]]).update();
 
 		});
 
 	});
 
-	console.log(window["ghosts_" + "area_2" + "_" + "spook1"]);
-
-
-
-
-
-
-		// console.log(window["ghosts"]);
-
-
-	// Object.keys(opponent).forEach(function(key) {
-
-	// 	if (opponent[key][0] != 0) {
-
-	// 		if (!window[key]) {
-	// 			// if new opponent
-	// 	    	window[key] = L.marker([opponent[key][0],opponent[key][1]],{icon: whiteIcon}).addTo(map);
-	// 	    	// window[key] = L.marker([opponent[key][0],opponent[key][1]],{icon: whiteIcon}).bindPopup( key ).addTo(map);
-	// 		}
-	// 		window[key].setLatLng([opponent[key][0],opponent[key][1]]).update();
-
-
-	// 	};
-
-
-	// });
 }); //e/opponent
+
+
+
+
 
 
 

@@ -727,8 +727,8 @@ io.on('connection', function(socket){
 				  		  		}
 				  		  		if (trysplit != false) {
 				  		  			global["ghosts"][currentAreaName][currentGhost] = selectResult[i][currentGhost];
-				  		  			console.log("trysplit");
-				  		  			console.log(global["ghosts"][currentAreaName][currentGhost]);
+				  		  			// console.log("trysplit");
+				  		  			// console.log(global["ghosts"][currentAreaName][currentGhost]);
 				  		  		}//e/fi
 				  		  	};///e/for
 
@@ -838,6 +838,7 @@ io.on('connection', function(socket){
 
     var sendGhostsToUser = setInterval(function () {
     	if (opponentHandelingStartBoolean) {
+    		// console.log(global["ghosts"]);
     		socket.emit('ghosts', JSON.stringify(global["ghosts"]));
     	};
     },1000);
@@ -852,13 +853,44 @@ io.on('connection', function(socket){
 
 			// global["ghosts"][currentAreaName]
 
+			Object.keys(global["ghosts"]).forEach(function(area) {
+				Object.keys(global["ghosts"][area]).forEach(function(ghostsName) {
+					// console.log(ghostsName + " " + ghosts[area][ghostsName]);
+
+					moveOpponent (currentAreaName,currentAreaPosition,ghostsName)
+
+				});
+			});
 
 
 
-    	};
+
+    	};///e/opponent~Boolean
     },1000);
 
 
+
+    function moveOpponent (currentAreaName,currentAreaPosition,ghostsName) {
+
+            // console.log("ghostsName");
+            // console.log(ghostsName);
+            // console.log("global[ghosts][currentAreaName][ghostsName]");
+            // console.log(global["ghosts"][currentAreaName][ghostsName]);
+            // console.log("currentAreaName");
+            // console.log(currentAreaName);
+
+
+    		var currentAreaPosition = currentAreaPosition.split(",");
+            var areaLatLongOffset = 0.01;
+
+            global["ghosts"][currentAreaName][ghostsName] = [getRandomArbitrary(Number(currentAreaPosition[0])-areaLatLongOffset, Number(currentAreaPosition[0])+areaLatLongOffset),getRandomArbitrary(Number(currentAreaPosition[1])-areaLatLongOffset, Number(currentAreaPosition[1])+areaLatLongOffset),10,30];
+
+            ghostcors =  global["ghosts"][currentAreaName][ghostsName][0] + "," + global["ghosts"][currentAreaName][ghostsName][1]
+
+            connection.query("UPDATE ghosts SET "+ ghostsName +" = '" + ghostcors + "' WHERE area = '" + currentAreaName +"'");
+
+
+    }
 
 
 
@@ -1390,6 +1422,9 @@ io.on('connection', function(socket){
 
     // }, 20000);
     // // end of logger
+
+
+
 
 });///e/connection
 
