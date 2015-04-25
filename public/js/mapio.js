@@ -354,7 +354,7 @@ socket.on('sessionEnabled', function(sessionEnabled){
 	Object.keys(sessionEnabled).forEach(function(key) {
 		if (userid === key) {
 			if (sessionEnabled[userid] == false || sessionEnabled[userid] == null) {
-				window.location = "/game"
+				window.location = "/game?q=se"
 			};
 		}
 	});

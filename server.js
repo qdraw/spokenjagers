@@ -387,6 +387,7 @@ io.on('connection', function(socket){
         if (global["sessionEnabled"][userid] != true) {
         	global["sessionEnabled"][userid] = false;
         	socket.emit('sessionEnabled', global["sessionEnabled"]);
+        	global["sessionEnabled"][userid] = true;
         };
 
 
@@ -417,7 +418,9 @@ io.on('connection', function(socket){
     // show cpu-load to user 
     // check if removed the Send Time interval
     var cpuload = null;
-    setInterval(function (argument) {
+
+    function checkCpuLoad () {
+
 	    var os = require("os");
 		var cpu = os.cpus();
 		var counter = 0;
@@ -436,7 +439,13 @@ io.on('connection', function(socket){
 		cpuload  = cpuload * 100;
 		cpuload = Math.round(cpuload);
 		cpuload = cpuload /100;
-		// console.log("cpu " + cpuload)
+
+    }//e/checkCpuLoad
+
+    checkCpuLoad ();
+    
+    setInterval(function (argument) {
+    	checkCpuLoad ();
 	},60000)
 
 
@@ -501,6 +510,11 @@ io.on('connection', function(socket){
                 userData[2][key] = [ 0, 0];
 
             };
+
+            if ((diffence > 160000) && diffence < 170000) {
+	        	global["sessionEnabled"][userid] = false;
+	        	socket.emit('sessionEnabled', global["sessionEnabled"]);
+            }
 
         });
 
