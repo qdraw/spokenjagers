@@ -909,7 +909,7 @@ io.on('connection', function(socket){
     			newOpponent (currentAreaName,currentAreaPosition,ghostsName);
     		};
 
-            var speed = 0.0003;
+            var speed = 0.00005;
 			var speedNeg = speed * -1;
             var value = getRandomArbitrary(speedNeg, speed);
 
@@ -948,7 +948,7 @@ io.on('connection', function(socket){
 	        // check if the shooting is inside the circle
 	        var isInBox = false;
 	        try {
-	            if (calcCrow(shoot.lat, shoot.lng, userData[c][userid][0], userData[c][userid][1]) <= 0.006) {
+	            if (calcCrow(shoot.lat, shoot.lng, userData[c][userid][0], userData[c][userid][1]) <= 0.0199883) {
 	                console.log(shoot);
 	                var isInBox = true;
 	            };
@@ -956,16 +956,63 @@ io.on('connection', function(socket){
 	        catch(e) {}
 
 
-	        console.log(global["ghosts"][currentAreaName]);
 
 	        // ! is for debug!!!!!!!!
-	        if (!isInBox) {
+	        if (isInBox) {
 
 
 				Object.keys(global["ghosts"]).forEach(function(area) {
 
 					Object.keys(global["ghosts"][area]).forEach(function(ghostsName) {
-							// first scores in db!!
+						// first scores in db!!
+	               		if (calcCrow(shoot.lat, shoot.lng, global["ghosts"][area][ghostsName][0], global["ghosts"][area][ghostsName][1]) < 0.06) {
+	                    	
+	                    	console.log("> User: " + userid );
+
+		                    // // Give +1 to the user
+		                    if (!(isNaN(global["score"][userid] + 1))) {
+
+			                    global["score"][userid] = Number(global["score"][userid] + 1);
+
+
+			        			if(config.use_database==='true'){
+									connection.query("SELECT * from users where userid="+ userid ,function(err,rows,fields){
+									if(err) throw err;
+									if(rows.length===1){
+										console.log("update score  -> " +  global["score"][userid]);
+						                connection.query("UPDATE users SET "+ "score" +" = '" + global["score"][userid] + "' WHERE userid = '" + userid +"'");
+
+									}
+									else{
+											console.log("User already exists in database");
+										}
+									});
+
+									// Give opponent -1
+									global["ghosts"][area][ghostsName][2] = Number(global["ghosts"][area][ghostsName][2]-1);
+
+									// opponent has lost:
+				                    if (global["ghosts"][area][ghostsName][2] <= 0) {
+				                    	newOpponent (currentAreaName,currentAreaPosition,ghostsName)
+				                    };
+
+
+
+
+								}//e/fi
+							}//e/NaN
+
+		                    // // send score to user:
+		                    socket.emit('score', {"points": global["score"][userid]});
+
+
+
+
+
+
+		                    
+
+	               		}//e/hit
 
 
 
@@ -982,7 +1029,7 @@ io.on('connection', function(socket){
 	                var posLng = global["opponent"]["opponent_" + i][1];
 
 	                // calculate the distance of the opponent related to the point that has been shot
-	                if (calcCrow(shoot.lat, shoot.lng, posLat, posLng) < 0.006) {
+	                if (calcCrow(shoot.lat, shoot.lng, posLat, posLng) < 0.0199883) {
 
 
 
