@@ -1,4 +1,4 @@
 #!/bin/bash
 
 cd "$(dirname "$0")"
-nodemon server.js ngrok
+nodemon server.js ngrok --ignore public/
