@@ -53,17 +53,40 @@ var map = L.map('map', { zoomControl:false }).setView([51, 5.1], maxZoom);
 // 	maxZoom: 18
 // }).addTo(map); 
 
+// untested
+// var Stamen_Toner = L.tileLayer('http://{s}.tile.stamen.com/toner/{z}/{x}/{y}.{ext}', {
+// 	attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+// 	subdomains: 'abcd',
+// 	minZoom: 0,
+// 	maxZoom: 20,
+// 	ext: 'png'
+// });
+
 // Nokia Here Maps, Thanks: http://leaflet-extras.github.io/leaflet-providers/preview/
-L.tileLayer('https://{s}.{base}.maps.cit.api.here.com/maptile/2.1/maptile/{mapID}/satellite.day/{z}/{x}/{y}/256/jpg?app_id={app_id}&app_code={app_code}', {
+// L.tileLayer('https://{s}.{base}.maps.cit.api.here.com/maptile/2.1/maptile/{mapID}/satellite.day/{z}/{x}/{y}/256/jpg?app_id={app_id}&app_code={app_code}', {
+// 	// attribution: 'Map &copy; 1987-2014 <a href="http://developer.here.com">HERE</a>',
+// 	subdomains: '1234',
+// 	mapID: 'newest',
+// 	app_id: 'Y8m9dK2brESDPGJPdrvs',
+// 	app_code: 'dq2MYIvjAotR8tHvY8Q_Dg',
+// 	base: 'aerial',
+// 	minZoom: 0,
+// 	maxZoom: maxZoom
+// }).addTo(map);
+
+
+// https: also suppported.
+L.tileLayer('https://{s}.{base}.maps.cit.api.here.com/maptile/2.1/maptile/{mapID}/normal.day.grey/{z}/{x}/{y}/256/png8?app_id={app_id}&app_code={app_code}', {
 	// attribution: 'Map &copy; 1987-2014 <a href="http://developer.here.com">HERE</a>',
 	subdomains: '1234',
 	mapID: 'newest',
 	app_id: 'Y8m9dK2brESDPGJPdrvs',
 	app_code: 'dq2MYIvjAotR8tHvY8Q_Dg',
-	base: 'aerial',
+	base: 'base',
 	minZoom: 0,
-	maxZoom: maxZoom
+	maxZoom: 20
 }).addTo(map);
+
 
 // Check if user support geolocation, after this load FirstFindGeoLocation
 if (!navigator.geolocation){
