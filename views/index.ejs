@@ -40,6 +40,15 @@
 
 	<script type="text/javascript" src="js/leaflet.js"></script>
 	<script type="text/javascript">
+
+		if (!navigator.geolocation){
+		    alert("Geolocation is not supported by your browser");
+		}
+
+		if (navigator.userAgent.indexOf("FBAN/MessengerForiOS") >= 0) {
+			alert("Would you like to open this page in Safari or Chrome, press the share button, in this window geolocation is not supported.");
+		};
+
 		var map = L.map('map', { zoomControl:false }).setView([52.5463, 5.26245], 11);
 
 		// Nokia Here Maps, Thanks: http://leaflet-extras.github.io/leaflet-providers/preview/
