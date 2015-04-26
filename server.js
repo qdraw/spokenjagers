@@ -39,10 +39,10 @@ var express				=		require('express')
 
 //Define MySQL parameter in Config.js file.
 var connection = mysql.createConnection({
-	host		 : config.host,
-	user		 : config.username,
-	password : config.password,
-	database : config.database
+	host		: 	  config.host,
+	user		: 	  config.username,
+	password 	: 	  config.password,
+	database 	: 	  config.database
 });
 
 //Connect to Database only if Config.js parameter is set.
@@ -117,7 +117,7 @@ if ( __dirname.indexOf("avans-individueel-verdieping-blok11-12") == -1) {
 // print process.argv ++ use: nodemon server.js ngrok
 process.argv.forEach(function (val, index, array) {
     if (val === "ngrok") {
-        console.log("> callbackURL > NGROK");
+        console.log("> callbackURL > NGROK \nhttps://qdraw.ngrok.io/");
         global["callbackURL"] = "https://" + "qdraw.ngrok.io" + "/auth/facebook/callback";
     }
 });
