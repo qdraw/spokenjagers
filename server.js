@@ -909,15 +909,16 @@ io.on('connection', function(socket){
             // console.log("global[ghosts][currentAreaName][ghostsName]111110");
             // console.log(global["ghosts"][currentAreaName][ghostsName][1]);
 
-            // console.log("currentAreaName");
-            // console.log(currentAreaName);
+            console.log("currentAreaName");
+            console.log(currentAreaName);
 
             // console.log("currentAreaPosition");
             // console.log(currentAreaPosition);
           
 
-
-    		var areaDistance = calcCrow(global["ghosts"][currentAreaName][ghostsName][0], global["ghosts"][currentAreaName][ghostsName][1], currentAreaPosition[0], currentAreaPosition[1]);
+            if (currentAreaName != undefined) {
+	    		var areaDistance = calcCrow(global["ghosts"][currentAreaName][ghostsName][0], global["ghosts"][currentAreaName][ghostsName][1], currentAreaPosition[0], currentAreaPosition[1]);
+            };
 
     		// console.log(areaDistance);
 
