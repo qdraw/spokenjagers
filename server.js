@@ -130,7 +130,7 @@ passport.use(new GoogleStrategy({
 		callbackURL: global["callbackURL"].replace("facebook","google")
 	},
 	function(accessToken, refreshToken, profile, done) {
-		console.log("> Welcome " + profile.displayName + " " + profile.id);
+		console.log("> Welcome " + profile.displayName + " " + profile.id + " " + profile.provider);
 
 		authenticateUser (profile);
 
@@ -154,7 +154,7 @@ passport.use(new FacebookStrategy({
 	},
 	function(accessToken, refreshToken, profile, done) {
 		
-		console.log("> Welcome " + profile.displayName + " " + profile.id);
+		console.log("> Welcome " + profile.displayName + " " + profile.id + " " + profile.provider);
 		// graph.facebook.com/10153168999049854/picture?type=large
 
 		authenticateUser (profile);
@@ -540,21 +540,23 @@ io.on('connection', function(socket){
 
 
 
-    // New Session
+    // New Session aka Area Feature
     var isArealistAvailableBoolean = false;
     var currentAreaName = {};
     var currentAreaPosition = {};
     function isArealistAvailable () {
 
-
+    	// nieuwe sessie
+    	// is userid aanwezig?
     	try { if (userData[c][userid][0] != 0) { var go = true;  } 	else { var go = false; }  	}   	catch(e){ 			var go = false;     	}
 
     	if (userid != 0 && go == true) {
     		clearInterval(isArealistAvailableInterval);
 
+    		// zijn areas aanwezig?
     		connection.query("SELECT COUNT(*) FROM ghosts",function(err, result){
     			if (result[0]["COUNT(*)"] == 0) {
-
+    				// maak area #1
     				console.log("> new area created COUNT(*)===0");
 
     				var newAreaNumber = 1;
@@ -672,7 +674,7 @@ io.on('connection', function(socket){
 			                currentAreaPosition[userid] = geo;
 
 					
-			                console.log("currentAreaPosition");
+			                console.log("currentAreaPosition1");
 			                console.log(currentAreaPosition);
 
 			                isArealistAvailableBoolean = true;
@@ -697,133 +699,72 @@ io.on('connection', function(socket){
 
 
 
-
+    // 7.1 aan het begin de waardes van de spoken controleren
     var opponentHandelingStartBoolean = false;
     var opponentHandelingStart = setInterval(function () {
     	if (isArealistAvailableBoolean) {
     		clearInterval(opponentHandelingStart);
-    		console.log("opponentHandelingStart " + userid);
 
+    		global["ghosts"][currentAreaName[userid]] = {};
 
-        	// global["ghosts"][easyCurrentAreaName] = {};	
 
 		    connection.query('SELECT * FROM ghosts',function(err,selectResult)     {
 
-		    	// console.log(selectResult);
 
-		    	// new spooks
-			    connection.query('DESCRIBE ghosts',function(err,result) {
+		    	// new spooks check on errors
+			    connection.query('DESCRIBE ghosts',function(err,describeResult) {
+
 			    	var ghostsNamesArray = [];
-			    	for (var i = 0; i < result.length; i++) {
-			  		  	// console.log(result[i]);
 
-			  		  	if (result[i]["Field"].indexOf("spook") > -1) {
-				  		  	ghostsNamesArray.push(result[i]["Field"])
+			    	for (var i = 0; i < describeResult.length; i++) {
+			  		  	if (describeResult[i]["Field"].indexOf("spook") > -1) {
+				  		  	ghostsNamesArray.push(describeResult[i]["Field"])
 			  		  	};
 			    	};
-			    	// console.log(ghostsNamesArray);
+
+			    	// current area location exist
+
+			    	console.log(currentAreaName[userid])
+					console.log(currentAreaPosition[userid])
+
+					// Check if area position is correct
+					try{
+						currentAreaPosition[userid].split(",");
+						isAreaPosCorrect = true;
+					}catch(e){
+						isAreaPosCorrect = false;
+					}
+
+					// Check if spooks locations are correct
 
 
+					for (var i = 0; i < selectResult.length; i++) {
 
+						// console.log("selectResult");
+						// console.log(selectResult[i]);
 
-			    	for (var i = 0; i < selectResult.length; i++) {
+						if (selectResult[i]["area"] == currentAreaName[userid]) {
+							for (var x = 0; x < ghostsNamesArray.length; x++) {
+								
+								// selectResult[i][ghostsNamesArray[x]]
+								try {
+									var ghostExistInDatabase = selectResult[i][ghostsNamesArray[x]].split(",");
+						    	}
+						    	catch(e) {
+						    		var ghostExistInDatabase = false;
+									newOpponent (currentAreaName[userid],currentAreaPosition[userid].split(","),ghostsNamesArray[x]);
+									opponentHandelingStartBoolean = true;
+						    	}//e/catch
 
-			    		var easyCurrentAreaName = currentAreaName[userid];
+						    	if (ghostExistInDatabase != false) {
+									global["ghosts"][currentAreaName[userid]][ghostsNamesArray[x]] = selectResult[i][ghostsNamesArray[x]].split(",");
+									opponentHandelingStartBoolean = true;
+						    	}//e/fi
 
-			  		  	if (selectResult[i]["area"] == easyCurrentAreaName) {
+							};
 
-			  		  		console.log("currentAreaName =  ")
-				  		  	console.log(selectResult[i]["area"]);
-
-				  		  	global["ghosts"][easyCurrentAreaName] = {};
-
-				  		  	for (var q = 0; q < ghostsNamesArray.length; q++) {
-				  		  		// selectResult[i]["area"][ghostsNamesArray[i]]
-				  		  		currentGhost = ghostsNamesArray[q];
-				  		  		console.log("currentGhost")
-
-				  		  		console.log(currentGhost)
-				  		  		console.log(selectResult[i][currentGhost])
-
-				  		  			
-
-				  		  		try{
-				  		  			var trysplit = selectResult[i][currentGhost].split(",");
-				  		  		}catch(e){
-				  		  			var trysplit = false;
-				  		  		}
-				  		  		if (selectResult[i][currentGhost] === null) {
-				  		  			var trysplit = false;
-				  		  		};
-
-				  		  		if (trysplit != false) {
-				  		  			var toSplit = selectResult[i][currentGhost].split(",");
-				  		  			console.log(global["ghosts"]);
-
-				  		  			global["ghosts"][easyCurrentAreaName][currentGhost] = toSplit;
-
-				  		  			// console.log("trysplit");
-				  		  			// console.log(global["ghosts"][currentAreaName][currentGhost]);
-				  		  		}//e/fi
-				  		  	};///e/for
-
-				  		};//e/fi
-			    	};//e/for
-
-	  		  		if (trysplit == false) {
-
-				    	// making objects
-				    	global["ghosts"] = {};
-			    		var easyCurrentAreaName = currentAreaName[userid];
-		            	global["ghosts"][easyCurrentAreaName] = {};
-
-
-				    	for (var i = 0; i < ghostsNamesArray.length; i++) {
-
-					    	arealocation = result[i]["arealocation"];
-
-				    		if (arealocation != null) {
-
-					    		var arealocation = arealocation.split(","); 
-
-					    		var areaDistance = calcCrow(arealocation[0], arealocation[1], userData[c][userid][0], userData[c][userid][1]);
-					    		// console.log(areaDistance);
-
-				    		} else {
-				    			// console.log("new spook");
-				    			// console.log(currentAreaName);
-				    			// console.log(currentAreaPosition);
-					      //           console.log("currentAreaPosition " + currentAreaPosition);
-
-					    		console.log("ghostsNamesArray[i]")
-					    		console.log(ghostsNamesArray[i])
-					    		console.log("arealocation");
-					    		console.log(result[i]["arealocation"]);
-
-					    		if (arealocation != undefined ) {
-				    				var easyCurrentAreaName = currentAreaName[userid];
-					    			global["ghosts"][easyCurrentAreaName][ghostsNamesArray[i]] = {};
-
-					    			newOpponent (easyCurrentAreaName,currentAreaPosition.split(","),ghostsNamesArray[i]);
-
-				    			}
-				    			else {
-				    				console.log("> FATAL ERROR | arealocation === undefined")
-				    			}
-
-
-
-				    		}//e/ls
-
-
-
-				    	};//e/for
-			    	    opponentHandelingStartBoolean = true;
-
-					} //e/fi
-					else {
-			    	    opponentHandelingStartBoolean = true;
-					};
+						};//e/fi
+					};//e/for
 
 
 
@@ -899,9 +840,11 @@ io.on('connection', function(socket){
 			Object.keys(global["ghosts"]).forEach(function(area) {
 				var sendSocket = {};
 				sendSocket[area] = global["ghosts"][area];
-				console.log(sendSocket);
+				// console.log(sendSocket);
 	    		socket.emit('ghosts', JSON.stringify(sendSocket));
 			});
+
+    		// socket.emit('ghosts', JSON.stringify(global["ghosts"]));
 
     	};
     },1000);
@@ -918,11 +861,19 @@ io.on('connection', function(socket){
 
 
 			Object.keys(currentAreaName).forEach(function(useridI) {
+				console.log("useridI");
+				console.log(useridI);
+
 				Object.keys(global["ghosts"]).forEach(function(area) {
+					console.log("area")
+					console.log(area)
 					Object.keys(global["ghosts"][area]).forEach(function(ghostsName) {
+						console.log("ghostsName")
+						console.log(ghostsName)
+
 						// console.log(ghostsName + " " + ghosts[area][ghostsName]);
 
-						moveOpponent (currentAreaName[useridI],currentAreaPosition[useridI].split(","),ghostsName)
+						moveOpponent (currentAreaName[userid],currentAreaPosition[userid].split(","),ghostsName)
 
 					});
 				});
@@ -937,38 +888,48 @@ io.on('connection', function(socket){
 
     function moveOpponent (currentAreaName,currentAreaPosition,ghostsName) {
 
-            // console.log("---------------------------");
+            console.log("---------------------------");
 
-            // console.log("ghostsName");
-            // console.log(ghostsName);
+            console.log("ghostsName");
+            console.log(ghostsName);
 
-            // console.log("currentAreaName");
-            // console.log(currentAreaName);
-
-
-            // console.log("currentAreaPosition");
-            // console.log(currentAreaPosition);
-
-            // console.log("global[ghosts]");
-            // console.log(global["ghosts"]);
+            console.log("currentAreaName");
+            console.log(currentAreaName);
 
 
-            // // console.log("global[ghosts][currentAreaName][ghostsName]");
-            // // console.log(global["ghosts"][currentAreaName][ghostsName]);
+            console.log("currentAreaPosition");
+            console.log(currentAreaPosition);
 
-            // // console.log("global[ghosts][currentAreaName][ghostsName]00000");
-            // // console.log(global["ghosts"][currentAreaName][ghostsName][0]);
-            // // console.log("global[ghosts][currentAreaName][ghostsName]111110");
-            // // console.log(global["ghosts"][currentAreaName][ghostsName][1]);
+            console.log("global[ghosts]");
+            console.log(global["ghosts"]);
+
+
+            // console.log("global[ghosts][currentAreaName][ghostsName]");
+            // console.log(global["ghosts"][currentAreaName][ghostsName]);
+
+            // console.log("global[ghosts][currentAreaName][ghostsName]00000");
+            // console.log(global["ghosts"][currentAreaName][ghostsName][0]);
+            // console.log("global[ghosts][currentAreaName][ghostsName]111110");
+            // console.log(global["ghosts"][currentAreaName][ghostsName][1]);
 
 
 
           
-            // console.log("---------------------------");
+            console.log("---------------------------");
 
-            if (currentAreaName != undefined) {
-	    		var areaDistance = calcCrow(global["ghosts"][currentAreaName][ghostsName][0], global["ghosts"][currentAreaName][ghostsName][1], currentAreaPosition[0], currentAreaPosition[1]);
-            };
+            try{
+
+	            if (isNaN(Number(global["ghosts"][currentAreaName][ghostsName][0] +1 )   ) ) {
+	            	console.log("NaN/e")
+	            }
+	            else {
+		    			var areaDistance = calcCrow(global["ghosts"][currentAreaName][ghostsName][0], global["ghosts"][currentAreaName][ghostsName][1], currentAreaPosition[0], currentAreaPosition[1]);
+				}//e/ls
+			}
+			catch(e) {
+				console.log("areaDistance=2")
+				areaDistance = 2;
+			}
 
     		// console.log(areaDistance);
 
@@ -987,6 +948,7 @@ io.on('connection', function(socket){
             }
             else {
 	            global["ghosts"][currentAreaName][ghostsName][topORleft] = (Number(global["ghosts"][currentAreaName][ghostsName][topORleft]) + value);
+	            console.log(global["ghosts"][currentAreaName][ghostsName][topORleft]);
             }
 
 
@@ -1380,14 +1342,13 @@ global["money"] = {};
 
 function readScore (userid) {
 
-    console.log("userid > " +userid);
+    // console.log("userid > " +userid);
 
 
     if(config.use_database==='true'){
         connection.query("SELECT * from users where userid="+ userid ,function(err,rows,fields){
         if(err) throw err;
         if(rows.length===1){
-            console.log(" <> rows");
             global["score"][userid] = rows[0].score;
 
 

@@ -11,7 +11,12 @@
 <!-- debug feature using c*ies and auto redirect-->
 <% if (!user) { %>
 	<% if (cookies.debug == "true" && (cookies.provider === "facebook" || cookies.provider === "google") ) { %>
-	<meta http-equiv="refresh" content="1; url=/auth/<%= cookies.provider %>">
+	<meta http-equiv="refresh" content="0; url=/auth/<%= cookies.provider %>">
+	<% } %>
+<% } %>
+<% if (user) { %>
+	<% if (cookies.debug == "true" && (cookies.provider === "facebook" || cookies.provider === "google") ) { %>
+	<meta http-equiv="refresh" content="0; url=/game %>">
 	<% } %>
 <% } %>
 

@@ -392,7 +392,6 @@ socket.on('ghosts', function(ghosts){
 	var	ghosts = JSON.parse(ghosts)
 
 	// console.log(ghosts["area_1"]["spook5"])
-	
 	console.log(ghosts);
 
 	window["ghosts"] = {};
@@ -407,8 +406,8 @@ socket.on('ghosts', function(ghosts){
 
 
 			if (window["ghosts_" + area + "_" +ghostsName] == undefined) {
-				console.log("-L> " + area + " "+ghostsName );
-				console.log(ghosts[area][ghostsName]);
+				console.log("--> " + area + " "+ghostsName );
+				console.log(ghosts[area][ghostsName][0]);
 
 				window["ghosts_" + area + "_" +ghostsName] = L.marker([ghosts[area][ghostsName][0],ghosts[area][ghostsName][1]],{icon: whiteIcon}).addTo(map);
 
