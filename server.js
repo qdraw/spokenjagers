@@ -130,7 +130,7 @@ passport.use(new GoogleStrategy({
 		callbackURL: global["callbackURL"].replace("facebook","google")
 	},
 	function(accessToken, refreshToken, profile, done) {
-		console.log(profile);
+		console.log("> Welcome " + profile.displayName + " " + profile.id);
 
 		authenticateUser (profile);
 
@@ -154,7 +154,7 @@ passport.use(new FacebookStrategy({
 	},
 	function(accessToken, refreshToken, profile, done) {
 		
-		console.log(profile);
+		console.log("> Welcome " + profile.displayName + " " + profile.id);
 		// graph.facebook.com/10153168999049854/picture?type=large
 
 		authenticateUser (profile);
@@ -345,6 +345,7 @@ var latestConnectionTime = {};
 // fill userData with all lat,long
 var isFirstRun = true;
 
+global["ghosts"] = {};
 
 // define interactions with client
 io.on('connection', function(socket){
@@ -541,8 +542,8 @@ io.on('connection', function(socket){
 
     // New Session
     var isArealistAvailableBoolean = false;
-    var currentAreaName = 0;
-    var currentAreaPosition = 0;
+    var currentAreaName = {};
+    var currentAreaPosition = {};
     function isArealistAvailable () {
 
 
@@ -565,8 +566,8 @@ io.on('connection', function(socket){
 	                connection.query("UPDATE users SET "+ "area" +" = '" + "area_" + newAreaNumber + "' WHERE userid = '" + userid +"'");
 	                connection.query("UPDATE users SET "+ "latestConnectionTime" +" = '" + Math.floor(Date.now() / 1000) + "' WHERE userid = '" + userid +"'");
 
-	                currentAreaName = "area_" + newAreaNumber;
-	                currentAreaPosition = userData[c][userid][0] + "," + userData[c][userid][1];
+	                currentAreaName[userid] = "area_" + newAreaNumber;
+	                currentAreaPosition[userid] = userData[c][userid][0] + "," + userData[c][userid][1];
 
 
 	                isArealistAvailableBoolean = true;
@@ -610,19 +611,20 @@ io.on('connection', function(socket){
 				    	if (AreaListOfGeoLocation.length === 0) {
 				    		// Create a new area
 
-				    		console.log("> Create a new area");
-							connection.query("INSERT into ghosts(area) VALUES('" + "area_" + newAreaNumber  + "')");
-			                connection.query("UPDATE ghosts SET "+ "arealocation" +" = '" + userData[c][userid][0] + "," + userData[c][userid][1] + "' WHERE area = '" + "area_" + newAreaNumber +"'");
+				    		if (userData[c][userid][1] != 0) {
+					    		console.log("> Create a new area");
+								connection.query("INSERT into ghosts(area) VALUES('" + "area_" + newAreaNumber  + "')");
+				                connection.query("UPDATE ghosts SET "+ "arealocation" +" = '" + userData[c][userid][0] + "," + userData[c][userid][1] + "' WHERE area = '" + "area_" + newAreaNumber +"'");
 
-			                connection.query("UPDATE users SET "+ "area" +" = '" + "area_" + newAreaNumber + "' WHERE userid = '" + userid +"'");
-			                connection.query("UPDATE users SET "+ "latestConnectionTime" +" = '" + Math.floor(Date.now() / 1000) + "' WHERE userid = '" + userid +"'");
+				                connection.query("UPDATE users SET "+ "area" +" = '" + "area_" + newAreaNumber + "' WHERE userid = '" + userid +"'");
+				                connection.query("UPDATE users SET "+ "latestConnectionTime" +" = '" + Math.floor(Date.now() / 1000) + "' WHERE userid = '" + userid +"'");
 
-			                currentAreaName = "area_" + newAreaNumber;
-			                currentAreaPosition = userData[c][userid][0] + "," + userData[c][userid][1];
+				                currentAreaName[userid] = "area_" + newAreaNumber;
+				                currentAreaPosition[userid] = userData[c][userid][0] + "," + userData[c][userid][1];
 
 
-			                isArealistAvailableBoolean = true;
-
+				                isArealistAvailableBoolean = true;
+			                };
 
 				    	}//e/fi
 
@@ -666,8 +668,8 @@ io.on('connection', function(socket){
 			                connection.query("UPDATE users SET "+ "area" +" = '" + "area_" + index + "' WHERE userid = '" + userid +"'");
 			                connection.query("UPDATE users SET "+ "latestConnectionTime" +" = '" + Math.floor(Date.now() / 1000) + "' WHERE userid = '" + userid +"'");
 			                
-			                currentAreaName = "area_" + index;
-			                currentAreaPosition = geo;
+			                currentAreaName[userid] = "area_" + index;
+			                currentAreaPosition[userid] = geo;
 
 					
 			                console.log("currentAreaPosition");
@@ -687,7 +689,7 @@ io.on('connection', function(socket){
 
 
     	};
-    	console.log("/e/isArealistAvailable");
+    	// console.log("/e/isArealistAvailable");
 
 
     }//e/isArealistAvailable
@@ -700,14 +702,14 @@ io.on('connection', function(socket){
     var opponentHandelingStart = setInterval(function () {
     	if (isArealistAvailableBoolean) {
     		clearInterval(opponentHandelingStart);
+    		console.log("opponentHandelingStart " + userid);
 
-	    	global["ghosts"] = {};
-        	global["ghosts"][currentAreaName] = {};	
+
+        	// global["ghosts"][easyCurrentAreaName] = {};	
 
 		    connection.query('SELECT * FROM ghosts',function(err,selectResult)     {
 
-		    	console.log(selectResult);
-
+		    	// console.log(selectResult);
 
 		    	// new spooks
 			    connection.query('DESCRIBE ghosts',function(err,result) {
@@ -726,10 +728,14 @@ io.on('connection', function(socket){
 
 			    	for (var i = 0; i < selectResult.length; i++) {
 
-			  		  	if (selectResult[i]["area"] == currentAreaName) {
+			    		var easyCurrentAreaName = currentAreaName[userid];
 
-			  		  		console.log("if")
+			  		  	if (selectResult[i]["area"] == easyCurrentAreaName) {
+
+			  		  		console.log("currentAreaName =  ")
 				  		  	console.log(selectResult[i]["area"]);
+
+				  		  	global["ghosts"][easyCurrentAreaName] = {};
 
 				  		  	for (var q = 0; q < ghostsNamesArray.length; q++) {
 				  		  		// selectResult[i]["area"][ghostsNamesArray[i]]
@@ -739,15 +745,22 @@ io.on('connection', function(socket){
 				  		  		console.log(currentGhost)
 				  		  		console.log(selectResult[i][currentGhost])
 
+				  		  			
+
 				  		  		try{
 				  		  			var trysplit = selectResult[i][currentGhost].split(",");
 				  		  		}catch(e){
 				  		  			var trysplit = false;
 				  		  		}
+				  		  		if (selectResult[i][currentGhost] === null) {
+				  		  			var trysplit = false;
+				  		  		};
+
 				  		  		if (trysplit != false) {
 				  		  			var toSplit = selectResult[i][currentGhost].split(",");
+				  		  			console.log(global["ghosts"]);
 
-				  		  			global["ghosts"][currentAreaName][currentGhost] = toSplit;
+				  		  			global["ghosts"][easyCurrentAreaName][currentGhost] = toSplit;
 
 				  		  			// console.log("trysplit");
 				  		  			// console.log(global["ghosts"][currentAreaName][currentGhost]);
@@ -761,12 +774,14 @@ io.on('connection', function(socket){
 
 				    	// making objects
 				    	global["ghosts"] = {};
-		            	global["ghosts"][currentAreaName] = {};
+			    		var easyCurrentAreaName = currentAreaName[userid];
+		            	global["ghosts"][easyCurrentAreaName] = {};
 
 
 				    	for (var i = 0; i < ghostsNamesArray.length; i++) {
 
 					    	arealocation = result[i]["arealocation"];
+
 				    		if (arealocation != null) {
 
 					    		var arealocation = arealocation.split(","); 
@@ -780,10 +795,27 @@ io.on('connection', function(socket){
 				    			// console.log(currentAreaPosition);
 					      //           console.log("currentAreaPosition " + currentAreaPosition);
 
-				    			global["ghosts"][currentAreaName][ghostsNamesArray[i]] = {};
+					    		console.log("ghostsNamesArray[i]")
+					    		console.log(ghostsNamesArray[i])
+					    		console.log("arealocation");
+					    		console.log(result[i]["arealocation"]);
 
-				    			newOpponent (currentAreaName,currentAreaPosition.split(","),ghostsNamesArray[i]);
+					    		if (arealocation != undefined ) {
+				    				var easyCurrentAreaName = currentAreaName[userid];
+					    			global["ghosts"][easyCurrentAreaName][ghostsNamesArray[i]] = {};
+
+					    			newOpponent (easyCurrentAreaName,currentAreaPosition.split(","),ghostsNamesArray[i]);
+
+				    			}
+				    			else {
+				    				console.log("> FATAL ERROR | arealocation === undefined")
+				    			}
+
+
+
 				    		}//e/ls
+
+
 
 				    	};//e/for
 			    	    opponentHandelingStartBoolean = true;
@@ -863,7 +895,14 @@ io.on('connection', function(socket){
     var sendGhostsToUser = setInterval(function () {
     	if (opponentHandelingStartBoolean) {
     		// console.log(global["ghosts"]);
-    		socket.emit('ghosts', JSON.stringify(global["ghosts"]));
+
+			Object.keys(global["ghosts"]).forEach(function(area) {
+				var sendSocket = {};
+				sendSocket[area] = global["ghosts"][area];
+				console.log(sendSocket);
+	    		socket.emit('ghosts', JSON.stringify(sendSocket));
+			});
+
     	};
     },1000);
 
@@ -877,15 +916,17 @@ io.on('connection', function(socket){
 
 			// global["ghosts"][currentAreaName]
 
-			Object.keys(global["ghosts"]).forEach(function(area) {
-				Object.keys(global["ghosts"][area]).forEach(function(ghostsName) {
-					// console.log(ghostsName + " " + ghosts[area][ghostsName]);
 
-					moveOpponent (currentAreaName,currentAreaPosition.split(","),ghostsName)
+			Object.keys(currentAreaName).forEach(function(useridI) {
+				Object.keys(global["ghosts"]).forEach(function(area) {
+					Object.keys(global["ghosts"][area]).forEach(function(ghostsName) {
+						// console.log(ghostsName + " " + ghosts[area][ghostsName]);
 
+						moveOpponent (currentAreaName[useridI],currentAreaPosition[useridI].split(","),ghostsName)
+
+					});
 				});
 			});
-
 
 
 
@@ -901,20 +942,29 @@ io.on('connection', function(socket){
             // console.log("ghostsName");
             // console.log(ghostsName);
 
-            // console.log("global[ghosts][currentAreaName][ghostsName]");
-            // console.log(global["ghosts"][currentAreaName][ghostsName]);
+            // console.log("currentAreaName");
+            // console.log(currentAreaName);
 
-            // console.log("global[ghosts][currentAreaName][ghostsName]00000");
-            // console.log(global["ghosts"][currentAreaName][ghostsName][0]);
-            // console.log("global[ghosts][currentAreaName][ghostsName]111110");
-            // console.log(global["ghosts"][currentAreaName][ghostsName][1]);
-
-            console.log("currentAreaName");
-            console.log(currentAreaName);
 
             // console.log("currentAreaPosition");
             // console.log(currentAreaPosition);
+
+            // console.log("global[ghosts]");
+            // console.log(global["ghosts"]);
+
+
+            // // console.log("global[ghosts][currentAreaName][ghostsName]");
+            // // console.log(global["ghosts"][currentAreaName][ghostsName]);
+
+            // // console.log("global[ghosts][currentAreaName][ghostsName]00000");
+            // // console.log(global["ghosts"][currentAreaName][ghostsName][0]);
+            // // console.log("global[ghosts][currentAreaName][ghostsName]111110");
+            // // console.log(global["ghosts"][currentAreaName][ghostsName][1]);
+
+
+
           
+            // console.log("---------------------------");
 
             if (currentAreaName != undefined) {
 	    		var areaDistance = calcCrow(global["ghosts"][currentAreaName][ghostsName][0], global["ghosts"][currentAreaName][ghostsName][1], currentAreaPosition[0], currentAreaPosition[1]);
