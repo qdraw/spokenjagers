@@ -515,6 +515,8 @@ io.on('connection', function(socket){
             if ((diffence > 160000) && diffence < 170000) {
 	        	global["sessionEnabled"][userid] = false;
 	        	socket.emit('sessionEnabled', global["sessionEnabled"]);
+	        	// http://stackoverflow.com/questions/7492966/closing-a-socket-server-side-on-socket-io
+	        	socket.close();
             }
 
         });
@@ -837,17 +839,24 @@ io.on('connection', function(socket){
     	if (opponentHandelingStartBoolean) {
     		// console.log(global["ghosts"]);
 
-			Object.keys(global["ghosts"]).forEach(function(area) {
-				var sendSocket = {};
-				sendSocket[area] = global["ghosts"][area];
-				// console.log(sendSocket);
-	    		socket.emit('ghosts', JSON.stringify(sendSocket));
-			});
+	        microSeconds = calcMicroSeconds();
+
+        	if ((microSeconds > 0 && microSeconds < 400)|| (microSeconds > 600 && microSeconds < 1000) ) {
+
+
+				Object.keys(global["ghosts"]).forEach(function(area) {
+					var sendSocket = {};
+					sendSocket[area] = global["ghosts"][area];
+					console.log(sendSocket);
+		    		socket.emit('ghosts', JSON.stringify(sendSocket));
+				});
+
+			}//ms
 
     		// socket.emit('ghosts', JSON.stringify(global["ghosts"]));
 
     	};
-    },1000);
+    },500);
 
 
 
@@ -868,6 +877,7 @@ io.on('connection', function(socket){
 					console.log("area")
 					console.log(area)
 					Object.keys(global["ghosts"][area]).forEach(function(ghostsName) {
+
 						console.log("ghostsName")
 						console.log(ghostsName)
 
@@ -888,34 +898,34 @@ io.on('connection', function(socket){
 
     function moveOpponent (currentAreaName,currentAreaPosition,ghostsName) {
 
-            console.log("---------------------------");
+            // console.log("---------------------------");
 
-            console.log("ghostsName");
-            console.log(ghostsName);
+            // console.log("ghostsName");
+            // console.log(ghostsName);
 
-            console.log("currentAreaName");
-            console.log(currentAreaName);
-
-
-            console.log("currentAreaPosition");
-            console.log(currentAreaPosition);
-
-            console.log("global[ghosts]");
-            console.log(global["ghosts"]);
+            // console.log("currentAreaName");
+            // console.log(currentAreaName);
 
 
-            // console.log("global[ghosts][currentAreaName][ghostsName]");
-            // console.log(global["ghosts"][currentAreaName][ghostsName]);
+            // console.log("currentAreaPosition");
+            // console.log(currentAreaPosition);
 
-            // console.log("global[ghosts][currentAreaName][ghostsName]00000");
-            // console.log(global["ghosts"][currentAreaName][ghostsName][0]);
-            // console.log("global[ghosts][currentAreaName][ghostsName]111110");
-            // console.log(global["ghosts"][currentAreaName][ghostsName][1]);
+            // console.log("global[ghosts]");
+            // console.log(global["ghosts"]);
+
+
+            // // console.log("global[ghosts][currentAreaName][ghostsName]");
+            // // console.log(global["ghosts"][currentAreaName][ghostsName]);
+
+            // // console.log("global[ghosts][currentAreaName][ghostsName]00000");
+            // // console.log(global["ghosts"][currentAreaName][ghostsName][0]);
+            // // console.log("global[ghosts][currentAreaName][ghostsName]111110");
+            // // console.log(global["ghosts"][currentAreaName][ghostsName][1]);
 
 
 
           
-            console.log("---------------------------");
+            // console.log("---------------------------");
 
             try{
 
