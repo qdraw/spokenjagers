@@ -516,7 +516,7 @@ io.on('connection', function(socket){
 	        	global["sessionEnabled"][userid] = false;
 	        	socket.emit('sessionEnabled', global["sessionEnabled"]);
 	        	// http://stackoverflow.com/questions/7492966/closing-a-socket-server-side-on-socket-io
-	        	socket.close();
+	        	io.close();
             }
 
         });
