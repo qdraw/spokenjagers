@@ -520,8 +520,6 @@ io.on('connection', function(socket){
             if ((diffence > 160000) && diffence < 170000) {
 	        	global["sessionEnabled"][userid] = false;
 	        	socket.emit('sessionEnabled', global["sessionEnabled"]);
-	        	// http://stackoverflow.com/questions/7492966/closing-a-socket-server-side-on-socket-io
-	        	io.close();
             }
 
         });

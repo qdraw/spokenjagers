@@ -13,7 +13,7 @@
 
 <header>
 	<div class="back"> <a href="/"></a> </div>
-	<div class="appname"> GhostHunter</div>
+	<div class="appname"><a href="/game"> GhostHunter</a> </div>
 	<div class="user">
 		<a href="/account">
 			<img class="image" src="<%= user.photos[0].value %>" alt="<%= user.displayName %>"/>
@@ -24,29 +24,33 @@
 	</div>
 
 </header>
+		<div style="float:right">		<a href="/logout">logout</a> </div>
+
+	<div class="container">
+
+	
+		<h2>Account information</h2>
 
 
-<h2><a href="../">home</a></h2>
+		<p>ID: <%= user.id %></p>
+		<p>Provider: <%= user.provider %></p>
+		<p>Name :<%= user.displayName %></p>
 
+		<p> familyName : <%= user.name.familyName %> <br />
+		 givenName : <%= user.name.givenName %> <br />
+		</p>
+		<p>gender: <%= user.gender  %></p>
 
-<p>ID: <%= user.id %></p>
-<p>Provider: <%= user.provider %></p>
-<p>Name :<%= user.displayName %></p>
-
-<p> familyName : <%= user.name.familyName %> <br />
- givenName : <%= user.name.givenName %> <br />
-</p>
-<p>gender: <%= user.gender  %></p>
-
-<p>Email: <%= user.emails[0].value %></p>
-<p>Image:
-	<img src="<%= user.photos[0].value %>" width="50px" height="50px" alt="<%= user.displayName %>"/>
-</p>
-<br />
---<br />
-That’s all we know.
-<br />
--- So no Likes, e-mails, posts
+		<p>Email: <%= user.emails[0].value %></p>
+		<p>Image:
+			<img src="<%= user.photos[0].value %>" width="50px" height="50px" alt="<%= user.displayName %>"/>
+		</p>
+		<br />
+		--<br />
+		That’s all we know.
+		<br />
+		-- So no Likes, e-mails, posts
+	</div>
 
 </body>
 </html>

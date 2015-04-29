@@ -54,18 +54,18 @@
 			alert("Would you like to open this page in Safari or Chrome, press the share button, in this window geolocation is not supported.");
 		};
 
-		var map = L.map('map', { zoomControl:false }).setView([52.5463, 5.26245], 11);
+		var map = L.map('map', { zoomControl:false }).setView([52.03851461021432, 6.150949001312256], 16);
 
 		// Nokia Here Maps, Thanks: http://leaflet-extras.github.io/leaflet-providers/preview/
-		L.tileLayer('https://{s}.{base}.maps.cit.api.here.com/maptile/2.1/maptile/{mapID}/satellite.day/{z}/{x}/{y}/256/png8?app_id={app_id}&app_code={app_code}', {
+		L.tileLayer('https://{s}.{base}.maps.cit.api.here.com/maptile/2.1/maptile/{mapID}/normal.day.grey/{z}/{x}/{y}/256/png8?app_id={app_id}&app_code={app_code}', {
 			// attribution: 'Map &copy; 1987-2014 <a href="http://developer.here.com">HERE</a>',
 			subdomains: '1234',
 			mapID: 'newest',
 			app_id: 'Y8m9dK2brESDPGJPdrvs',
 			app_code: 'dq2MYIvjAotR8tHvY8Q_Dg',
-			base: 'aerial',
-			minZoom: 11,
-			maxZoom: 11
+			base: 'base',
+			minZoom: 16,
+			maxZoom: 16
 		}).addTo(map);
 
 	// Disable drag and zoom handlers.
@@ -115,7 +115,7 @@
 
 	<header>
 		<div class="back"> </div>
-		<div class="appname"> GhostHunter</div>
+		<div class="appname"><a href="/game"> GhostHunter</a> </div>
 		<div class="user">
 			<a href="/account">
 				<img class="image" src="<%= user.photos[0].value %>" alt="<%= user.displayName %>"/>
@@ -127,13 +127,17 @@
 
 	</header>
 
-	<h2>Hello <%= user.displayName %>,</h2>
-	<h2><a href="../game">START THE GAME</a></h2>
+	<div class="container">
+		<h2>Hello <%= user.displayName %>,</h2>
+		<h2><a href="../game">START THE GAME</a></h2>
 
-	<img src="<%= user.photos[0].value %>" width="50px" height="50px" alt="<%= user.displayName %>"/><br />
+		<img src="<%= user.photos[0].value %>" width="50px" height="50px" alt="<%= user.displayName %>"/><br />
+		
+		<a href="/account">account info</a><br />
+		<a href="/logout">logout</a>
 	
-	<a href="/account">account info</a><br />
-	<a href="/logout">logout</a>
+	</div>
+
 
 	<script type="text/javascript">
 	

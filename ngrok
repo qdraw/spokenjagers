@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# ngrok authtoken GqcJiYJPvH2hNprQHSyR_47YUE2MSZJGLNv67cP3b6 
 # /opt/ngrok http -subdomain=qdraw 80
 
 

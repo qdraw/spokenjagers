@@ -89,12 +89,14 @@ header {
 	height: 44px;
 	background-color: rgba(0,0,0,0.6);
 	position: fixed;
+	top: 0px;
 	z-index: 1;
 }
 
 header .back {
 	float: left;
 	width: 33.33%;
+	height: 44px;
 }
 header .back a {
 	background-image: url("../images/fa-caret-left.svg");
@@ -111,6 +113,10 @@ header .appname {
 	text-align: center;
 	padding-top: 13px;
 	color: #fff;
+}
+header .appname a {
+	color: white;
+	text-decoration: none;
 }
 
 header .user {
@@ -132,6 +138,17 @@ header .user .image {
 }
 
 
+.container {
+	top: 44px;
+	width: 960px;
+	margin: 44px auto 0px auto;
+}
+@media (max-width: 960px) {
+	.container {
+		width: 100%;
+	}
+
+}
 
 #map {
 	width: 500px;
