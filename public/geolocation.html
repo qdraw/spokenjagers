@@ -50,6 +50,9 @@
 
 		if (isSafari) document.getElementById("browserimage").src = "images/geolocation.safari.jpg" ;
 
+		if (isSafari && (navigator.userAgent.indexOf("FBAN/MessengerForiOS") >= 0)) {
+			alert("Would you like to open this page in Safari or Chrome, press the share button, in this window geolocation is not supported.");
+		};
 
 	</script>
 
