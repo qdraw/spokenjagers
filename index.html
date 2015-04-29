@@ -3,20 +3,28 @@
 <head>
 <TITLE>Ghosthunter Qdraw</TITLE>
 <meta name="robots" content="noindex,nofollow">
+ 
+<script type="text/javascript" src="cordova.js"></script>
 
-<meta name="generator" content="AWStats (http://awstats.sourceforge.net)">
+<meta name="generator" content="Q is good for you">
 <meta name="robots" content="noindex,nofollow">
 <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
-<meta http-equiv="refresh" content="0;URL=https://qdraw.herokuapp.com" />
+<meta http-equiv="refresh" content="5;URL=https://qdraw.herokuapp.com" />
 
 
-</HEAD>
-<FRAMESET ROWS="100%" frameborder="0">
-  <FRAME SRC="https://qdraw.herokuapp.com" NORESIZE SCROLLING="no">
-  <FRAME SRC="cgi-bin/awstats.pl?config=blog.qdraw.nl" NAME="werkframe">
-</FRAMESET>
+<script type="text/javascript">
 
-<noframes>Your browser does not support frames.<br />
-</noframes>
+function onBodyLoad(){     
+	document.addEventListener("deviceready", onDeviceReady, false);
+}
+function onDeviceReady(){
+	window.location.href = "https://qdraw.herokuapp.com"
+}
+
+</script>
+
+</head>
+<body>
+</body>
 
 </html>
