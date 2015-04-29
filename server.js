@@ -1409,46 +1409,48 @@ function moveOpponent (currentAreaName,currentAreaPosition,ghostsName) {
       
         // console.log("---------------------------");
 
-        try{
-
-            if (isNaN(Number(global["ghosts"][currentAreaName][ghostsName][0] +1 )   ) ) {
-            	console.log("NaN/e")
-            }
-            else {
-	    			var areaDistance = calcCrow(global["ghosts"][currentAreaName][ghostsName][0], global["ghosts"][currentAreaName][ghostsName][1], currentAreaPosition[0], currentAreaPosition[1]);
-			}//e/ls
+	    try{
+	        if (isNaN(Number(global["ghosts"][currentAreaName][ghostsName][0] +1 )   ) ) {
+				var saveWrite = false;
+			}
+			else{
+				var saveWrite = true;
+			}
 		}
 		catch(e) {
-			console.log("areaDistance=2")
-			areaDistance = 2;
+			var saveWrite = false;
 		}
 
-		// console.log(areaDistance);
+		if(saveWrite) {
 
-		if (areaDistance >= 1) {
-			newOpponent (currentAreaName,currentAreaPosition,ghostsName);
-		};
-
-        var speed = 0.00005;
-		var speedNeg = speed * -1;
-        var value = getRandomArbitrary(speedNeg, speed);
-
-        var topORleft = getRandomInt(0,1);
-
-        if (isNaN(Number(global["ghosts"][currentAreaName][ghostsName][topORleft] +1 )   ) ) {
-        	console.log("NaN/e")
-        }
-        else {
-            global["ghosts"][currentAreaName][ghostsName][topORleft] = (Number(global["ghosts"][currentAreaName][ghostsName][topORleft]) + value);
-            // console.log(global["ghosts"][currentAreaName][ghostsName][topORleft]);
-        }
+			var areaDistance = calcCrow(global["ghosts"][currentAreaName][ghostsName][0], global["ghosts"][currentAreaName][ghostsName][1], currentAreaPosition[0], currentAreaPosition[1]);
 
 
+			if (areaDistance >= 1) {
+				newOpponent (currentAreaName,currentAreaPosition,ghostsName);
+			};
+
+	        var speed = 0.00005;
+			var speedNeg = speed * -1;
+	        var value = getRandomArbitrary(speedNeg, speed);
+
+	        var topORleft = getRandomInt(0,1);
+
+	        if (isNaN(Number(global["ghosts"][currentAreaName][ghostsName][topORleft] +1 )   ) ) {
+	        	console.log("NaN/e")
+	        }
+	        else {
+	            global["ghosts"][currentAreaName][ghostsName][topORleft] = (Number(global["ghosts"][currentAreaName][ghostsName][topORleft]) + value);
+	            // console.log(global["ghosts"][currentAreaName][ghostsName][topORleft]);
+	        }
 
 
-        ghostcors =  global["ghosts"][currentAreaName][ghostsName][0] + "," + global["ghosts"][currentAreaName][ghostsName][1] + "," + global["ghosts"][currentAreaName][ghostsName][2]
-        connection.query("UPDATE ghosts SET "+ ghostsName +" = '" + ghostcors + "' WHERE area = '" + currentAreaName +"'");
 
+
+	        ghostcors =  global["ghosts"][currentAreaName][ghostsName][0] + "," + global["ghosts"][currentAreaName][ghostsName][1] + "," + global["ghosts"][currentAreaName][ghostsName][2]
+	        connection.query("UPDATE ghosts SET "+ ghostsName +" = '" + ghostcors + "' WHERE area = '" + currentAreaName +"'");
+
+	    } //e/SaveWrite
 
 
 
@@ -1464,6 +1466,19 @@ function moveOpponent (currentAreaName,currentAreaPosition,ghostsName) {
 // Create single Opponents, when you kill some, or moved out of canvas
 function newOpponent (currentAreaName,currentAreaPosition,ghostsName) {
 
+    try{
+        if (isNaN(Number(global["ghosts"][currentAreaName][ghostsName][0] +1 )   ) ) {
+			var saveWrite = false;
+		}
+		else{
+			var saveWrite = true;
+		}
+	}
+	catch(e) {
+		var saveWrite = false;
+	}
+
+	if(saveWrite) {
 
         // [lat,long,score, offEarthScore]
         // used to be: 0.0006
@@ -1492,6 +1507,8 @@ function newOpponent (currentAreaName,currentAreaPosition,ghostsName) {
         connection.query("UPDATE ghosts SET "+ ghostsName +" = '" + ghostcors + "' WHERE area = '" + currentAreaName +"'");
 
 			// 	                connection.query("UPDATE users SET "+ "score" +" = '" + global["score"][userid] + "' WHERE userid = '" + userid +"'");
+
+	} //e/saveWrite
 
 
 }//e/newOpponent
