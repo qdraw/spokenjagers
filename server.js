@@ -839,10 +839,9 @@ io.on('connection', function(socket){
 				Object.keys(global["ghosts"]).forEach(function(area) {
 					var sendSocket = {};
 					sendSocket[area] = global["ghosts"][area];
-					// console.log(sendSocket);
+					console.log(sendSocket);
 		    		socket.emit('ghosts', JSON.stringify(sendSocket));
 				});
-
     	};
     },500);
 
