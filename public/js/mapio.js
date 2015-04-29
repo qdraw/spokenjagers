@@ -33,7 +33,7 @@ var maxZoom = 20;
 
 var public_html = "";
 
-var map = L.map('map', { zoomControl:false }).setView([51, 5.1], maxZoom);
+var map = L.map('map', { zoomControl:false }).setView([51, 5.1], 16);
 
 
 // // MapBox
@@ -389,6 +389,9 @@ socket.on('sessionEnabled', function(sessionEnabled){
 // The spooks are comming, opponent handeling
 socket.on('ghosts', function(ghosts){
 
+	console.log("ghosts");
+	console.log(ghosts);
+
 	var	ghosts = JSON.parse(ghosts)
 
 	// console.log(ghosts["area_1"]["spook5"])
@@ -440,30 +443,42 @@ function onMapClick(e) {
 
 
 socket.on('score', function(score){
-	scoreInPoints = Math.ceil(score["points"]*10);
-	scoreInPoints = scoreInPoints/10;
+	if (score["points"] != null) {
 
-	console.log(score["points"]);
-	document.getElementById("points").innerHTML = scoreInPoints;
+		scoreInPoints = Math.ceil(score["points"]*10);
+		scoreInPoints = scoreInPoints/10;
+
+		console.log(score["points"]);
+		document.getElementById("points").innerHTML = scoreInPoints;
+	};
 }); //e/score
 
 
 
 
 socket.on('health', function(health){
-	scoreInPoints = Math.ceil(health["health"]*10);
-	scoreInPoints = scoreInPoints/10;
+	if (health["health"] != null) {
 
-	console.log(health["health"]);
-	document.getElementById("health").innerHTML = scoreInPoints + "%";
+		scoreInPoints = Math.ceil(health["health"]*10);
+		scoreInPoints = scoreInPoints/10;
+
+		console.log(health["health"]);
+		document.getElementById("health").innerHTML = scoreInPoints + "%";
+	}
+
 }); //e/score
 
 socket.on('money', function(money){
-	scoreInPoints = Math.ceil(money["money"]*10);
-	scoreInPoints = scoreInPoints/10;
 
-	console.log(money["money"]);
-	document.getElementById("money").innerHTML = "$" + scoreInPoints;
+	if (money["money"] != null) {
+
+		scoreInPoints = Math.ceil(money["money"]*10);
+		scoreInPoints = scoreInPoints/10;
+
+		console.log(money["money"]);
+		document.getElementById("money").innerHTML = "$" + scoreInPoints;
+
+	}
 }); //e/score
 
 

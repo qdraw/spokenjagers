@@ -726,8 +726,8 @@ io.on('connection', function(socket){
 
 			    	// current area location exist
 
-			    	console.log(currentAreaName[userid])
-					console.log(currentAreaPosition[userid])
+			    	// console.log(currentAreaName[userid])
+					// console.log(currentAreaPosition[userid])
 
 					// Check if area position is correct
 					try{
@@ -792,24 +792,20 @@ io.on('connection', function(socket){
     // Create single Opponents, when you kill some, or moved out of canvas
     function newOpponent (currentAreaName,currentAreaPosition,ghostsName) {
 
-    		console.log(currentAreaPosition);
-
-    		// var currentAreaPosition = currentAreaPosition.split(",");
 
             // [lat,long,score, offEarthScore]
             // used to be: 0.0006
             var areaLatLongOffset = 0.01;
             global["ghosts"][currentAreaName][ghostsName] = [getRandomArbitrary(Number(currentAreaPosition[0])-areaLatLongOffset, Number(currentAreaPosition[0])+areaLatLongOffset),getRandomArbitrary(Number(currentAreaPosition[1])-areaLatLongOffset, Number(currentAreaPosition[1])+areaLatLongOffset),10];
             
-            // connection.query("UPDATE ghosts SET "+ ghostsName +" = '" + global["ghosts"][currentAreaName][ghostsName] + "' WHERE area = '" + currentAreaName +"'");
-            console.log(global["ghosts"][currentAreaName][ghostsName]);
+            // console.log(global["ghosts"][currentAreaName][ghostsName]);
 
 
 
             // console.log("ghostsName");
             // console.log(ghostsName);
-            console.log("global[ghosts][currentAreaName][ghostsName]");
-            console.log(global["ghosts"][currentAreaName][ghostsName]);
+            // console.log("global[ghosts][currentAreaName][ghostsName]");
+            // console.log(global["ghosts"][currentAreaName][ghostsName]);
             // console.log("currentAreaName");
             // console.log(currentAreaName);
 
@@ -839,21 +835,13 @@ io.on('connection', function(socket){
     	if (opponentHandelingStartBoolean) {
     		// console.log(global["ghosts"]);
 
-	        microSeconds = calcMicroSeconds();
-
-        	if ((microSeconds > 0 && microSeconds < 400)|| (microSeconds > 600 && microSeconds < 1000) ) {
-
 
 				Object.keys(global["ghosts"]).forEach(function(area) {
 					var sendSocket = {};
 					sendSocket[area] = global["ghosts"][area];
-					console.log(sendSocket);
+					// console.log(sendSocket);
 		    		socket.emit('ghosts', JSON.stringify(sendSocket));
 				});
-
-			}//ms
-
-    		// socket.emit('ghosts', JSON.stringify(global["ghosts"]));
 
     	};
     },500);
@@ -869,17 +857,17 @@ io.on('connection', function(socket){
 			// global["ghosts"][currentAreaName]
 
 
-			Object.keys(currentAreaName).forEach(function(useridI) {
-				console.log("useridI");
-				console.log(useridI);
+			// Object.keys(currentAreaName).forEach(function(useridI) {
+				// console.log("useridI");
+				// console.log(useridI);
 
 				Object.keys(global["ghosts"]).forEach(function(area) {
-					console.log("area")
-					console.log(area)
+					// console.log("area")
+					// console.log(area)
 					Object.keys(global["ghosts"][area]).forEach(function(ghostsName) {
 
-						console.log("ghostsName")
-						console.log(ghostsName)
+						// console.log("ghostsName")
+						// console.log(ghostsName)
 
 						// console.log(ghostsName + " " + ghosts[area][ghostsName]);
 
@@ -887,7 +875,7 @@ io.on('connection', function(socket){
 
 					});
 				});
-			});
+			// });
 
 
 
@@ -958,7 +946,7 @@ io.on('connection', function(socket){
             }
             else {
 	            global["ghosts"][currentAreaName][ghostsName][topORleft] = (Number(global["ghosts"][currentAreaName][ghostsName][topORleft]) + value);
-	            console.log(global["ghosts"][currentAreaName][ghostsName][topORleft]);
+	            // console.log(global["ghosts"][currentAreaName][ghostsName][topORleft]);
             }
 
 
