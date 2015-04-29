@@ -389,8 +389,8 @@ socket.on('sessionEnabled', function(sessionEnabled){
 // The spooks are comming, opponent handeling
 socket.on('ghosts', function(ghosts){
 
-	console.log("ghosts");
-	console.log(ghosts);
+	// console.log("ghosts");
+	// console.log(ghosts);
 
 	var	ghosts = JSON.parse(ghosts)
 
@@ -401,6 +401,7 @@ socket.on('ghosts', function(ghosts){
 
 	Object.keys(ghosts).forEach(function(area) {
 		
+		console.log("area");
 		console.log(area);
 
 		window["ghosts"][area] = {};
@@ -408,7 +409,7 @@ socket.on('ghosts', function(ghosts){
 		Object.keys(ghosts[area]).forEach(function(ghostsName) {
 
 
-			if (window["ghosts_" + area + "_" +ghostsName] == undefined) {
+			if (window["ghosts_" + area + "_" + ghostsName] == undefined) {
 				console.log("--> " + area + " "+ghostsName );
 				console.log(ghosts[area][ghostsName][0]);
 
