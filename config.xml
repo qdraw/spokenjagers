@@ -136,4 +136,13 @@
         <string>Without permission to use geo location this app is useless</string>
     </gap:config-file>
 
+    <gap:plugin name="org.apache.cordova.inappbrowser"  />
+
+    <feature name="InAppBrowser">
+        <param name="android-package" value="org.apache.cordova.InAppBrowser"/>
+    </feature>
+    <feature name="InAppBrowser">
+        <param name="ios-package" value="CDVInAppBrowser" />
+    </feature>
+
 </widget>

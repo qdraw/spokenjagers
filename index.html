@@ -18,7 +18,7 @@ function onBodyLoad(){
 	document.addEventListener("deviceready", onDeviceReady, false);
 }
 function onDeviceReady(){
-	window.location.href = "https://qdraw.herokuapp.com"
+	var ref = cordova.InAppBrowser.open("https://qdraw.herokuapp.com", "_self", 'location=yes');
 }
 
 </script>
