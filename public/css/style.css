@@ -93,6 +93,8 @@ header {
 	z-index: 1;
 }
 
+/* check if changes phonegap.css */
+
 header .back {
 	float: left;
 	width: 33.33%;
@@ -139,7 +141,6 @@ header .user .image {
 
 
 .container {
-	top: 44px;
 	width: 960px;
 	margin: 44px auto 0px auto;
 }
@@ -149,6 +150,8 @@ header .user .image {
 	}
 
 }
+/* check if changes phonegap.css */
+
 
 #map {
 	width: 500px;

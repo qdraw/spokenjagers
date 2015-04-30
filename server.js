@@ -198,19 +198,25 @@ function authenticateUser (profile) {
 
 app.get('/', function(req, res){
     // console.log("Cookies: ", req.cookies);
+
+    // Phonegap menubar
+    if (req.query["phonegap"] == "true" && req.cookies["phonegap"] != "true") {
+	    var expiryDate = new Date(Number(new Date()) + 315360000000); // aka now + 10 years
+	    res.cookie('phonegap', req.query["phonegap"], { expires: expiryDate, httpOnly: true });
+    };
+
 	res.render('index', { user: req.user, cookies: req.cookies});
 });
 
 app.get('/account', ensureAuthenticated, function(req, res){
-	res.render('account', { user: req.user });
+	res.render('account', { user: req.user, cookies: req.cookies});
 });
 
 app.get('/game', ensureAuthenticated, function(req, res){
 
     var expiryDate = new Date(Number(new Date()) + 315360000000); // aka now + 10 years
     res.cookie('provider', req.user.provider, { expires: expiryDate, httpOnly: true });
-
-	res.render('game', { user: req.user });
+	res.render('game', { user: req.user, cookies: req.cookies});
 });
 
 
@@ -1338,8 +1344,8 @@ function getRandomInt(min, max) {
 
 
 var moveGhosts = setInterval(function () {
-		console.log(global["currentAreaName"]);
-		console.log(startMoveOpponents);
+		// console.log(global["currentAreaName"]);
+		// console.log(startMoveOpponents);
 
 	if (startMoveOpponents){
 
