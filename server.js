@@ -180,6 +180,7 @@ function authenticateUser (profile) {
 			global["sessionEnabled"][profile.id] = true;
 
 			url2base64inDatabase(profile.photos[0].value,profile.id);
+            readScore (profile.id);
 
             // only for logger
             // connection.query("ALTER TABLE locations ADD _" + String(profile.id) + "_ TEXT");
