@@ -72,6 +72,12 @@
 			</a>
 		<% } %>
 	</div>
+	
+	<div id="providers-disabled">
+		Sorry, but you can't login
+	</div>
+
+
 		This app requires your geo-location and Facebook or Google account number.
 
 
@@ -79,8 +85,9 @@
 	</div>
 	
 	<div class="facebook-messenger">
-		<img src="images/iconfinder-ios-share.svg" alt="ios share icon"> -
-		Open in Safari
+		<img src="images/iconfinder-ios-share.svg" alt="ios share icon">
+		Open in Safari <br />
+		to continue
 	</div>
 
 	<script type="text/javascript" src="js/leaflet.js"></script>
@@ -92,6 +99,7 @@
 
 		if (navigator.userAgent.indexOf("FBAN/MessengerForiOS") >= 0) {
 
+			document.getElementById("providers-disabled").style.display = "block";
 			document.getElementById("providers").style.display = "none";
 			document.querySelector(".facebook-messenger").style.display = "block";
 
