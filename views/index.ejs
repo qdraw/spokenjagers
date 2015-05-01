@@ -45,6 +45,43 @@
 
 	<div id="map"></div>
 
+	<div id="login">
+
+	<div id="providers">
+		<% if (cookies.provider === "facebook") { %>
+			<a class="login-facebook" href="/auth/facebook">
+				Log in with Facebook
+			</a>
+			<a class="login-google-low" href="/auth/google">
+				Log in with Google
+			</a>
+
+		<% } else if (cookies.provider === "google") { %>
+			<a class="login-google" href="/auth/google">
+				Log in with Google
+			</a>
+			<a class="login-facebook-low" href="/auth/facebook">
+				Log in with Facebook
+			</a>
+		<% } else { %>
+			<a class="login-facebook" href="/auth/facebook">
+				Log in with Facebook
+			</a>
+			<a class="login-google" href="/auth/google">
+				Log in with Google
+			</a>
+		<% } %>
+	</div>
+		This app requires your geo-location and Facebook or Google account number.
+
+
+
+	</div>
+	
+	<div class="facebook-messenger">
+		<img src="images/iconfinder-ios-share.svg" alt="ios share icon"> -
+		Open in Safari
+	</div>
 
 	<script type="text/javascript" src="js/leaflet.js"></script>
 	<script type="text/javascript">
@@ -54,7 +91,10 @@
 		}
 
 		if (navigator.userAgent.indexOf("FBAN/MessengerForiOS") >= 0) {
-			alert("Would you like to open this page in Safari or Chrome, press the share button, in this window geolocation is not supported.");
+
+			document.getElementById("providers").style.display = "none";
+			document.querySelector(".facebook-messenger").style.display = "block";
+
 		};
 
 		var map = L.map('map', { zoomControl:false }).setView([52.03851461021432, 6.150949001312256], 16);
@@ -83,36 +123,7 @@
 
 	</script>
 
-	<div id="login">
 
-		<% if (cookies.provider === "facebook") { %>
-			<a class="login-facebook" href="/auth/facebook">
-				Log in with Facebook
-			</a>
-			<a class="login-google-low" href="/auth/google">
-				Log in with Google
-			</a>
-
-		<% } else if (cookies.provider === "google") { %>
-			<a class="login-google" href="/auth/google">
-				Log in with Google
-			</a>
-			<a class="login-facebook-low" href="/auth/facebook">
-				Log in with Facebook
-			</a>
-		<% } else { %>
-			<a class="login-facebook" href="/auth/facebook">
-				Log in with Facebook
-			</a>
-			<a class="login-google" href="/auth/google">
-				Log in with Google
-			</a>
-		<% } %>
-
-		This app requires your geo-location and Facebook or Google account number.
-
-
-	</div>
 
 <% } else { %>
 
