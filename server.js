@@ -49,7 +49,7 @@ var connection = mysql.createConnection({
 if(config.use_database==='true'){
 	connection.connect();
 
-	connection.query('CREATE TABLE IF NOT EXISTS users (id MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY, userid TEXT, displayname TEXT, displayimage TEXT, email TEXT, health INTEGER, score INTEGER, money INTEGER, useragent TEXT, value TEXT, latestConnectionTime INT, area TEXT)',
+	connection.query('CREATE TABLE IF NOT EXISTS users (id MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY, userid TEXT, displayname TEXT, displayimage TEXT, provider TEXT, email TEXT, health INTEGER, score INTEGER, money INTEGER, useragent TEXT, value TEXT, latestConnectionTime INT, area TEXT)',
 	function(err, result){
 	    // Case there is an error during the creation
 	    if(err) {
@@ -176,7 +176,7 @@ function authenticateUser (profile) {
 		if(err) throw err;
 		if(rows.length===0){
 			console.log("There is no such user, adding now");
-			connection.query("INSERT into users(userid,displayname,email) VALUES('"+ profile.id + "','" + profile.displayName + "','" + profile.emails[0].value + "')");
+			connection.query("INSERT into users(userid,displayname,email,provider,gender) VALUES('"+ profile.id + "','" + profile.displayName + "','" + profile.emails[0].value + "','" + profile.provider +  "','" + profile.gender +"')");
 			global["sessionEnabled"][profile.id] = true;
 
 			url2base64inDatabase(profile.photos[0].value,profile.id);
