@@ -49,7 +49,7 @@ var connection = mysql.createConnection({
 if(config.use_database==='true'){
 	connection.connect();
 
-	connection.query('CREATE TABLE IF NOT EXISTS users (id MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY, userid TEXT, displayname TEXT, displayimage TEXT, provider TEXT, email TEXT, health INTEGER, score INTEGER, money INTEGER, useragent TEXT, value TEXT, latestConnectionTime INT, area TEXT)',
+	connection.query('CREATE TABLE IF NOT EXISTS users (id MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY, userid TEXT, displayname TEXT, displayimage TEXT, provider TEXT, email TEXT, gender TEXT, health INTEGER, score INTEGER, money INTEGER, useragent TEXT, value TEXT, latestConnectionTime INT, area TEXT)',
 	function(err, result){
 	    // Case there is an error during the creation
 	    if(err) {
@@ -66,6 +66,8 @@ if(config.use_database==='true'){
 	        console.log(err);
 	    }
 	});
+
+    var spookCounter = 7;
 
 }// connection
 
@@ -578,6 +580,11 @@ io.on('connection', function(socket){
 					connection.query("INSERT into ghosts(area) VALUES('" + "area_" + newAreaNumber + "')");
 	                connection.query("UPDATE ghosts SET "+ "arealocation" +" = '" + userData[c][userid][0] + "," + userData[c][userid][1] + "' WHERE area = '" + "area_" + newAreaNumber +"'");
 
+                    for (var i = 1; i <= spookCounter; i++) {
+                        connection.query("UPDATE ghosts SET "+ "spook" + i + " = '" + 0 + "," + 0 + "," + 10 + "' WHERE area = '" + "area_" + newAreaNumber +"'");
+                    };//e/spookCounter
+
+
 	                connection.query("UPDATE users SET "+ "area" +" = '" + "area_" + newAreaNumber + "' WHERE userid = '" + userid +"'");
 	                connection.query("UPDATE users SET "+ "latestConnectionTime" +" = '" + Math.floor(Date.now() / 1000) + "' WHERE userid = '" + userid +"'");
 
@@ -630,6 +637,11 @@ io.on('connection', function(socket){
 					    		console.log("> Create a new area");
 								connection.query("INSERT into ghosts(area) VALUES('" + "area_" + newAreaNumber  + "')");
 				                connection.query("UPDATE ghosts SET "+ "arealocation" +" = '" + userData[c][userid][0] + "," + userData[c][userid][1] + "' WHERE area = '" + "area_" + newAreaNumber +"'");
+
+                                for (var i = 1; i <= spookCounter; i++) {
+                                    connection.query("UPDATE ghosts SET "+ "spook" + i + " = '" + 0 + "," + 0 + "," + 10 + "' WHERE area = '" + "area_" + newAreaNumber +"'");
+                                };//e/spookCounter
+
 
 				                connection.query("UPDATE users SET "+ "area" +" = '" + "area_" + newAreaNumber + "' WHERE userid = '" + userid +"'");
 				                connection.query("UPDATE users SET "+ "latestConnectionTime" +" = '" + Math.floor(Date.now() / 1000) + "' WHERE userid = '" + userid +"'");
