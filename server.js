@@ -37,6 +37,28 @@ var express				=		require('express')
 	, fs				=		require('fs');
 
 
+
+// Domain options, for testing and running on multiple domains
+console.log( "Dirname " + __dirname);
+
+// Just for testing and debugging
+if (__dirname.indexOf("avans-individueel-verdieping-blok11-12")) {
+    console.log("> callbackURL > localhost");
+    global["callbackURL"] = "http://" + "localhost" + ":8080" + "/auth/facebook/callback"
+}
+
+if(__dirname === "/mnt/data/avans-individueel-verdieping-blok11-12") {
+    console.log("> callbackURL > /mnt/data");
+    global["callbackURL"] = "http://" + "xserve.qdraw.eu" + "/auth/facebook/callback";
+    config.host = "localhost";
+}
+
+if ( __dirname.indexOf("avans-individueel-verdieping-blok11-12") == -1) {
+    console.log("> callbackURL > herokuapp");
+    global["callbackURL"] = "https://" + "qdraw.herokuapp.com" + "/auth/facebook/callback";
+}
+
+
 //Define MySQL parameter in Config.js file.
 var connection = mysql.createConnection({
 	host		: 	  config.host,
@@ -95,26 +117,8 @@ app.use(passport.session());
 app.use(express.static(__dirname + '/public'));
 app.set('port', process.env.PORT || 8080);
 
-// app.use(useragent.express());
 
-// Domain options, for testing and running on multiple domains
-console.log( "Dirname " + __dirname);
 
-// Just for testing and debugging
-if (__dirname.indexOf("avans-individueel-verdieping-blok11-12")) {
-    console.log("> callbackURL > localhost");
-	global["callbackURL"] = "http://" + "localhost" + ":8080" + "/auth/facebook/callback"
-}
-
-if(__dirname === "/mnt/data/avans-individueel-verdieping-blok11-12") {
-    console.log("> callbackURL > /mnt/data");
-	global["callbackURL"] = "http://" + "xserve.qdraw.eu" + "/auth/facebook/callback"
-}
-
-if ( __dirname.indexOf("avans-individueel-verdieping-blok11-12") == -1) {
-    console.log("> callbackURL > herokuapp");
-	global["callbackURL"] = "https://" + "qdraw.herokuapp.com" + "/auth/facebook/callback";
-}
 
 // print process.argv ++ use: nodemon server.js ngrok
 process.argv.forEach(function (val, index, array) {
