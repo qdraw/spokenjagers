@@ -118,6 +118,65 @@ app.use(express.static(__dirname + '/public'));
 app.set('port', process.env.PORT || 8080);
 
 
+// Usaly disabled for security reasons
+function localAuth () {
+    var BasicStrategy = require('passport-http').BasicStrategy;
+
+
+    var users = [
+        { username: "dion", id: "1000000000000000000", displayName: 'dion', name: {givenName : "Dion"}, password: 'dion', email: 'joe@example.com', provider: 'basic' }
+      , { username: "henry", id: "1000000000010000001", displayName: 'henry', name: {givenName : "Henry"}, password: 'henry', email: 'joe@example.com', provider: 'basic' }
+    ];
+
+
+    function findByUsername(username, fn) {
+        for (var i = 0, len = users.length; i < len; i++) {
+            var user = users[i];
+            if (user.username === username) {
+                return fn(null, user);
+            }//e/fi
+        }//e/for
+        return fn(null, null);
+    }//e/findByUsername
+
+    passport.use(new BasicStrategy({
+    },
+        function(username, password, done) {
+            // asynchronous verification, for effect...
+            process.nextTick(function () {
+
+                // Find the user by username.  If there is no user with the given
+                // username, or the password is not correct, set the user to `false` to
+                // indicate failure.  Otherwise, return the authenticated `user`.
+                findByUsername(username, function(err, user) {
+                    if (err) { return done(err); }
+                    if (!user) { return done(null, false); }
+                    if (user.password != password) { return done(null, false); }
+                    console.log(user);
+                    console.log("> Welcome " + user.displayName + " " + user.username + " " + user.provider);
+
+                    user.id = String(user.id);
+                    user.emails = [];
+                    user.emails[0] = {};
+                    user.emails[0].value = user.email;
+                    user.photos = [];
+                    user.photos[0] = {};
+                    user.photos[0].value = "images/profile.jpg";
+
+                    authenticateUser (user);
+                    global["sessionEnabled"][user.id] = true;
+
+                    return done(null, user);
+                })
+            });
+        }
+    )); 
+
+    app.get('/auth/localauth', passport.authenticate('basic',{ session: true }), function(req, res){
+        res.redirect("/")
+    });
+
+}//e/elocalAuth
 
 
 // print process.argv ++ use: nodemon server.js ngrok
@@ -126,6 +185,11 @@ process.argv.forEach(function (val, index, array) {
         console.log("> callbackURL > NGROK \nhttps://qdraw.ngrok.io/");
         global["callbackURL"] = "https://" + "qdraw.ngrok.io" + "/auth/facebook/callback";
     }
+    if (val === "localauth") {
+        console.log("> localauth Enabled");
+        localAuth ()
+        // localAuth
+    }    
 });
 
 
@@ -193,7 +257,7 @@ function authenticateUser (profile) {
 
 		}
 		else{
-				console.log("User already exists in database");
+				console.log("User " + profile.id +" already exists in database");
                 readScore (profile.id);
                 global["sessionEnabled"][profile.id] = true;
 			}

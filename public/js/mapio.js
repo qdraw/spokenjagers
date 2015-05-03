@@ -75,7 +75,7 @@ var map = L.map('map', { zoomControl:false }).setView([51, 5.1], 16);
 // }).addTo(map);
 
 
-// https: also suppported.
+// https: also suppported. The grey maps
 L.tileLayer('https://{s}.{base}.maps.cit.api.here.com/maptile/2.1/maptile/{mapID}/normal.day.grey/{z}/{x}/{y}/256/png8?app_id={app_id}&app_code={app_code}', {
 	// attribution: 'Map &copy; 1987-2014 <a href="http://developer.here.com">HERE</a>',
 	subdomains: '1234',
@@ -86,6 +86,17 @@ L.tileLayer('https://{s}.{base}.maps.cit.api.here.com/maptile/2.1/maptile/{mapID
 	minZoom: 0,
 	maxZoom: 20
 }).addTo(map);
+
+
+
+
+// // https: also suppported.
+// L.tileLayer('local-maps/{z}/{x}/{y}.jpg', {
+// 	minZoom: 15,
+// 	maxZoom: 18
+// }).addTo(map);
+
+
 
 
 // Check if user support geolocation, after this load FirstFindGeoLocation
@@ -166,6 +177,7 @@ function findGeoLocation () {
 			speed: speed
 		}
 		window["data"] = data;
+		console.log(data);
 
 		sendToQ(data)
 	}
@@ -241,12 +253,19 @@ function startSocket () {
 
 	socket.on('users', function(users){
 	// ask the server for a list of users:
+	console.log("users");
+	console.log(users);
 
 
 		// loop though object 
 		// Visit non-inherited enumerable keys
 		// var obj = { first: "John", last: "Doe" };
 		Object.keys(users).forEach(function(key) {
+			console.log("key")
+			console.log(key)
+
+			key = String(key);
+
 
 			if (!window[key]) {
 
@@ -264,6 +283,8 @@ function startSocket () {
 				}
 
 			}
+
+
 			window[key].setLatLng([users[key][0],users[key][1]]).update();
 
 		});

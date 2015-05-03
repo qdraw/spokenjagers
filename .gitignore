@@ -19,3 +19,5 @@ pids
 # Logs
 logs
 *.log
+
+local-maps/
