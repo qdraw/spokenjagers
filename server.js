@@ -62,7 +62,7 @@ if ( __dirname.indexOf("avans-individueel-verdieping-blok11-12") == -1) {
 // localAuth
 process.argv.forEach(function (val, index, array) {
     if (val === "localauth") {
-        config.host = "localhost";
+        config.host = "127.0.0.1";
 
     }   
 });
