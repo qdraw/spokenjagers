@@ -74,7 +74,7 @@ var map = L.map('map', { zoomControl:false }).setView([51, 5.1], 16);
 // 	maxZoom: maxZoom
 // }).addTo(map);
 
-/*
+
 // // // https: also suppported. The grey maps
 L.tileLayer('https://{s}.{base}.maps.cit.api.here.com/maptile/2.1/maptile/{mapID}/normal.day.grey/{z}/{x}/{y}/256/png8?app_id={app_id}&app_code={app_code}', {
 	// attribution: 'Map &copy; 1987-2014 <a href="http://developer.here.com">HERE</a>',
@@ -86,16 +86,16 @@ L.tileLayer('https://{s}.{base}.maps.cit.api.here.com/maptile/2.1/maptile/{mapID
 	minZoom: 0,
 	maxZoom: 20
 }).addTo(map);
-*/
 
 
 
+/*
 // // LocalMaps
  L.tileLayer('local-maps/{z}/{x}/{y}.jpg', {
  	minZoom: 4,
  	maxZoom: 18
  }).addTo(map);
-
+*/
 
 
 
