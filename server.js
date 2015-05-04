@@ -59,6 +59,15 @@ if ( __dirname.indexOf("avans-individueel-verdieping-blok11-12") == -1) {
 }
 
 
+// localAuth
+process.argv.forEach(function (val, index, array) {
+    if (val === "localauth") {
+        config.host = "localhost";
+
+    }   
+});
+
+
 //Define MySQL parameter in Config.js file.
 var connection = mysql.createConnection({
 	host		: 	  config.host,
@@ -81,7 +90,7 @@ if(config.use_database==='true'){
 	});
 
 	// GHOST ITEM IN DB
-	connection.query('CREATE TABLE IF NOT EXISTS ghosts (id MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY, area TEXT, arealocation TEXT, spook1 TEXT, spook2 TEXT, spook3 TEXT, spook4 TEXT, spook5 TEXT, spook6 TEXT, spook7 TEXT)',
+	connection.query('CREATE TABLE IF NOT EXISTS ghosts (id MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY, area TEXT, arealocation TEXT, spook1 TEXT, spook2 TEXT, spook3 TEXT, spook4 TEXT, spook5 TEXT, spook6 TEXT, spook7 TEXT, spook8 TEXT, spook9 TEXT)',
 	function(err, result){
 	    // Case there is an error during the creation
 	    if(err) {
@@ -89,7 +98,7 @@ if(config.use_database==='true'){
 	    }
 	});
 
-    var spookCounter = 7;
+    var spookCounter = 9;
 
 }// connection
 
