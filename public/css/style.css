@@ -97,7 +97,7 @@ header {
 
 header .back {
 	float: left;
-	width: 33.33%;
+	width: 20%;
 	height: 44px;
 }
 header .back a {
@@ -109,21 +109,11 @@ header .back a {
 	background-position: center;
 	background-repeat: no-repeat;
 }
-header .appname {
-	float: left;
-	width: 33.33%;
-	text-align: center;
-	padding-top: 13px;
-	color: #fff;
-}
-header .appname a {
-	color: white;
-	text-decoration: none;
-}
+
 
 header .user {
 	float: right;
-	width: 33%;
+	width: 80%;
 }
 header .user .text{
 	padding-top: 13px;
@@ -319,10 +309,93 @@ header .user .image {
 .login-map .info {
 	margin-top: 30px;
 }
+
+
+
+
+.dashboard-name {
+	margin-top: 10px;
+	float: right;
+	font-size: 30px;
+	width: 340px; 
+}
+
+@media (max-width: 400px) {
+	.dashboard-name {
+		margin-top: 0px;
+		width: 210px; 
+	}
+}
+
+.dashboard-name h1 {
+	font-size: 40px;
+}
+.dashboard-name p {
+	font-size: 20px;
+}
+
+@media (max-width: 400px) {
+	.dashboard-name h1 {
+		font-size: 35px;
+	}
+}
+
+
+.dashboard-name-box {
+	margin: auto auto;
+	width: 400px;
+	display: block;
+	height: 130px;
+}
+@media (max-width: 400px) {
+	.dashboard-name-box {
+		width: 94%;
+		margin: 10px 10px;
+	}
+}
+
+dashboard-name-box img {
+	margin-left: 10px;
+}
+
+
+/*.login-small-box {
+	margin: auto auto;
+	width: 400px;
+	display: block;
+}
+@media (max-width: 400px) {
+	.login-small-box {
+		width: 94%;
+		margin: 10px 10px;
+	}
+}*/
+
+
+.dashboard-login {
+	display: block;
+	color: blue;
+	margin-bottom: 15px;
+	height: 22px;
+	padding: 11px;
+	padding-bottom: 8px;
+	background-color: #00777F;
+	border-radius: 3px;
+	text-decoration: none;
+	color: white;
+}
+.dashboard-login:hover {
+	color: white;
+	background-color: rgba(0,119,127,0.6);
+}
+
+
+
 h2 {
 	font-size: 20pt;
-	margin-bottom: 40pt;
 }
+
+
 #debug {
 	position: absolute;
 	bottom: 15px;

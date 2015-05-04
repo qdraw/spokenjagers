@@ -31,12 +31,11 @@
 
 	<header>
 		<div class="back">&nbsp;</div>
-		<div class="appname"> GhostHunter</div>
 		<div class="user">
 			<a href="/account">
 				<img class="image" src="/images/fa-user.svg" alt="Unknown User"/>
 				<span class="text">
-				 	+You
+				 	You
 				</span>
 			</a>
 		</div>
@@ -104,6 +103,68 @@
 		to continue
 	</div>
 
+
+<% } else { %>
+
+	<header>
+		<div class="back"> </div>
+		<div class="user">
+			<a href="/account">
+				<img class="image" src="<%= user.photos[0].value %>" alt="<%= user.displayName %>"/>
+				<span class="text">
+				 	<%= user.name.givenName %>
+				</span>
+			</a>
+		</div>
+
+	</header>
+	<div id="map" class="login-map"></div>
+
+
+	<div class="container login-box">
+
+		<div class="dashboard-name-box">
+			<div class="dashboard-name">
+				<h2> Welcome back, <br /> <%= user.displayName %> </h2>
+			</div>
+
+			<img src="<%= user.photos[0].value %>" width="50px" height="50px" alt="<%= user.displayName %>"/><br />
+
+		</div>
+
+		<div class="login-small-box">
+
+			<a class="dashboard-login" href="../game">Start the game</a>
+
+		</div>
+
+
+
+	</div>
+	<!-- dont forget phonegap -->
+
+	<script type="text/javascript">
+	
+		if (!navigator.geolocation){
+		    alert("Geolocation is not supported by your browser");
+		}
+		else {
+			FirstFindGeoLocationDialog();
+		}
+
+		function FirstFindGeoLocationDialog () {
+			navigator.geolocation.getCurrentPosition(success, error);
+			function success(position) {}
+			function error() {};	
+
+		}//e/eFirstFindGeoLocation
+
+
+	</script>
+
+
+<% } %>
+
 	<script type="text/javascript" src="js/leaflet.js"></script>
 	<script type="text/javascript">
 
@@ -144,57 +205,5 @@
 
 
 	</script>
-
-
-
-<% } else { %>
-
-	<header>
-		<div class="back"> </div>
-		<div class="appname"><a href="/game"> GhostHunter</a> </div>
-		<div class="user">
-			<a href="/account">
-				<img class="image" src="<%= user.photos[0].value %>" alt="<%= user.displayName %>"/>
-				<span class="text">
-				 	+<%= user.name.givenName %>
-				</span>
-			</a>
-		</div>
-
-	</header>
-
-	<div class="container">
-		<h2>Hello <%= user.displayName %>,</h2>
-		<h2><a href="../game">START THE GAME</a></h2>
-
-		<img src="<%= user.photos[0].value %>" width="50px" height="50px" alt="<%= user.displayName %>"/><br />
-		
-		<a href="/account">account info</a><br />
-		<a href="/logout">logout</a>
-	
-	</div>
-
-
-	<script type="text/javascript">
-	
-		if (!navigator.geolocation){
-		    alert("Geolocation is not supported by your browser");
-		}
-		else {
-			FirstFindGeoLocationDialog();
-		}
-
-		function FirstFindGeoLocationDialog () {
-			navigator.geolocation.getCurrentPosition(success, error);
-			function success(position) {}
-			function error() {};	
-
-		}//e/eFirstFindGeoLocation
-
-
-	</script>
-
-
-<% } %>
 </body>
 </html>
