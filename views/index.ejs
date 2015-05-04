@@ -43,43 +43,57 @@
 
 	</header>
 
-	<div id="map"></div>
+	<div id="map" class="login-map"></div>
 
-	<div id="login">
+	<div class="container login-box">
 
-	<div id="providers">
-		<% if (cookies.provider === "facebook") { %>
-			<a class="login-facebook" href="/auth/facebook">
-				Log in with Facebook
-			</a>
-			<a class="login-google-low" href="/auth/google">
-				Log in with Google
-			</a>
+		<div class="login-small-box">
+			<div class="login-name">
+				<h1> GhostHunter </h1>
+				<p>	a realtime open air ghost hunting game</p>
+			</div>
 
-		<% } else if (cookies.provider === "google") { %>
-			<a class="login-google" href="/auth/google">
-				Log in with Google
-			</a>
-			<a class="login-facebook-low" href="/auth/facebook">
-				Log in with Facebook
-			</a>
-		<% } else { %>
-			<a class="login-facebook" href="/auth/facebook">
-				Log in with Facebook
-			</a>
-			<a class="login-google" href="/auth/google">
-				Log in with Google
-			</a>
-		<% } %>
-	</div>
-	
-	<div id="providers-disabled">
-		Sorry, but you can't login
-	</div>
+			<div class="login-description">
+			</div>
+
+			<div class="login-logo"></div>
+		</div>
 
 
-		This app requires your geo-location and Facebook or Google account number.
+		<div id="providers" class="login-small-box">
+			<% if (cookies.provider === "facebook") { %>
+				<a class="login-facebook" href="/auth/facebook">
+					Log in with Facebook
+				</a>
+				<a class="login-google-low" href="/auth/google">
+					Log in with Google
+				</a>
 
+			<% } else if (cookies.provider === "google") { %>
+				<a class="login-google" href="/auth/google">
+					Log in with Google
+				</a>
+				<a class="login-facebook-low" href="/auth/facebook">
+					Log in with Facebook
+				</a>
+			<% } else { %>
+				<a class="login-facebook" href="/auth/facebook">
+					Log in with Facebook
+				</a>
+				<a class="login-google" href="/auth/google">
+					Log in with Google
+				</a>
+			<% } %>
+		</div>
+		
+		<div id="providers-disabled">
+			Sorry, but you can't login
+		</div>
+
+		<div class="login-small-box info">
+
+			This app requires your geo-location and access to your social media account.
+		</div>
 
 
 	</div>
