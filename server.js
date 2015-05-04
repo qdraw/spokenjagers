@@ -18,6 +18,7 @@
 */
 
 // Check ./sources for the code snippits that i've used in this code
+console.log( "\n> Check ./README for the setup instructions\n");
 
 var express				=		require('express')
 	, passport			=		require('passport')

@@ -1,0 +1,18 @@
+# Windows in debug mode setuplist
+
+- enable xampp
+	- in xampp turn mysql on
+- turn on connectify hotspot
+
+open msdos window:
+
+cd D:\g\avans-individueel-verdieping-blok11-12
+go to the D drive
+d:
+
+Start script:
+nodemon server.js --ignore public/ localauth
+
+And remember ip address
+
+http://192.168.241.1:8080/auth/localauth
