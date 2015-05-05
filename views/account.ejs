@@ -16,12 +16,11 @@
 
 <header>
 	<div class="back"> <a href="/"></a> </div>
-	<div class="appname"><a href="/game"> GhostHunter</a> </div>
 	<div class="user">
 		<a href="/account">
 			<img class="image" src="<%= user.photos[0].value %>" alt="<%= user.displayName %>"/>
 			<span class="text">
-			 	+<%= user.name.givenName %>
+			 	<%= user.name.givenName %>
 			</span>
 		</a>
 	</div>

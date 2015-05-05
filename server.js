@@ -305,6 +305,10 @@ app.get('/game', ensureAuthenticated, function(req, res){
 });
 
 
+app.get('/privacy', function(req, res){
+    res.render('privacy', { cookies: req.cookies});
+});
+
 // Facebook
 app.get('/auth/facebook', passport.authenticate('facebook',{scope:'email'}));
 
