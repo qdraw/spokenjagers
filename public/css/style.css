@@ -41,17 +41,21 @@ h1{
     font-size: 25pt;
 }
 h2{
-    font-size: 20px;
+    font-size: 20pt;
     line-height: 1.4;
-
 }
+
+h3 {
+    font-size: 16pt;
+}
+
 @media (max-width: 500px) {
     h1{
         font-size: 36px;
     }/*e/h1*/
     
     h2{
-        font-size: 16px;
+        font-size: 16pt;
     }/*e/h1*/
 
 }/*e/mq*/
@@ -150,6 +154,8 @@ header .user .image {
 	width: 100vw;
 	height: 100vh;
 	position: absolute;
+	position: fixed;
+
 	top: 0px;
 }
 
@@ -161,7 +167,7 @@ header .user .image {
 }
 
 .login-box {
-	margin-top: 150px;
+	margin-top: 100px;
 }
 
 
@@ -311,7 +317,9 @@ header .user .image {
 }
 
 
-
+.dashboard-box {
+	margin-top: 100px;
+}
 
 .dashboard-name {
 	margin-top: 10px;
@@ -345,7 +353,7 @@ header .user .image {
 	margin: auto auto;
 	width: 400px;
 	display: block;
-	height: 130px;
+	height: 120px;
 }
 @media (max-width: 400px) {
 	.dashboard-name-box {
@@ -357,20 +365,6 @@ header .user .image {
 dashboard-name-box img {
 	margin-left: 10px;
 }
-
-
-/*.login-small-box {
-	margin: auto auto;
-	width: 400px;
-	display: block;
-}
-@media (max-width: 400px) {
-	.login-small-box {
-		width: 94%;
-		margin: 10px 10px;
-	}
-}*/
-
 
 .dashboard-login {
 	display: block;
@@ -384,16 +378,55 @@ dashboard-name-box img {
 	text-decoration: none;
 	color: white;
 }
+
 .dashboard-login:hover {
 	color: white;
 	background-color: rgba(0,119,127,0.6);
 }
 
-
-
-h2 {
-	font-size: 20pt;
+.dashboard-box .score,
+.dashboard-box .health,
+.dashboard-box .money {
+	margin-top: 20px;
+	width: 33%;
+	float: left;
 }
+
+.dashboard-box .score p,
+.dashboard-box .health p,
+.dashboard-box .money p{
+	font-size: 30pt;
+}
+
+#users {
+	margin-top: 140px;
+}
+
+#users p {
+	height: 44px;
+	margin-bottom: 10px;
+}
+#users h3 {
+	margin-bottom: 10px;
+
+}
+#users img {
+	height: 44px;
+	border-radius: 22px;
+	float: left;
+}
+
+#users a {
+	margin-top: 10px;
+	margin-left: 10px;
+	float: left;
+}
+
+#users span {
+	margin-top: 10px;
+	float: right;
+}
+
 
 
 #debug {

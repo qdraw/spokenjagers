@@ -261,6 +261,7 @@ function authenticateUser (profile) {
 
 			url2base64inDatabase(profile.photos[0].value,profile.id);
             readScore (profile.id);
+            readNameImage (profile.id);
 
             // only for logger
             // connection.query("ALTER TABLE locations ADD _" + String(profile.id) + "_ TEXT");
@@ -269,6 +270,7 @@ function authenticateUser (profile) {
 		else{
 				console.log("User " + profile.id +" already exists in database");
                 readScore (profile.id);
+                readNameImage (profile.id);
                 global["sessionEnabled"][profile.id] = true;
 			}
 		});
@@ -286,8 +288,10 @@ app.get('/', function(req, res){
 	    res.cookie('phonegap', req.query["phonegap"], { expires: expiryDate, httpOnly: true });
     };
 
-	res.render('index', { user: req.user, cookies: req.cookies});
+	res.render('index', { user: req.user, cookies: req.cookies, userData: JSON.stringify(userData[0]), score: JSON.stringify(global["score"]), health: JSON.stringify(global["health"]), money: JSON.stringify(global["money"]), readNameImage: JSON.stringify(global["readNameImage"])  });
 });
+
+
 
 app.get('/account', ensureAuthenticated, function(req, res){
 	res.render('account', { user: req.user, cookies: req.cookies});
@@ -1333,6 +1337,22 @@ function readScore (userid) {
         });
     }
 }///e/readScore
+
+global["readNameImage"] = {};
+function readNameImage (userid) {
+    if(config.use_database==='true'){
+        connection.query("SELECT * from users where userid="+ userid ,function(err,rows,fields){
+            if(err) throw err;
+            if(rows.length===1){
+                global["readNameImage"][userid] = [rows[0].displayname,rows[0].displayimage,rows[0].provider];
+            }
+
+        });
+
+
+    }//e/db
+
+}//e/readNameImage
 
 
 

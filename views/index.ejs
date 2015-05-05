@@ -121,7 +121,7 @@
 	<div id="map" class="login-map"></div>
 
 
-	<div class="container login-box">
+	<div class="container dashboard-box">
 
 		<div class="dashboard-name-box">
 			<div class="dashboard-name">
@@ -138,12 +138,102 @@
 
 		</div>
 
+		<div class="login-small-box">
+
+			<div class="score">
+				<h3>Level</h3>
+				<p></p>
+			</div>
+			<div class="health">
+				<h3>Health</h3>
+				<p></p>
+			</div>
+			<div class="money">
+				<h3>Money</h3>
+				<p></p>
+			</div>
+
+		</div>
+
+		<div class="login-small-box" id="users">
+			<h3> Users playing right now</h3>
+
+		</div>
+
+	<script type="text/javascript">
+
+	String.prototype.replaceAll = function(str1, str2, ignore) {
+	    return this.replace(new RegExp(str1.replace(/([\/\,\!\\\^\$\{\}\[\]\(\)\.\*\+\?\|\<\>\-\&])/g,"\\$&"),(ignore?"gi":"g")),(typeof(str2)=="string")?str2.replace(/\$/g,"$$$$"):str2);
+	} //e/replaceAll
+
+
+		var score = "<%= score %>".replaceAll('&#34;','"')
+		var money = "<%= money %>".replaceAll('&#34;','"')
+		var health = "<%= health %>".replaceAll('&#34;','"')
+
+		var	score = JSON.parse(score)
+		var	money = JSON.parse(money)
+		var	health = JSON.parse(health)
+
+		console.log(score)
+		console.log(money)
+		console.log(health)
+
+		var key = "<%= user.id %>";
+
+
+		if (score[key] == null) {
+			scoreYou = 0;
+		}
+		else {
+			scoreYou = score[key]
+		}
+
+		if (money[key] == null) {
+			moneyYou = 0;
+		}
+		else {
+			moneyYou = money[key]
+		}
+
+		if (health[key] == null) {
+			healthYou = 0;
+		}
+		else {
+			healthYou = health[key]
+		}
+
+		document.querySelector(".score p").innerHTML = scoreYou;
+		document.querySelector(".money p").innerHTML = "$" + moneyYou;
+		document.querySelector(".health p").innerHTML = healthYou + "%";
+
+	</script>
 
 
 	</div>
 	<!-- dont forget phonegap -->
 
 	<script type="text/javascript">
+
+		function calcCrow(lat1, lon1, lat2, lon2){
+		    var R = 6371; // km
+		    var dLat = toRad(lat2-lat1);
+		    var dLon = toRad(lon2-lon1);
+		    var lat1 = toRad(lat1);
+		    var lat2 = toRad(lat2);
+
+		    var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+		    Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
+		    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+		    var d = R * c;
+		    return d;
+		}
+		// 1 == 1km
+
+		// Converts numeric degrees to radians
+		function toRad(Value){
+		    return Value * Math.PI / 180;
+		}	
 	
 		if (!navigator.geolocation){
 		    alert("Geolocation is not supported by your browser");
@@ -152,9 +242,69 @@
 			FirstFindGeoLocationDialog();
 		}
 
+
+		var userData = "<%= userData %>".replaceAll('&#34;','"')
+		var	userData = JSON.parse(userData);
+
+
+		var readNameImage = "<%= readNameImage %>".replaceAll('&#34;','"')
+		var	readNameImage = JSON.parse(readNameImage);
+
+
 		function FirstFindGeoLocationDialog () {
 			navigator.geolocation.getCurrentPosition(success, error);
-			function success(position) {}
+			function success(position) {
+
+
+				console.log(position.coords.latitude);
+				console.log(position.coords.longitude);
+
+
+		        Object.keys(userData).forEach(function(key) {
+		        	
+
+		        	if (key != "<%= user.id %>") {
+
+			        		console.log(userData[key]);
+
+		        		if (userData[key][0] != 0) {
+
+			        		var distance = calcCrow(position.coords.latitude, position.coords.longitude, userData[key][0], userData[key][1])
+
+	        		        var p = document.createElement("p");
+
+	        		        var img = "<img src='" +  readNameImage[key][1] + "' alt='" +  readNameImage[key][0] + "'/>"
+
+	        		        if (readNameImage[key][2] == "facebook") {
+		        		        var providerPrefix  = "https://www.facebook.com/"
+	        		        }
+	        		        else if (readNameImage[key][2] == "google") {
+		        		        var providerPrefix  = "https://plus.google.com/";
+	        		        }
+	        		        else {
+	        		        	var providerPrefix = "#";
+	        		        }
+
+	        		        var a = "<a target='_blank' href='" + providerPrefix + key + "'>" + readNameImage[key][0] + "</a>"
+
+
+	        		        p.innerHTML = img + " " + a + " <span>" + distance.toFixed(2) + " km</span>";
+	        		        document.getElementById("users").appendChild(p);
+
+						};
+
+		        	};//e/key
+		        });//e/e Object.keys
+
+		        
+		        if (document.querySelectorAll("#users p").length <= 0) {
+    		        var p = document.createElement("p");
+    		        p.innerHTML = "There are no users playing now"
+    		        document.getElementById("users").appendChild(p);
+		        };
+
+
+			}
 			function error() {};	
 
 		}//e/eFirstFindGeoLocation

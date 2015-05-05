@@ -130,3 +130,6 @@ https://gist.github.com/paulirish/1579671
 
 http://www.lanexa.net/2011/08/create-a-mysql-database-username-password-and-permissions-from-the-command-line/
 >	Create a MySQL Database, Username, Password, and Privileges from the command line
+
+http://stackoverflow.com/questions/2116558/fastest-method-to-replace-all-instances-of-a-character-in-a-string
+>	String.prototype.replaceAll = function(str1, str2, ignore) 
