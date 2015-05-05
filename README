@@ -16,7 +16,7 @@
 	mysql -u root -p
 	Enter password:
 
-	mysql > create database deb40577_game
+	mysql > create database deb40577_game;
 	mysql > show databases;
 	mysql > create user deb40577_game;
 	mysql > grant all on deb40577_game.* to 'deb40577_game'@'localhost' identified by 'PASSW!ORD';

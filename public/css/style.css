@@ -468,17 +468,20 @@ dashboard-name-box img {
 	height: 50px;
 	width: 130px;
 	text-align: right;
-	color: white;
+	color: black;
 }
 
 #score #points {
-	font-size: 30pt;
+	margin-bottom: 5px;
+	font-size: 30px;
 }
 #score #health {
-	font-size: 30pt;
+	margin-bottom: 5px;
+	font-size: 30px;
 }
 #score #money {
-	font-size: 30pt;
+	margin-bottom: 5px;
+	font-size: 30px;
 }
 
 #fullscreen {
