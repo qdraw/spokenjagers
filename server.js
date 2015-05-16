@@ -907,7 +907,7 @@ io.on('connection', function(socket){
 
 
 
-
+     // Send Ghosts to Client
     setInterval(function () {
     	if (startMoveOpponents) {
     		// console.log(global["ghosts"]);

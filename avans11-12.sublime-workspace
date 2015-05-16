@@ -4,12 +4,264 @@
 		"selected_items":
 		[
 			[
-				"fo",
+				"mar",
+				"margin-left"
+			],
+			[
+				"us",
+				"userid"
+			],
+			[
+				"d",
+				"document"
+			],
+			[
+				"c",
+				"console"
+			],
+			[
+				"sc",
+				"score"
+			],
+			[
+				"ma",
+				"margin"
+			],
+			[
+				"back",
+				"background-size"
+			],
+			[
+				"ba",
+				"background-image"
+			],
+			[
+				"te",
+				"text-indent"
+			],
+			[
+				"pa",
+				"padding-top"
+			],
+			[
+				"m",
+				"margin-top"
+			],
+			[
+				"tex",
+				"text-align"
+			],
+			[
+				"fon",
 				"font-size"
 			],
 			[
+				"bor",
+				"border-radius"
+			],
+			[
+				"bac",
+				"background-size"
+			],
+			[
+				"fa",
+				"false"
+			],
+			[
+				"giv",
+				"givenName"
+			],
+			[
+				"user",
+				"user"
+			],
+			[
+				"f",
+				"fun	Function"
+			],
+			[
+				"se",
+				"sessionEnabled"
+			],
+			[
+				"con",
+				"config"
+			],
+			[
+				"pr",
+				"profile"
+			],
+			[
+				"fo",
+				"for	for (…) {…}"
+			],
+			[
+				"b",
+				"block"
+			],
+			[
+				"al",
+				"alt	Attr"
+			],
+			[
+				"curr",
+				"currentAreaPosition"
+			],
+			[
+				"li",
+				"listOfAreas"
+			],
+			[
+				"are",
+				"areaDistance"
+			],
+			[
+				"gh",
+				"ghostsName"
+			],
+			[
+				"usie",
+				"userid"
+			],
+			[
+				"inde",
+				"indexOf"
+			],
+			[
+				"di",
+				"displayName"
+			],
+			[
+				"a",
+				"alert"
+			],
+			[
+				"r",
+				"req"
+			],
+			[
+				"cur",
+				"currentAreaName"
+			],
+			[
+				"top",
+				"topORleft"
+			],
+			[
+				"Va",
+				"value"
+			],
+			[
+				"try",
+				"trysplit"
+			],
+			[
+				"lo",
+				"log"
+			],
+			[
+				"sp",
+				"spook1"
+			],
+			[
+				"spoo",
+				"spooks"
+			],
+			[
 				"in",
-				"innerHTML"
+				"index"
+			],
+			[
+				"Opp",
+				"Opponent"
+			],
+			[
+				"fu",
+				"fun	Function"
+			],
+			[
+				"INT",
+				"INTO"
+			],
+			[
+				"IN",
+				"INSERT"
+			],
+			[
+				"cu",
+				"cpuload"
+			],
+			[
+				"cpu",
+				"cpuload"
+			],
+			[
+				"i",
+				"inline-block"
+			],
+			[
+				"he",
+				"header	Tag"
+			],
+			[
+				"pro",
+				"profile"
+			],
+			[
+				"au",
+				"authenticate"
+			],
+			[
+				"fun",
+				"function"
+			],
+			[
+				"type",
+				"typeof"
+			],
+			[
+				"set",
+				"setInterval"
+			],
+			[
+				"http",
+				"httpcode"
+			],
+			[
+				"l",
+				"latestid"
+			],
+			[
+				"u",
+				"userIDs"
+			],
+			[
+				"va",
+				"value"
+			],
+			[
+				"off",
+				"offEarth"
+			],
+			[
+				"new",
+				"newPosition"
+			],
+			[
+				"lat",
+				"latmax"
+			],
+			[
+				"key",
+				"key"
+			],
+			[
+				"op",
+				"opponent_lenght"
+			],
+			[
+				"appen",
+				"appendData"
 			],
 			[
 				"win",
@@ -28,14 +280,6 @@
 				"article	Tag"
 			],
 			[
-				"mar",
-				"margin-right"
-			],
-			[
-				"ma",
-				"margin-left"
-			],
-			[
 				"el",
 				"else"
 			],
@@ -44,40 +288,12 @@
 				"pointer"
 			],
 			[
-				"fon",
-				"font-weight"
-			],
-			[
-				"bor",
-				"border-bottom"
-			],
-			[
-				"m",
-				"margin-bottom"
-			],
-			[
-				"d",
-				"display"
-			],
-			[
-				"tex",
-				"text-align"
-			],
-			[
 				"print",
 				"print_r"
 			],
 			[
 				"prin",
 				"print_r"
-			],
-			[
-				"f",
-				"fun	Function"
-			],
-			[
-				"pa",
-				"parentElement"
 			],
 			[
 				"Child",
@@ -96,14 +312,6 @@
 				"width"
 			],
 			[
-				"l",
-				"length"
-			],
-			[
-				"con",
-				"console"
-			],
-			[
 				"cla",
 				"className"
 			],
@@ -116,14 +324,6 @@
 				"top"
 			],
 			[
-				"bac",
-				"background-color"
-			],
-			[
-				"te",
-				"text-decoration"
-			],
-			[
 				"co",
 				"color"
 			],
@@ -134,10 +334,6 @@
 			[
 				"w",
 				"width"
-			],
-			[
-				"ba",
-				"background-color"
 			],
 			[
 				"end",
@@ -172,7 +368,7 @@
 	},
 	"console":
 	{
-		"height": 0.0,
+		"height": 126.0,
 		"history":
 		[
 		]
@@ -188,8 +384,87 @@
 	},
 	"file_history":
 	[
-		"/data/web/qdraw.github.io/class/footer.php",
+		"/Users/dion/Dropbox/opt_scripts/ffmpeg/loop ffmpeg MSDOS/loop_MTS_mp4.bat",
+		"/Volumes/CANON_DC/CHDK/SCRIPTS/BATTERY_MISSER.lua",
+		"/Users/dion/Desktop/naamloze map 2/dropbox-sort-image-video",
+		"/Volumes/CANON_DC/vers.req",
+		"/Users/dion/Desktop/naamloze map 2/dropbox-sort-image-video-script",
+		"/data/web/avans-individueel-verdieping-blok11-12/start",
+		"/data/web/avans-individueel-verdieping-blok11-12/views/game.ejs",
+		"/data/web/avans-individueel-verdieping-blok11-12/public/css/style.css",
+		"/Users/dion/Desktop/naamloze map 2/test.sh",
+		"/data/web/publication_tool/qsettings.py",
+		"/data/web/avans-individueel-verdieping-blok11-12/server.js",
+		"/data/web/avans-individueel-verdieping-blok11-12/views/privacy.ejs",
+		"/Users/dion/Dropbox/Camera-uploads H&M/sort",
+		"/Users/dion/Desktop/naamloze map 2/read_Dropbox-name",
+		"/Users/dion/Dropbox/Camera Uploads/sort",
+		"/Users/dion/Dropbox/Camera Uploads/sort2",
+		"/Users/dion/Dropbox/Camera-uploads H&M/dropbox-sort-image-video",
+		"/Users/dion/Desktop/naamloze map 2/sort2",
+		"/data/web/avans-individueel-verdieping-blok11-12/views/index.ejs",
+		"/data/web/avans-individueel-verdieping-blok11-12/views/account.ejs",
+		"/Users/dion/Desktop/naamloze map 2/read_Dropbox-name.sh",
+		"/data/web/avans-individueel-verdieping-blok11-12/views/privacy",
+		"/data/web/avans-individueel-verdieping-blok11-12/README",
+		"/data/web/avans-individueel-verdieping-blok11-12/sources",
+		"/data/web/avans-individueel-verdieping-blok11-12/public/images/ghosthunter.svg",
+		"/data/web/avans-individueel-verdieping-blok11-12/package.json",
+		"/data/web/avans-individueel-verdieping-blok11-12/.gitignore",
+		"/data/web/avans-individueel-verdieping-blok11-12/public/js/mapio.js",
+		"/data/web/avans-individueel-verdieping-blok11-12/configuration/config.js",
+		"/data/web/avans-individueel-verdieping-blok11-12/localauth",
+		"/data/web/avans-individueel-verdieping-blok11-12/config.xml",
+		"/data/web/avans-individueel-verdieping-blok11-12/database.js",
+		"/data/web/avans-individueel-verdieping-blok11-12/public/images/iconfinder-ios-share.svg",
+		"/data/web/avans-individueel-verdieping-blok11-12/public/geolocation.html",
+		"/data/web/avans-individueel-verdieping-blok11-12/public/css/phonegap.css",
+		"/data/web/avans-individueel-verdieping-blok11-12/index.html",
+		"/Users/dion/node_modules/phonegap/lib/phonegap/cordova.js",
+		"/data/web/avans-individueel-verdieping-blok11-12/heroku",
+		"/data/web/avans-individueel-verdieping-blok11-12/ngrok",
+		"/data/web/avans-individueel-verdieping-blok11-12/leak.js",
+		"/data/web/avans-individueel-verdieping-blok11-12/ngrok-node",
+		"/data/web/avans-individueel-verdieping-blok11-12/url2base64.js",
+		"/data/web/avans-individueel-verdieping-blok11-12/cpu.js",
+		"/Users/dion/Desktop/new.html",
+		"/data/web/avans-individueel-verdieping-blok11-12/views/logout.ejs",
+		"/data/web/avans-individueel-verdieping-blok11-12/views/json.esj",
+		"/data/web/avans-individueel-verdieping-blok11-12/____server.js",
+		"/data/web/avans-individueel-verdieping-blok11-12/public/app.html",
+		"/data/web/avans-individueel-verdieping-blok11-12/mysql.js",
+		"/data/web/avans-individueel-verdieping-blok11-12/public_html/js/userid.js",
+		"/data/web/avans-individueel-verdieping-blok11-12/public_html/js/mapio.js",
+		"/Users/dion/Downloads/OpenAuthInNodejs-master/views/index.jade",
+		"/Users/dion/Downloads/OpenAuthInNodejs-master/views/layout.jade",
+		"/Users/dion/Downloads/OpenAuthInNodejs-master/views/auth.html",
+		"/data/web/avans-individueel-verdieping-blok11-12/public_html/index.html",
+		"/data/web/avans-individueel-verdieping-blok11-12/public_html/css/style.css",
+		"/data/web/avans-individueel-verdieping-blok11-12/public_html/login.html",
+		"/data/web/avans-individueel-verdieping-blok11-12/app/css/style.css",
+		"/data/web/avans-individueel-verdieping-blok11-12/app.html",
+		"/data/web/avans-individueel-verdieping-blok11-12/app/index.html",
+		"/data/web/avans-individueel-verdieping-blok11-12/dblite.js",
+		"/data/web/avans-individueel-verdieping-blok11-12/testsql.js",
+		"/data/web/avans-individueel-verdieping-blok11-12/nstore.js",
+		"/data/web/avans-individueel-verdieping-blok11-12/logs/.gitkeep",
+		"/data/web/avans-individueel-verdieping-blok11-12/js/mapio.js",
+		"/data/web/avans-individueel-verdieping-blok11-12/public_html/404.html",
+		"/data/web/avans-individueel-verdieping-blok11-12/css/style.css",
+		"/Volumes/mnt/data/avans-individueel-verdieping-blok11-12/logs/awstats.access.conf",
+		"/data/web/avans-individueel-verdieping-blok11-12/geolocation.html",
+		"/data/web/avans-individueel-verdieping-blok11-12/logs/587ec2931a2d1ad6eabc454d2d03d005.srcgpx",
+		"/data/web/avans-individueel-verdieping-blok11-12/logs/3924caca210d40b35db150b45414d052.scrgpx",
+		"/data/web/avans-individueel-verdieping-blok11-12/logs/587ec2931a2d1ad6eabc454d2d03d005.scrgpx",
+		"/data/web/avans-individueel-verdieping-blok11-12/logs/587ec2931a2d1ad6eabc454d2d03d005",
+		"/data/web/avans-individueel-verdieping-blok11-12/logs/587ec2931a2d1ad6eabc454d2d03d005.gpx",
+		"/data/web/avans-individueel-verdieping-blok11-12/logs/587ec2931a2d1ad6eabc454d2d03d005 kopie.gpx",
+		"/Users/dion/Dropbox/FOTOS ONLINE/2015/03/2015_03_22 Avans Proces Christiaan Slot Nijenbeek/2015-03-22_17-20-27.gpx",
+		"/Users/dion/Dropbox/FOTOS ONLINE/2015/04/2015_04_05 Cortenoever Ruimte voor de Rivieren/20150405 Cortenoever auto.gpx",
+		"/Users/dion/Dropbox/FOTOS ONLINE/2015/04/2015_04_11/20150411 Henry Naar bieb.gpx",
+		"/data/web/avans-individueel-verdieping-blok11-12/logs/undefined.gpx",
 		"/data/web/avans-individueel-verdieping-blok11-12/avans11-12.sublime-project",
+		"/data/web/qdraw.github.io/class/footer.php",
 		"/data/web/qdraw.github.io/js/fdisplay.js",
 		"/data/web/qdraw.github.io/cache/123zing-website.html",
 		"/data/web/qdraw.github.io/class/weather.php",
@@ -235,6 +510,7 @@
 		"height": 93.0,
 		"where_history":
 		[
+			""
 		]
 	},
 	"find_state":
@@ -242,74 +518,134 @@
 		"case_sensitive": false,
 		"find_history":
 		[
-			"request",
-			"new",
-			"utf-8",
-			"fotoarray",
-			"loadJSON",
-			"Element",
-			"new",
-			"event",
-			"evet",
-			"arrayDuplicate",
-			"array",
-			"requestAnimationFrame",
-			"h1",
-			"article h1",
-			"article",
-			"none",
-			"hide",
-			"meta",
-			"Redirect",
-			"canonical",
-			"ch",
-			"xmlrpc",
-			"grey",
-			"greyscale",
-			"dataset",
-			"dataset.counter",
-			"navigation-header",
-			"nav-previous",
-			"breadcrumb",
-			"#blog",
-			"input",
-			"breadc",
-			"microdata",
-			"search",
-			"microdata",
-			"media",
-			"img",
-			"bigImagesLink",
-			"960",
-			"cont",
-			"media",
-			"nav",
-			"bigImagesLinkProxy",
-			"b {",
-			"border-bottom",
-			"article",
-			"lightbox",
-			"article ul",
-			".meta",
-			"images",
-			"backgroundimage",
-			"width",
-			"input",
-			"OffsetTop",
-			"goToPosition",
-			"Top",
-			"grey",
-			"red",
-			"200px",
-			"vh",
-			"dede",
-			"trans",
-			"cat",
-			".co",
-			"portfolio",
-			"backgroundAnimationProxy",
-			"RewriteRule ^index\\.php$ - [L]",
-			"mod_rewrite"
+			"title=\"Hoe ik mijn compact-camera hackte om time-lapses te maken ; ",
+			"Buffer",
+			"Users",
+			"users",
+			"map",
+			"border-",
+			"/index",
+			"index",
+			"readScore (",
+			"readScore",
+			"calcCrow",
+			"div",
+			"object",
+			"h2{",
+			"score",
+			"UserData",
+			"index",
+			"login-box",
+			"login-small-box",
+			"dashboard-",
+			"login-sm",
+			"facebook",
+			"login-map",
+			"container",
+			"1000000",
+			"app.get('",
+			" passport",
+			" passport.use(",
+			"ensureAuthenticated",
+			"authenticateUser",
+			"authenticate",
+			"google",
+			"passport.use",
+			"authenticateUser",
+			"spookC",
+			"	                connection.query(\"UPDATE ghosts SET \"+ \"arealocation\" +\" = '\" + userData[c][userid][0] + \",\" + userData[c][userid][1] + \"' WHERE area = '\" + \"area_\" + newAreaNumber +\"'\");\n",
+			"spookCounter",
+			"moveOp",
+			"spook",
+			" spook",
+			"spook",
+			"spooks",
+			"ghosts",
+			"providers",
+			"readScore",
+			"index",
+			"console.log",
+			"access",
+			"FB",
+			"Kill Bill",
+			"js/ui.js",
+			".back",
+			"startMoveOpponents",
+			"global[\"ghosts\"]",
+			"global[\"currentAreaName\"]",
+			"1466",
+			"currentAreaPosition",
+			"newOp",
+			"startMoveOpponents",
+			"getRandomArbitrary",
+			",500",
+			"currentAreaName[userid]",
+			"global[\"currentAreaName\"]",
+			"send",
+			"opponentHandelingStartBoolean",
+			"currentAreaName",
+			"ghostsName\"",
+			"ghostsName",
+			"(global[\"ghosts\"]",
+			"global[\"ghosts\"]",
+			"console.log",
+			"currentAreaName",
+			"opponentHandelingStartBoolean",
+			"ghostL",
+			"opp",
+			"opposite",
+			"socket",
+			"send",
+			"seconds",
+			"send",
+			"global[\"ghosts\"]",
+			"ghosts[",
+			"    // console.log(\"userid > \" +userid);\n",
+			"currentAreaName =",
+			"{\n",
+			"\n			                ",
+			"AreaListOfGeoLocation",
+			"op",
+			"newOpponent (",
+			"newOpponent(",
+			"newOpponent (",
+			"newOpponent",
+			"isArealistAvailableBoolean",
+			"currentGhost",
+			"newOpponent",
+			"isArealistAvailable",
+			"global[\"ghosts\"]",
+			"move",
+			"userid",
+			"if",
+			"currentAreaName",
+			"userData",
+			"index",
+			"userData",
+			"cpuload",
+			"sessionEnabled",
+			"kill",
+			"base64",
+			"update",
+			"indexOf",
+			"move",
+			" if (calcCrow(shoot.lat, shoot.lng, userData[c][userid][0], userData[c][userid][1])",
+			"	            if (calcCrow(shoot.lat, shoot.lng, userData[c][userid][0], userData[c][userid][1\n",
+			"	            if (calcCrow(shoot.lat, shoot.lng, userData[c][userid][0], userData[c][userid][1])\n",
+			"	            if (calcCrow(shoot.lat, shoot.lng, userData[c][userid][0], userData[c][userid][1]) <= 0.006) {\n",
+			"30",
+			"UPDATE ghosts SET",
+			"shoot",
+			"ghosts",
+			"calc",
+			"global[\"ghosts\"]",
+			"currentAreaPosition",
+			"global[\"ghosts\"][currentAreaName][ghostsName]",
+			"onOR",
+			"newPosition",
+			"var speedNeg = speed * -1;",
+			"split",
+			"socket.emit"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -317,10 +653,12 @@
 		"regex": false,
 		"replace_history":
 		[
+			"title=\"	",
+			"	"
 		],
 		"reverse": false,
-		"show_context": true,
-		"use_buffer2": true,
+		"show_context": false,
+		"use_buffer2": false,
 		"whole_word": false,
 		"wrap": true
 	},
@@ -338,7 +676,7 @@
 	},
 	"input":
 	{
-		"height": 0.0
+		"height": 31.0
 	},
 	"layout":
 	{
