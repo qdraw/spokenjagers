@@ -133,3 +133,6 @@ http://www.lanexa.net/2011/08/create-a-mysql-database-username-password-and-perm
 
 http://stackoverflow.com/questions/2116558/fastest-method-to-replace-all-instances-of-a-character-in-a-string
 >	String.prototype.replaceAll = function(str1, str2, ignore) 
+
+http://stackoverflow.com/questions/20210522/nodejs-mysql-error-connection-lost-the-server-closed-the-connection
+>	handle mysql disconnect to avoid that the entire app crashes

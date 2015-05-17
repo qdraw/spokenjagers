@@ -70,38 +70,108 @@ process.argv.forEach(function (val, index, array) {
 
 
 //Define MySQL parameter in Config.js file.
-var connection = mysql.createConnection({
-	host		: 	  config.host,
-	user		: 	  config.username,
-	password 	: 	  config.password,
-	database 	: 	  config.database
-});
+var mysqlConfig = {
+    host        :     config.host,
+    user        :     config.username,
+    password    :     config.password,
+    database    :     config.database
+};
+
+var connection;
 
 //Connect to Database only if Config.js parameter is set.
 if(config.use_database==='true'){
-	connection.connect();
+    handleDisconnect();
 
-	connection.query('CREATE TABLE IF NOT EXISTS users (id MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY, userid TEXT, displayname TEXT, displayimage TEXT, provider TEXT, email TEXT, gender TEXT, health INTEGER, score INTEGER, money INTEGER, useragent TEXT, value TEXT, latestConnectionTime INT, area TEXT)',
-	function(err, result){
-	    // Case there is an error during the creation
-	    if(err) {
-	        console.log(err);
-	    }
-  		console.log('> mysql connected as id ' + connection.threadId);
-	});
+    connection.query('CREATE TABLE IF NOT EXISTS users (id MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY, userid TEXT, displayname TEXT, displayimage TEXT, provider TEXT, email TEXT, gender TEXT, health INTEGER, score INTEGER, money INTEGER, useragent TEXT, value TEXT, latestConnectionTime INT, area TEXT)',
+    function(err, result){
+        // Case there is an error during the creation
+        if(err) {
+            console.log(err);
+        }
+        console.log('> mysql connected as id ' + connection.threadId);
+    });
 
-	// GHOST ITEM IN DB
-	connection.query('CREATE TABLE IF NOT EXISTS ghosts (id MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY, area TEXT, arealocation TEXT, spook1 TEXT, spook2 TEXT, spook3 TEXT, spook4 TEXT, spook5 TEXT, spook6 TEXT, spook7 TEXT, spook8 TEXT, spook9 TEXT)',
-	function(err, result){
-	    // Case there is an error during the creation
-	    if(err) {
-	        console.log(err);
-	    }
-	});
+    // GHOST ITEM IN DB
+    connection.query('CREATE TABLE IF NOT EXISTS ghosts (id MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY, area TEXT, arealocation TEXT, spook1 TEXT, spook2 TEXT, spook3 TEXT, spook4 TEXT, spook5 TEXT, spook6 TEXT, spook7 TEXT, spook8 TEXT, spook9 TEXT)',
+    function(err, result){
+        // Case there is an error during the creation
+        if(err) {
+            console.log(err);
+        }
+    });
 
     var spookCounter = 9;
 
 }// connection
+
+
+
+function handleDisconnect() {
+    connection = mysql.createConnection(mysqlConfig); // Recreate the connection, since
+                                                  // the old one cannot be reused.
+
+    connection.connect(function(err) {              // The server is either down
+        if(err) {                                     // or restarting (takes a while sometimes).
+          console.log('error when connecting to db:', err);
+          setTimeout(handleDisconnect, 2000); // We introduce a delay before attempting to reconnect,
+        }                                     // to avoid a hot loop, and to allow our node script to
+    });                                     // process asynchronous requests in the meantime.
+                                          // If you're also serving http, display a 503 error.
+    connection.on('error', function(err) {
+        console.log('db error', err);
+        if(err.code === 'PROTOCOL_CONNECTION_LOST') { // Connection to the MySQL server is usually
+            handleDisconnect();                         // lost due to either server restart, or a
+        } else {                                      // connnection idle timeout (the wait_timeout
+            throw err;                                  // server variable configures this)
+        }
+    });
+}
+
+
+
+
+
+/// Old style
+
+// //Define MySQL parameter in Config.js file.
+// var connection = mysql.createConnection({
+// 	host		: 	  config.host,
+// 	user		: 	  config.username,
+// 	password 	: 	  config.password,
+// 	database 	: 	  config.database
+// });
+
+// //Connect to Database only if Config.js parameter is set.
+// if(config.use_database==='true'){
+// 	connection.connect();
+
+// 	connection.query('CREATE TABLE IF NOT EXISTS users (id MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY, userid TEXT, displayname TEXT, displayimage TEXT, provider TEXT, email TEXT, gender TEXT, health INTEGER, score INTEGER, money INTEGER, useragent TEXT, value TEXT, latestConnectionTime INT, area TEXT)',
+// 	function(err, result){
+// 	    // Case there is an error during the creation
+// 	    if(err) {
+// 	        console.log(err);
+// 	    }
+//   		console.log('> mysql connected as id ' + connection.threadId);
+// 	});
+
+// 	// GHOST ITEM IN DB
+// 	connection.query('CREATE TABLE IF NOT EXISTS ghosts (id MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY, area TEXT, arealocation TEXT, spook1 TEXT, spook2 TEXT, spook3 TEXT, spook4 TEXT, spook5 TEXT, spook6 TEXT, spook7 TEXT, spook8 TEXT, spook9 TEXT)',
+// 	function(err, result){
+// 	    // Case there is an error during the creation
+// 	    if(err) {
+// 	        console.log(err);
+// 	    }
+// 	});
+
+//     var spookCounter = 9;
+
+// }// connection
+
+
+
+
+
 
 
 // // only for locations logger
