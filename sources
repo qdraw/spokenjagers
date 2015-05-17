@@ -1,3 +1,5 @@
+#text/plain
+
 This file is summary of sources that i've used in my project
 
 Check for dependencies the package.json file
@@ -100,6 +102,9 @@ http://stackoverflow.com/questions/9577611/http-get-request-in-node-js-express
 > HTTP GET Request in Node.js Express
 
 # Clientside
+
+http://leafletjs.com/
+>	In this basic example, of the leaflet maps
 
 https://github.com/leaflet-extras/leaflet-providers
 >	List of leaflet providers

@@ -1702,3 +1702,25 @@ function newOpponent (currentAreaName,currentAreaPosition,ghostsName) {
 
 }//e/newOpponent
 
+var ghostAttackUserInterval = setInterval(function () {
+    
+    function ghostAttackUser () {
+
+
+        Object.keys(global["currentAreaName"]).forEach(function(useridI) {
+            // console.log("useridI");
+            // console.log(useridI);
+            Object.keys(global["ghosts"]).forEach(function(area) {
+                // console.log("area")
+                // console.log(area)
+                Object.keys(global["ghosts"][area]).forEach(function(ghostsName) {
+                    
+                });
+            });
+        });        
+
+    }//e/attackUser
+
+},1000);
+
+
