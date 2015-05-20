@@ -552,3 +552,24 @@ dashboard-name-box img {
 	border-width: 36px;
 	margin-left: -36px;
 }
+
+
+.logout a{
+	float: right;
+	width: 56px;
+	height: 34px;
+	background-color: rgba(0,119,127,0.9);
+	text-align: right;
+	padding: 10px 10px 0px 0px;
+	color: white;
+	text-decoration: none;
+}
+
+.account-box {
+	width: 500px;
+	margin-left: auto;
+	margin-right: auto;
+}
+.account-box #me {
+	float: right;
+}

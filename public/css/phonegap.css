@@ -1,9 +1,14 @@
 /*phonegap*/
 
+
 header {
-	padding-top: 20px;
+	padding-top: 22px;
 }
 
 .container {
-	margin: 64px auto 0px auto;
-}	
+	margin-top: 66px;
+}
+
+#score {
+	top: 75px;
+}

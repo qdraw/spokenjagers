@@ -26,33 +26,116 @@
 	</div>
 
 </header>
-		<div style="float:right">		<a href="/logout">logout</a> </div>
+
+	<div id="map" class="login-map"></div>
+
+	<div class="logout">		<a href="/logout">logout</a> </div>
 
 	<div class="container">
+		<div class="account-box">
+			<h2>Account information</h2>
 
+			<p id="me"> </p>
+
+			<p>Name: <%= user.displayName %></p>
+
+			<!--
+			<p> familyName : <%= user.name.familyName %> <br />
+			 givenName : <%= user.name.givenName %> <br />
+			</p>
+			-->
+
+			<p>gender: <%= user.gender  %></p>
+
+			<p>Email: <%= user.emails[0].value %></p>
+			<p>Provider: <%= user.provider %></p>
+
+			<p id="id">ID: <%= user.id %></p>
+			<p id="geolocation">Geolocation: is not shown</p>
+
+			<br />
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--------<br />
+			That’s all we know.
+			<br />
+			No Likes, e-mails, posts or whatever.
+			<br />
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--------<br />
+
+
+			<script type="text/javascript">
+
+		        if ("<%= user.provider %>" == "facebook") {
+    		        var providerPrefix  = "https://www.facebook.com/"
+		        }
+		        else if ("<%= user.provider %>" == "google") {
+    		        var providerPrefix  = "https://plus.google.com/";
+		        }
+		        else {
+		        	var providerPrefix = "#";
+		        }
+
+		        var a = "<a target='_blank' href='" + providerPrefix + <%= user.id %> + "'>" + '<img src="<%= user.photos[0].value %>" width="50px" height="50px" alt="<%= user.displayName %>"/>' + "</a>"
+				document.getElementById("me").innerHTML = a;;
+
+		        var a = "ID: <a target='_blank' href='" + providerPrefix + <%= user.id %> + "'>" + '<%= user.id %>' + "</a>"
+				document.getElementById("id").innerHTML = a;
+
+
+				navigator.geolocation.getCurrentPosition(success, error);
+				function success(position) {
+					var latitude  = position.coords.latitude;
+					var longitude = position.coords.longitude;
+					console.log(latitude,longitude)
+
+					//http://www.openstreetmap.org/?mlat=52.67205555555555&mlon=5.918580555555556#map=13/52.6721/5.9186
+			        var a = "Geolocation: <a target='_blank' href='" + "http://www.openstreetmap.org/?mlat=" + latitude + "&mlon=" + longitude + "#map=13/" + latitude + "/" + longitude + "'>" + "view on the map" + "</a>"
 	
-		<h2>Account information</h2>
+					document.getElementById("geolocation").innerHTML = a;
+									
+
+				} function error() {};	
 
 
-		<p>ID: <%= user.id %></p>
-		<p>Provider: <%= user.provider %></p>
-		<p>Name :<%= user.displayName %></p>
 
-		<p> familyName : <%= user.name.familyName %> <br />
-		 givenName : <%= user.name.givenName %> <br />
-		</p>
-		<p>gender: <%= user.gender  %></p>
+			</script>
 
-		<p>Email: <%= user.emails[0].value %></p>
-		<p>Image:
-			<img src="<%= user.photos[0].value %>" width="50px" height="50px" alt="<%= user.displayName %>"/>
-		</p>
-		<br />
-		--<br />
-		That’s all we know.
-		<br />
-		-- So no Likes, e-mails, posts
+
+
+		</div>
 	</div>
+
+	<script type="text/javascript" src="js/leaflet.js"></script>
+	<script type="text/javascript">
+
+		if (!navigator.geolocation){
+		    alert("Geolocation is not supported by your browser");
+		}
+
+		var map = L.map('map', { zoomControl:false }).setView([52.03851461021432, 6.150949001312256], 16);
+
+		// Nokia Here Maps, Thanks: http://leaflet-extras.github.io/leaflet-providers/preview/
+		L.tileLayer('https://{s}.{base}.maps.cit.api.here.com/maptile/2.1/maptile/{mapID}/normal.day.grey/{z}/{x}/{y}/256/png8?app_id={app_id}&app_code={app_code}', {
+			// attribution: 'Map &copy; 1987-2014 <a href="http://developer.here.com">HERE</a>',
+			subdomains: '1234',
+			mapID: 'newest',
+			app_id: 'Y8m9dK2brESDPGJPdrvs',
+			app_code: 'dq2MYIvjAotR8tHvY8Q_Dg',
+			base: 'base',
+			minZoom: 16,
+			maxZoom: 16
+		}).addTo(map);
+
+	// Disable drag and zoom handlers.
+	map.dragging.disable();
+	map.touchZoom.disable();
+	map.doubleClickZoom.disable();
+	map.scrollWheelZoom.disable();
+
+	// Disable tap handler, if present.
+	if (map.tap) map.tap.disable();
+
+
+	</script>
 
 </body>
 </html>
