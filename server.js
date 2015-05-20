@@ -93,7 +93,7 @@ if(config.use_database==='true'){
     });
 
     // GHOST ITEM IN DB
-    connection.query('CREATE TABLE IF NOT EXISTS ghosts (id MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY, area TEXT, arealocation TEXT, spook1 TEXT, spook2 TEXT, spook3 TEXT, spook4 TEXT, spook5 TEXT, spook6 TEXT, spook7 TEXT, spook8 TEXT, spook9 TEXT)',
+    connection.query('CREATE TABLE IF NOT EXISTS ghosts (id MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY, area TEXT, arealocation TEXT, spook1 TEXT, spook2 TEXT, spook3 TEXT, spook4 TEXT, spook5 TEXT, spook6 TEXT, spook7 TEXT, spook8 TEXT, spook9 TEXT, spook10 TEXT, spook11 TEXT, spook12 TEXT)',
     function(err, result){
         // Case there is an error during the creation
         if(err) {
@@ -101,7 +101,7 @@ if(config.use_database==='true'){
         }
     });
 
-    var spookCounter = 9;
+    var spookCounter = 12;
 
 }// connection
 
@@ -1619,7 +1619,7 @@ function moveOpponent (currentAreaName,currentAreaPosition,ghostsName) {
 				newOpponent (currentAreaName,currentAreaPosition,ghostsName);
 			};
 
-	        var speed = 0.00025; // 00005 
+	        var speed = 0.00015; // 00005 
 			var speedNeg = speed * -1;
 	        var value = getRandomArbitrary(speedNeg, speed);
 
@@ -1627,6 +1627,7 @@ function moveOpponent (currentAreaName,currentAreaPosition,ghostsName) {
 
 	        if (isNaN(Number(global["ghosts"][currentAreaName][ghostsName][topORleft] +1 )   ) ) {
 	        	console.log("NaN/e")
+                console.log(ghostsName)
 	        }
 	        else {
 	            global["ghosts"][currentAreaName][ghostsName][topORleft] = (Number(global["ghosts"][currentAreaName][ghostsName][topORleft]) + value);
@@ -1722,7 +1723,7 @@ var ghostAttackUserInterval = setInterval(function () {
                 // console.log("area")
                 // console.log(area)
                 Object.keys(global["ghosts"][area]).forEach(function(ghostsName) {
-                    if (calcCrow(global["ghosts"][area][ghostsName][0], global["ghosts"][area][ghostsName][1], userData[c][useridI][0], userData[c][useridI][1]) <= 0.03) { // 0199883
+                    if (calcCrow(global["ghosts"][area][ghostsName][0], global["ghosts"][area][ghostsName][1], userData[c][useridI][0], userData[c][useridI][1]) <= 0.0199883) { // 0199883
                         
                         console.log("-----loop " + calcCrow(global["ghosts"][area][ghostsName][0], global["ghosts"][area][ghostsName][1], userData[c][useridI][0], userData[c][useridI][1]) )
                         console.log(global["ghosts"][area][ghostsName])
@@ -1747,13 +1748,13 @@ var ghostAttackUserInterval = setInterval(function () {
                                         }
                                     });
 
-                                    // Give opponent +1
-                                    global["ghosts"][area][ghostsName][2] = Number(global["ghosts"][area][ghostsName][2]+1);
+                                    // // Give opponent +1
+                                    // global["ghosts"][area][ghostsName][2] = Number(global["ghosts"][area][ghostsName][2]+1);
 
-                                    // opponent has lost:
-                                    if (global["ghosts"][area][ghostsName][2] <= 0) {
-                                        newOpponent (global["currentAreaName"][useridI],global["currentAreaPosition"][useridI],ghostsName)
-                                    };
+                                    // // opponent has lost:
+                                    // if (global["ghosts"][area][ghostsName][2] <= 0) {
+                                    //     newOpponent (global["currentAreaName"][useridI],global["currentAreaPosition"][useridI],ghostsName)
+                                    // };
 
         
 
@@ -1761,6 +1762,39 @@ var ghostAttackUserInterval = setInterval(function () {
                                 }//e/fi
                             }//e/NaN
 
+
+
+
+                    }; //e/fi
+
+                    var distance = calcCrow(global["ghosts"][area][ghostsName][0], global["ghosts"][area][ghostsName][1], userData[c][useridI][0], userData[c][useridI][1]);
+
+                    if ( (distance >= 0.03) && (distance <= 0.05)) { // 0199883    // 0.16
+
+
+
+                        // moveOpponent (global["currentAreaName"][useridI],global["currentAreaPosition"][useridI],ghostsName)
+                        console.log(global["currentAreaName"][useridI])
+                        console.log(global["currentAreaPosition"][useridI])
+                        console.log(ghostsName)
+                        console.log("in neighboorhood");
+
+                        console.log(userData[c][useridI][0]);
+                        console.log(global["ghosts"][area][ghostsName][0]);
+                        console.log(global["ghosts"][area][ghostsName][1]);
+
+                        if (isNaN(Number(global["ghosts"][global["currentAreaName"][useridI]][ghostsName][0] +1 )   ) ) {
+                            console.log("NaN/e/2");
+                            console.log(ghostsName);
+                        }
+                        else {
+                            // global["ghosts"][area][ghostsName][0] =
+                            console.log( Number(global["ghosts"][area][ghostsName][0] - 0.000115)   ) ;
+                            global["ghosts"][area][ghostsName][0] = Number(global["ghosts"][area][ghostsName][0] + 0.000035);
+
+                            global["ghosts"][area][ghostsName][1] = Number(global["ghosts"][area][ghostsName][1] + 0.000035);
+
+                        }//e/sle
 
 
 
