@@ -784,7 +784,7 @@ io.on('connection', function(socket){
 				    		}//e/ls
 				    	};
 				    	
-				    	console.log(AreaListOfGeoLocation);
+				    	// console.log(AreaListOfGeoLocation);
 
 				    	if (AreaListOfGeoLocation.length === 0) {
 				    		// Create a new area
@@ -1166,9 +1166,9 @@ io.on('connection', function(socket){
             socket.emit('money', {"money": global["money"][userid]});
             socket.emit('health', {"health": global["health"][userid]});
 
-            clearInterval(DisplayScore);
+            // // // clearInterval(DisplayScore);
         };
-	}, 500);
+	}, 1000);
 
 
 
@@ -1538,7 +1538,7 @@ var moveGhosts = setInterval(function () {
 		// currentAreaName
 		// currentAreaPosition
 
-		console.log(global["currentAreaName"]);
+		// console.log(global["currentAreaName"]);
 
 
 		Object.keys(global["currentAreaName"]).forEach(function(useridI) {
@@ -1619,7 +1619,7 @@ function moveOpponent (currentAreaName,currentAreaPosition,ghostsName) {
 				newOpponent (currentAreaName,currentAreaPosition,ghostsName);
 			};
 
-	        var speed = 0.00005;
+	        var speed = 0.00025; // 00005 
 			var speedNeg = speed * -1;
 	        var value = getRandomArbitrary(speedNeg, speed);
 
@@ -1702,8 +1702,16 @@ function newOpponent (currentAreaName,currentAreaPosition,ghostsName) {
 
 }//e/newOpponent
 
+
+
+// ghostAttackUser!!!
+
 var ghostAttackUserInterval = setInterval(function () {
     
+    if (startMoveOpponents){
+        ghostAttackUser ()
+    }
+
     function ghostAttackUser () {
 
 
@@ -1714,8 +1722,51 @@ var ghostAttackUserInterval = setInterval(function () {
                 // console.log("area")
                 // console.log(area)
                 Object.keys(global["ghosts"][area]).forEach(function(ghostsName) {
-                    
-                });
+                    if (calcCrow(global["ghosts"][area][ghostsName][0], global["ghosts"][area][ghostsName][1], userData[c][useridI][0], userData[c][useridI][1]) <= 0.03) { // 0199883
+                        
+                        console.log("-----loop " + calcCrow(global["ghosts"][area][ghostsName][0], global["ghosts"][area][ghostsName][1], userData[c][useridI][0], userData[c][useridI][1]) )
+                        console.log(global["ghosts"][area][ghostsName])
+
+
+                        // // Give +1 to the user
+                        if (!(isNaN(global["score"][useridI] + 1))) {
+
+                                global["score"][useridI] = Number(global["score"][useridI] - 1);
+
+
+                                if(config.use_database==='true'){
+                                    connection.query("SELECT * from users where userid="+ useridI ,function(err,rows,fields){
+                                    if(err) throw err;
+                                    if(rows.length===1){
+                                        console.log("update score  -> " +  global["score"][useridI]);
+                                        connection.query("UPDATE users SET "+ "score" +" = '" + global["score"][useridI] + "' WHERE userid = '" + useridI +"'");
+
+                                    }
+                                    else{
+                                            console.log("User already exists in database");
+                                        }
+                                    });
+
+                                    // Give opponent +1
+                                    global["ghosts"][area][ghostsName][2] = Number(global["ghosts"][area][ghostsName][2]+1);
+
+                                    // opponent has lost:
+                                    if (global["ghosts"][area][ghostsName][2] <= 0) {
+                                        newOpponent (global["currentAreaName"][useridI],global["currentAreaPosition"][useridI],ghostsName)
+                                    };
+
+        
+
+
+                                }//e/fi
+                            }//e/NaN
+
+
+
+
+                    }; //e/fi
+
+                });//e/object
             });
         });        
 
