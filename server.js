@@ -1773,23 +1773,22 @@ var ghostAttackUserInterval = setInterval(function () {
 
 
 
-                        // moveOpponent (global["currentAreaName"][useridI],global["currentAreaPosition"][useridI],ghostsName)
-                        console.log(global["currentAreaName"][useridI])
-                        console.log(global["currentAreaPosition"][useridI])
-                        console.log(ghostsName)
-                        console.log("in neighboorhood");
+                        // console.log(global["currentAreaName"][useridI])
+                        // console.log(global["currentAreaPosition"][useridI])
+                        // console.log(ghostsName)
+                        // console.log("in neighboorhood");
 
-                        console.log(userData[c][useridI][0]);
-                        console.log(global["ghosts"][area][ghostsName][0]);
-                        console.log(global["ghosts"][area][ghostsName][1]);
+                        // console.log(userData[c][useridI][0]);
+                        // console.log(global["ghosts"][area][ghostsName][0]);
+                        // console.log(global["ghosts"][area][ghostsName][1]);
 
-                        if (isNaN(Number(global["ghosts"][global["currentAreaName"][useridI]][ghostsName][0] +1 )   ) ) {
+                        if (isNaN(Number(global["ghosts"][global["currentAreaName"][useridI]][ghostsName][1] + 1 )   ) ) {
                             console.log("NaN/e/2");
                             console.log(ghostsName);
                         }
                         else {
                             // global["ghosts"][area][ghostsName][0] =
-                            console.log( Number(global["ghosts"][area][ghostsName][0] - 0.000115)   ) ;
+                            console.log(ghostsName + " is very close to " + useridI);
                             global["ghosts"][area][ghostsName][0] = Number(global["ghosts"][area][ghostsName][0] + 0.000035);
 
                             global["ghosts"][area][ghostsName][1] = Number(global["ghosts"][area][ghostsName][1] + 0.000035);
@@ -1809,3 +1808,38 @@ var ghostAttackUserInterval = setInterval(function () {
 },1000);
 
 
+
+// var killAreasInterval = setInterval(function () {
+    
+//     if (startMoveOpponents){
+//         killAreas ()
+//     }//e/estartMoveOpponents
+
+//     function killAreas () {
+//         Object.keys(latestConnectionTime).forEach(function(item) {
+
+//             // calc in unix time
+//             var time1 = Number(latestConnectionTime[item]/1000);
+//             var time2 = Math.floor(Date.now() /1000);
+
+
+//             if (time2-time1 > 10) { // 7200
+//                 console.log("user kicked out::!")
+//                 console.log(latestConnectionTime[item]);
+//                 console.log(time2-time1);
+
+
+//                 delete global["currentAreaName"][item];
+//                 delete global["currentAreaPosition"][item];
+
+//                 delete latestConnectionTime[item];
+
+
+
+//             };
+//         });//e/object
+
+//     }//e/KillArea
+
+
+// },1000);
