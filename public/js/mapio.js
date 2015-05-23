@@ -84,7 +84,7 @@ L.tileLayer('https://{s}.{base}.maps.cit.api.here.com/maptile/2.1/maptile/{mapID
 	app_code: 'dq2MYIvjAotR8tHvY8Q_Dg',
 	base: 'base',
 	minZoom: 0,
-	maxZoom: 20
+	maxZoom: 18
 }).addTo(map);
 
 
