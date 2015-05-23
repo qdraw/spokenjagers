@@ -64,7 +64,6 @@ if ( __dirname.indexOf("avans-individueel-verdieping-blok11-12") == -1) {
 process.argv.forEach(function (val, index, array) {
     if (val === "localauth") {
         config.host = "127.0.0.1";
-
     }   
 });
 
@@ -1619,7 +1618,7 @@ function moveOpponent (currentAreaName,currentAreaPosition,ghostsName) {
 				newOpponent (currentAreaName,currentAreaPosition,ghostsName);
 			};
 
-	        var speed = 0.00015; // 00005 
+	        var speed = 0.00009; // 00005 
 			var speedNeg = speed * -1;
 	        var value = getRandomArbitrary(speedNeg, speed);
 
@@ -1791,11 +1790,11 @@ var ghostAttackUserInterval = setInterval(function () {
                             console.log(ghostsName + " is very close to " + useridI);
 
                             if (! isNaN(Number(global["ghosts"][area][ghostsName][0] + 0.000035)) ) {
-                                global["ghosts"][area][ghostsName][0] = Number(global["ghosts"][area][ghostsName][0] + 0.000035);
+                                global["ghosts"][area][ghostsName][0] = Number(global["ghosts"][area][ghostsName][0] + 0.000015);
                             }//e/extra nan
 
                             if (!isNaN(Number(global["ghosts"][area][ghostsName][1] + 0.000035))) {
-                                global["ghosts"][area][ghostsName][1] = Number(global["ghosts"][area][ghostsName][1] + 0.000035);
+                                global["ghosts"][area][ghostsName][1] = Number(global["ghosts"][area][ghostsName][1] + 0.000015);
                             }//e/extra nan
 
 
