@@ -573,3 +573,7 @@ dashboard-name-box img {
 .account-box #me {
 	float: right;
 }
+
+.privacy p {
+	margin-bottom: 15px;
+}

@@ -6,10 +6,10 @@
 
     <preference name="phonegap-version" value="3.7.0" />
 
-    <name>GameProject</name>
+    <name>GhostHunter</name>
 
     <description>
-        GameProject
+        a realtime open air ghost hunting game
     </description>
 
     <author href="http://qdraw.nl" email="dion@qdraw.nl">
