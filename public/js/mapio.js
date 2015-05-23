@@ -177,7 +177,7 @@ function findGeoLocation () {
 			speed: speed
 		}
 		window["data"] = data;
-		console.log(data);
+		// console.log(data);
 
 		sendToQ(data)
 	}
@@ -233,7 +233,7 @@ var blueIcon = L.icon({
 });
 
 var whiteIcon = L.icon({
-    iconUrl: public_html + 'images/fa-map-marker-white.svg',
+    iconUrl: public_html + 'images/fa-map-marker-ghost.svg',
     shadowUrl: public_html + 'js/images/marker-shadow.png',
 
     iconSize:     [50, 50], // size of the icon
@@ -253,16 +253,16 @@ function startSocket () {
 
 	socket.on('users', function(users){
 	// ask the server for a list of users:
-	console.log("users");
-	console.log(users);
+	// console.log("users");
+	// console.log(users);
 
 
 		// loop though object 
 		// Visit non-inherited enumerable keys
 		// var obj = { first: "John", last: "Doe" };
 		Object.keys(users).forEach(function(key) {
-			console.log("key")
-			console.log(key)
+			// console.log("key")
+			// console.log(key)
 
 			key = String(key);
 
@@ -304,12 +304,12 @@ function startSocket () {
 		});
 
 
-		// Display a list of users:
-		var userList = "Users: <br />";
-		Object.keys(users).forEach(function(key) {
-			userList = userList + key + "<br />";
-		});
-		document.getElementById("users").innerHTML = userList;
+		// // Display a list of users:
+		// var userList = "Users: <br />";
+		// Object.keys(users).forEach(function(key) {
+		// 	userList = userList + key + "<br />";
+		// });
+		// document.getElementById("users").innerHTML = userList;
 
 
 
@@ -416,14 +416,14 @@ socket.on('ghosts', function(ghosts){
 	var	ghosts = JSON.parse(ghosts)
 
 	// console.log(ghosts["area_1"]["spook5"])
-	console.log(ghosts);
+	// console.log(ghosts);
 
 	window["ghosts"] = {};
 
 	Object.keys(ghosts).forEach(function(area) {
 		
-		console.log("area");
-		console.log(area);
+		// console.log("area");
+		// console.log(area);
 
 		window["ghosts"][area] = {};
 
@@ -431,8 +431,8 @@ socket.on('ghosts', function(ghosts){
 
 
 			if (window["ghosts_" + area + "_" + ghostsName] == undefined) {
-				console.log("--> " + area + " "+ghostsName );
-				console.log(ghosts[area][ghostsName][0]);
+				// console.log("--> " + area + " "+ghostsName );
+				// console.log(ghosts[area][ghostsName][0]);
 
 				window["ghosts_" + area + "_" +ghostsName] = L.marker([ghosts[area][ghostsName][0],ghosts[area][ghostsName][1]],{icon: whiteIcon}).addTo(map);
 
@@ -456,7 +456,7 @@ socket.on('ghosts', function(ghosts){
 map.on('click', onMapClick);
 
 function onMapClick(e) {
-	console.log(e.latlng);
+	console.log("You shoot at", e.latlng.lat, e.latlng.lng);
 	socket.emit('shoot', e.latlng);
 }
 
@@ -470,9 +470,25 @@ socket.on('score', function(score){
 		scoreInPoints = Math.ceil(score["points"]*10);
 		scoreInPoints = scoreInPoints/10;
 
-		console.log(score["points"]);
+		// console.log(score["points"]);
 		document.getElementById("points").innerHTML = scoreInPoints;
+	}
+
+	// low xp user
+	if ((score["points"] > -2) && (score["points"] < 2)) {
+		console.log("score")
+		console.log(score)
+		document.getElementById("info").style.display = "none";
+
+	}
+
+	// very new user
+	if (score["points"] == null) {
+		console.log("null");
+		document.getElementById("info").style.display = "block";
+		document.getElementById("info").innerHTML = "Inside the blue circle you can shoot a ghost!"
 	};
+
 }); //e/score
 
 

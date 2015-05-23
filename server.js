@@ -1789,9 +1789,16 @@ var ghostAttackUserInterval = setInterval(function () {
                         else {
                             // global["ghosts"][area][ghostsName][0] =
                             console.log(ghostsName + " is very close to " + useridI);
-                            global["ghosts"][area][ghostsName][0] = Number(global["ghosts"][area][ghostsName][0] + 0.000035);
 
-                            global["ghosts"][area][ghostsName][1] = Number(global["ghosts"][area][ghostsName][1] + 0.000035);
+                            if (! isNaN(Number(global["ghosts"][area][ghostsName][0] + 0.000035)) ) {
+                                global["ghosts"][area][ghostsName][0] = Number(global["ghosts"][area][ghostsName][0] + 0.000035);
+                            }//e/extra nan
+
+                            if (!isNaN(Number(global["ghosts"][area][ghostsName][1] + 0.000035))) {
+                                global["ghosts"][area][ghostsName][1] = Number(global["ghosts"][area][ghostsName][1] + 0.000035);
+                            }//e/extra nan
+
+
 
                         }//e/sle
 

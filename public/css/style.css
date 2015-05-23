@@ -435,7 +435,10 @@ dashboard-name-box img {
 	left: 15px;
 	color: white;
 }
-
+#debug #date,
+#debug #cpuload {
+	display: none;
+}
 #update {
 	position: absolute;
 	bottom: 20px;
@@ -511,6 +514,17 @@ dashboard-name-box img {
     z-index:-1;
     
     background-image: url("../images/preloader.svg");
+}
+
+#info {
+	display: none;
+	width: 50vw;
+	margin-left: 25vw;
+	background-color: rgba(0,119,127,0.6);
+	position: absolute;
+	bottom: 25vw;
+	padding: 10px;
+	color: white;
 }
 
 

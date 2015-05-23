@@ -324,6 +324,21 @@
 
 	</script>
 
+	<script type="text/javascript">
+
+		// for people that can't find the most important button!
+		window.onscroll = function(ev) {
+		    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+		        document.querySelector(".dashboard-login").style.backgroundColor = "#B25F26"
+		    }
+		};
+
+		setTimeout(function () {
+	        document.querySelector(".dashboard-login").style.backgroundColor = "#B25F26"
+		},6000);
+
+	</script>
+
 
 <% } %>
 

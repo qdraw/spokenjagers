@@ -3,10 +3,7 @@
 <svg version="1.1" id="Laag_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 width="50px" height="50px" viewBox="0 0 50 50" enable-background="new 0 0 50 50" xml:space="preserve">
 <circle fill="#FFFFFF" cx="25" cy="25" r="25"/>
-<circle cx="25.571" cy="25" r="3.981"/>
-<circle fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10" cx="25.571" cy="25" r="8.183"/>
-<line fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10" x1="25.571" y1="16.817" x2="25.571" y2="13.9"/>
-<line fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10" x1="25.571" y1="35.725" x2="25.571" y2="32.807"/>
-<line fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10" x1="33.625" y1="25" x2="36.542" y2="25"/>
-<line fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10" x1="14.472" y1="25" x2="17.389" y2="25"/>
+<rect x="24.18" y="13.784" width="1.641" height="22.433"/>
+<rect x="19.989" y="16.805" width="10.023" height="6.367"/>
+<rect x="17.386" y="26.802" width="15.229" height="6.366"/>
 </svg>
