@@ -205,6 +205,8 @@ function localAuth () {
     var users = [
         { username: "dion", id: "1000000000000000000", displayName: 'dion', name: {givenName : "Dion"}, password: 'dion', email: 'joe@example.com', provider: 'basic' }
       , { username: "henry", id: "1000000000010000001", displayName: 'henry', name: {givenName : "Henry"}, password: 'henry', email: 'joe@example.com', provider: 'basic' }
+      , { username: "niels", id: "1000000000020000002", displayName: 'niels', name: {givenName : "niels"}, password: 'niels', email: 'n@example.com', provider: 'basic' }
+      , { username: "demo", id: "1000000000030000003", displayName: 'demo', name: {givenName : "demo"}, password: 'demo', email: 'demo@example.com', provider: 'basic' }
     ];
 
 
