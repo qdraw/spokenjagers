@@ -92,7 +92,7 @@ if(config.use_database==='true'){
     });
 
     // GHOST ITEM IN DB
-    connection.query('CREATE TABLE IF NOT EXISTS ghosts (id MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY, area TEXT, arealocation TEXT, spook1 TEXT, spook2 TEXT, spook3 TEXT, spook4 TEXT, spook5 TEXT, spook6 TEXT, spook7 TEXT, spook8 TEXT, spook9 TEXT, spook10 TEXT, spook11 TEXT, spook12 TEXT)',
+    connection.query('CREATE TABLE IF NOT EXISTS ghosts (id MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY, area TEXT, arealocation TEXT, spook1 TEXT, spook2 TEXT, spook3 TEXT, spook4 TEXT, spook5 TEXT, spook6 TEXT, spook7 TEXT, spook8 TEXT, spook9 TEXT, spook10 TEXT, spook11 TEXT, spook12 TEXT, spook13 TEXT, spook14 TEXT, spook15 TEXT)',
     function(err, result){
         // Case there is an error during the creation
         if(err) {
@@ -100,7 +100,7 @@ if(config.use_database==='true'){
         }
     });
 
-    var spookCounter = 12;
+    var spookCounter = 15;
 
 }// connection
 
@@ -1002,7 +1002,7 @@ io.on('connection', function(socket){
 	        // check if the shooting is inside the circle
 	        var isInBox = false;
 	        try {
-	            if (calcCrow(shoot.lat, shoot.lng, userData[c][userid][0], userData[c][userid][1]) <= 0.0199883) {
+	            if (calcCrow(shoot.lat, shoot.lng, userData[c][userid][0], userData[c][userid][1]) <= 0.03997664) { // 0.0199883
 	                console.log(shoot);
 	                var isInBox = true;
 	            };
@@ -1012,7 +1012,7 @@ io.on('connection', function(socket){
 
 
 	        // ! is for debug!!!!!!!!
-	        if (!isInBox) {
+	        if (isInBox) {
 
 
 				Object.keys(global["ghosts"]).forEach(function(area) {
@@ -1083,7 +1083,7 @@ io.on('connection', function(socket){
 	                var posLng = global["opponent"]["opponent_" + i][1];
 
 	                // calculate the distance of the opponent related to the point that has been shot
-	                if (calcCrow(shoot.lat, shoot.lng, posLat, posLng) < 0.0199883) {
+	                if (calcCrow(shoot.lat, shoot.lng, posLat, posLng) < 0.03997664) {
 
 
 
@@ -1768,18 +1768,7 @@ var ghostAttackUserInterval = setInterval(function () {
 
                     var distance = calcCrow(global["ghosts"][area][ghostsName][0], global["ghosts"][area][ghostsName][1], userData[c][useridI][0], userData[c][useridI][1]);
 
-                    if ( (distance >= 0.03) && (distance <= 0.05)) { // 0199883    // 0.16
-
-
-
-                        // console.log(global["currentAreaName"][useridI])
-                        // console.log(global["currentAreaPosition"][useridI])
-                        // console.log(ghostsName)
-                        // console.log("in neighboorhood");
-
-                        // console.log(userData[c][useridI][0]);
-                        // console.log(global["ghosts"][area][ghostsName][0]);
-                        // console.log(global["ghosts"][area][ghostsName][1]);
+                    if ( (distance >= 0.1) && (distance <= 0.3)) { // 0199883    // 0.16
 
                         if (isNaN(Number(global["ghosts"][global["currentAreaName"][useridI]][ghostsName][1] + 1 )   ) ) {
                             console.log("NaN/e/2");
@@ -1794,16 +1783,38 @@ var ghostAttackUserInterval = setInterval(function () {
                             }//e/extra nan
 
                             if (!isNaN(Number(global["ghosts"][area][ghostsName][1] + 0.000035))) {
-                                global["ghosts"][area][ghostsName][1] = Number(global["ghosts"][area][ghostsName][1] + 0.000015);
+                                global["ghosts"][area][ghostsName][1] = Number(global["ghosts"][area][ghostsName][1] + 0.000005);
                             }//e/extra nan
-
-
 
                         }//e/sle
 
 
 
                     }; //e/fi
+
+                    if ( (distance >= 0.7) && (distance <= 1.0)) { // 0199883    // 0.16
+
+                        if (isNaN(Number(global["ghosts"][global["currentAreaName"][useridI]][ghostsName][1] + 1 )   ) ) {
+                            console.log("NaN/e/2");
+                            console.log(ghostsName);
+                        }
+                        else {
+                            // global["ghosts"][area][ghostsName][0] =
+                            console.log(ghostsName + " is very far from to " + useridI);
+
+                            if (! isNaN(Number(global["ghosts"][area][ghostsName][0] + 0.000135)) ) {
+                                global["ghosts"][area][ghostsName][0] = Number(global["ghosts"][area][ghostsName][0] + 0.000535);
+                            }//e/extra nan
+
+                            if (!isNaN(Number(global["ghosts"][area][ghostsName][1] + 0.000135))) {
+                                global["ghosts"][area][ghostsName][1] = Number(global["ghosts"][area][ghostsName][1] + 0.000535);
+                            }//e/extra nan
+
+                        }//e/sle
+
+
+
+                    }; //e/fi                    
 
                 });//e/object
             });

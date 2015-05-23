@@ -294,11 +294,11 @@ function startSocket () {
 		Object.keys(users).forEach(function(key) {
 
 			if ((userid === key)&& (YouCircle === 0)) {
-				YouCircle = L.circle([users[key][0],users[key][1]],20 ).addTo(map);
+				YouCircle = L.circle([users[key][0],users[key][1]],40 ).addTo(map);
 			}
 			if ((userid === key) && (YouCircle != 0)) {
 				map.removeLayer(YouCircle);
-				YouCircle = L.circle([users[key][0],users[key][1]],20 ).addTo(map);
+				YouCircle = L.circle([users[key][0],users[key][1]],40 ).addTo(map);
 			}
 
 		});
