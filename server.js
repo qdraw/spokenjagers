@@ -92,7 +92,7 @@ if(config.use_database==='true'){
     });
 
     // GHOST ITEM IN DB
-    connection.query('CREATE TABLE IF NOT EXISTS ghosts (id MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY, area TEXT, arealocation TEXT, spook1 TEXT, spook2 TEXT, spook3 TEXT, spook4 TEXT, spook5 TEXT, spook6 TEXT, spook7 TEXT, spook8 TEXT, spook9 TEXT, spook10 TEXT, spook11 TEXT, spook12 TEXT, spook13 TEXT, spook14 TEXT, spook15 TEXT)',
+    connection.query('CREATE TABLE IF NOT EXISTS ghosts (id MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY, area TEXT, arealocation TEXT, spook1 TEXT, spook2 TEXT, spook3 TEXT, spook4 TEXT, spook5 TEXT, spook6 TEXT, spook7 TEXT, spook8 TEXT, spook9 TEXT, spook10 TEXT, spook11 TEXT, spook12 TEXT, spook13 TEXT, spook14 TEXT, spook15 TEXT, spook16 TEXT, spook17 TEXT, spook18 TEXT, spook19 TEXT, spook20 TEXT, spook21 TEXT, spook22 TEXT, spook23 TEXT, spook24 TEXT, spook25 TEXT, spook26 TEXT)',
     function(err, result){
         // Case there is an error during the creation
         if(err) {
@@ -100,7 +100,7 @@ if(config.use_database==='true'){
         }
     });
 
-    var spookCounter = 15;
+    var spookCounter = 22;
 
 }// connection
 
