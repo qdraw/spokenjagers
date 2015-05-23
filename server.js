@@ -1794,7 +1794,7 @@ var ghostAttackUserInterval = setInterval(function () {
 
                     }; //e/fi
 
-                    if ( (distance >= 0.7) && (distance <= 1.0)) { // 0199883    // 0.16
+                    if ( (distance >= 0.8) && (distance <= 1.0)) { // 0199883    // 0.16
 
                         if (isNaN(Number(global["ghosts"][global["currentAreaName"][useridI]][ghostsName][1] + 1 )   ) ) {
                             console.log("NaN/e/2");
@@ -1804,12 +1804,12 @@ var ghostAttackUserInterval = setInterval(function () {
                             // global["ghosts"][area][ghostsName][0] =
                             console.log(ghostsName + " is very far from to " + useridI);
 
-                            if (! isNaN(Number(global["ghosts"][area][ghostsName][0] + 0.000135)) ) {
-                                global["ghosts"][area][ghostsName][0] = Number(global["ghosts"][area][ghostsName][0] + 0.000535);
+                            if (! isNaN(Number(global["ghosts"][area][ghostsName][0] + 0.000335)) ) {
+                                global["ghosts"][area][ghostsName][0] = Number(global["ghosts"][area][ghostsName][0] + 0.001535);
                             }//e/extra nan
 
-                            if (!isNaN(Number(global["ghosts"][area][ghostsName][1] + 0.000135))) {
-                                global["ghosts"][area][ghostsName][1] = Number(global["ghosts"][area][ghostsName][1] + 0.000535);
+                            if (!isNaN(Number(global["ghosts"][area][ghostsName][1] + 0.000335))) {
+                                global["ghosts"][area][ghostsName][1] = Number(global["ghosts"][area][ghostsName][1] + 0.001535);
                             }//e/extra nan
 
                         }//e/sle
