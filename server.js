@@ -1794,7 +1794,7 @@ var ghostAttackUserInterval = setInterval(function () {
 
                     }; //e/fi
 
-                    if ( (distance >= 0.8) && (distance <= 1.0)) { // 0199883    // 0.16
+                    if ( (distance >= 1.8) && (distance <= 2.0)) { // 0199883    // 0.16
 
                         if (isNaN(Number(global["ghosts"][global["currentAreaName"][useridI]][ghostsName][1] + 1 )   ) ) {
                             console.log("NaN/e/2");
