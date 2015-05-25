@@ -118,8 +118,13 @@ function FirstFindGeoLocation () {
 		console.log(latitude,longitude);
 		map.panTo(L.latLng(latitude, longitude));
 	}
-	function error() {
-    	map.innerHTML = "Unable to retrieve your location";
+	function error(e) {
+		console.log("Error code "+ e.code , e.message);
+		if (document.querySelectorAll("#error").length >= 0) {
+			document.querySelector("#error").style.display = "block";
+			document.querySelector("#error").innerHTML = "There is a geolocation error";
+		}; //e/fi
+
  	};	
 
  	// leave this one over, here chrome doesn't like it inside the succes()
@@ -161,6 +166,10 @@ function findGeoLocation () {
 	function success(position) {
 		// when i;ve a succesfull lookup of the geolocation
 
+		if (document.querySelectorAll("#error").length >= 0) {
+			document.querySelector("#error").style.display = "none";
+		}; //e/fi
+
 		var latitude  = position.coords.latitude;
 		var longitude = position.coords.longitude;
 		var accuracy = position.coords.accuracy;
@@ -181,8 +190,12 @@ function findGeoLocation () {
 
 		sendToQ(data)
 	}
-	function error() {
-    	map.innerHTML = "Unable to retrieve your location";
+	function error(e) {
+		console.log("Error code "+ e.code , e.message);
+		if (document.querySelectorAll("#error").length >= 0) {
+			document.querySelector("#error").style.display = "block";
+			document.querySelector("#error").innerHTML = "There is a geolocation error";
+		}; //e/fi
  	};
 
 
@@ -332,8 +345,22 @@ socket.on('date', function(data){
 setInterval(function(){
 	var delay = Number(new Date().getTime() - date);
 	if ((delay > 10001) &&(delay < 15001)) {
-		alert("you've lost the connection for 10 seconds");
-	};
+		if (document.querySelectorAll("#connection-error").length >= 0) {
+			document.querySelector("#connection-error").style.display = "block";
+			document.querySelector("#connection-error").innerHTML = "Warning, <br />You've lost the connection for 10 seconds";
+		}
+		else {
+			alert("you've lost the connection for 10 seconds");
+		}//e/ls
+	}
+
+	if ((delay > 0) &&(delay < 10001)) {
+		if (document.querySelectorAll("#connection-error").length >= 0) {
+			document.querySelector("#connection-error").style.display = "none";
+		}		
+	}
+
+
 }, 5000);
 
 
@@ -352,7 +379,7 @@ setInterval(function(){
 // Kills the users without geolocation
 setInterval(function(){
 	if (window["data"].longitude === 0) {
-		console.log("FAIL");
+		console.log("FAIL Fatal Warning");
 		window.location = "geolocation.html"
 	};
 }, 20000);
@@ -375,22 +402,22 @@ function panToYou () {
 }//e/pantoyou
 
 
-// Fatal error functions:
-if (document.querySelectorAll("#error").length >= 0) {
-	document.querySelector("#error").style.display = "none";
-}; //e/fi
+// // Fatal error functions:
+// if (document.querySelectorAll("#error").length >= 0) {
+// 	document.querySelector("#error").style.display = "none";
+// }; //e/fi
 
-function fatalError(zIndex) {
-	if (document.querySelectorAll("#error").length >= 0) {
-		document.querySelector("#error").style.display = "block";
-		document.querySelector("#error").style.zIndex = zIndex;
-	}//fi
-}
+// function fatalError(zIndex) {
+// 	if (document.querySelectorAll("#error").length >= 0) {
+// 		document.querySelector("#error").style.display = "block";
+// 		document.querySelector("#error").style.zIndex = zIndex;
+// 	}//fi
+// }
 
 
-setTimeout(function(){
-	fatalError(-1);
-}, 10000);
+// setTimeout(function(){
+// 	fatalError(-1);
+// }, 10000);
 
 
 // Kill Users if server crashes or if you logout
@@ -412,6 +439,10 @@ socket.on('ghosts', function(ghosts){
 
 	// console.log("ghosts");
 	// console.log(ghosts);
+
+	if (document.querySelectorAll("#preloader").length >= 0) {
+		document.getElementById("preloader").style.display = "none";
+	}//fi
 
 	var	ghosts = JSON.parse(ghosts)
 

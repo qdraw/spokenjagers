@@ -47,8 +47,10 @@
 <div id="map"></div>
 
 <div id="error">
-    <h1>There is something horribly wrong over here, please try to reload the page</h1>
+    <h2>There is something horribly wrong over here, please try to reload the page</h2>
 </div>
+
+<div id="connection-error"></div>
 
 <div id="debug">
 	<div id="timedifference"></div>
@@ -77,7 +79,9 @@ update
 </div>
 
 
-<div id="preloader"></div>
+<div id="preloader">
+    <span> Loading...</span>
+</div>
 
     <script type="text/javascript">
     var userid = "<%= user.id %>";

@@ -451,18 +451,21 @@ dashboard-name-box img {
 	text-indent: -9999px;
 }
 
-
+#connection-error,
 #error {
+	display: none;
 	position: absolute;
-	bottom: 50%;
-	right: 40%;
+	top: 70px;
 	padding: 20px;
-	height: 100px;
-	width: 200px;
 	font-size: 20px;
+	width: 100vw;
 	background-color: #fff;
+	z-index: 2;
 }
 
+#connection-error {
+	background-color: rgba(178,95,38,0.9);
+}
 
 #score {
 	position: absolute;
@@ -511,9 +514,12 @@ dashboard-name-box img {
     background-size: 58px 58px;
     margin-top: -29px;
     margin-left: -29px;
-    z-index:-1;
-    
+    z-index:2;
     background-image: url("../images/preloader.svg");
+}
+#preloader span {
+	display: block;
+	margin-top: 58px;
 }
 
 #info {
@@ -590,4 +596,8 @@ dashboard-name-box img {
 
 .privacy p {
 	margin-bottom: 15px;
+}
+
+#browserimage {
+	width: 100vw;
 }

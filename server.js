@@ -101,6 +101,8 @@ if(config.use_database==='true'){
     });
 
     var spookCounter = 22;
+    // sql code to upgrade database: update ghosts set spook21 = "0,0,10" where spook21 is null;
+
 
 }// connection
 
@@ -1781,10 +1783,10 @@ var ghostAttackUserInterval = setInterval(function () {
                             console.log(ghostsName + " is very close to " + useridI);
 
                             if (! isNaN(Number(global["ghosts"][area][ghostsName][0] + 0.000035)) ) {
-                                global["ghosts"][area][ghostsName][0] = Number(global["ghosts"][area][ghostsName][0] + 0.000015);
+                                global["ghosts"][area][ghostsName][0] = Number(global["ghosts"][area][ghostsName][0] + 0.000005);
                             }//e/extra nan
 
-                            if (!isNaN(Number(global["ghosts"][area][ghostsName][1] + 0.000035))) {
+                            if (!isNaN(Number(global["ghosts"][area][ghostsName][1] + 0.000015))) {
                                 global["ghosts"][area][ghostsName][1] = Number(global["ghosts"][area][ghostsName][1] + 0.000005);
                             }//e/extra nan
 
@@ -1794,7 +1796,7 @@ var ghostAttackUserInterval = setInterval(function () {
 
                     }; //e/fi
 
-                    if ( (distance >= 1.8) && (distance <= 2.0)) { // 0199883    // 0.16
+                    if ( (distance >= 1.5) && (distance <= 2.0)) { // 0199883    // 0.16
 
                         if (isNaN(Number(global["ghosts"][global["currentAreaName"][useridI]][ghostsName][1] + 1 )   ) ) {
                             console.log("NaN/e/2");
@@ -1805,11 +1807,11 @@ var ghostAttackUserInterval = setInterval(function () {
                             console.log(ghostsName + " is very far from to " + useridI);
 
                             if (! isNaN(Number(global["ghosts"][area][ghostsName][0] + 0.000335)) ) {
-                                global["ghosts"][area][ghostsName][0] = Number(global["ghosts"][area][ghostsName][0] + 0.001535);
+                                global["ghosts"][area][ghostsName][0] = Number(global["ghosts"][area][ghostsName][0] + 0.000535);
                             }//e/extra nan
 
                             if (!isNaN(Number(global["ghosts"][area][ghostsName][1] + 0.000335))) {
-                                global["ghosts"][area][ghostsName][1] = Number(global["ghosts"][area][ghostsName][1] + 0.001535);
+                                global["ghosts"][area][ghostsName][1] = Number(global["ghosts"][area][ghostsName][1] + 0.000535);
                             }//e/extra nan
 
                         }//e/sle

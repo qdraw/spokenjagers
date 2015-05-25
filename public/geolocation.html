@@ -2,16 +2,46 @@
 <html>
 <head>
 	<meta charset="utf-8" />
+	<title>GhostHunter - Geolocation Error</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+
 	<link rel="stylesheet" href="/css/reset.css" />	
 	<link rel="stylesheet" href="/css/style.css" />	
-	<link rel="stylesheet" href="/css/leaflet.css" />		
-	<title>GeoLocation helper</title>
+	<link rel="stylesheet" href="/css/leaflet.css" />
+
+
+     <!-- Disable automatic phone number detection. -->
+    <meta name="format-detection" content="telephone=no"> 
+    <!-- thanks: https://gist.github.com/tfausak/2222823 -->
+     <!-- iPad non-retina icon -->
+    <link href="/images/favicon/apple-touch-icon-precomposed-76.png" sizes="76x76" rel="apple-touch-icon-precomposed"> 
+     <!-- iPhone 6 Plus icon -->
+    <link href="/images/favicon/apple-touch-icon-precomposed-180.png" sizes="120x120" rel="apple-touch-icon-precomposed"> 
+     <!-- iPad retina icon -->
+    <link href="/images/favicon/apple-touch-icon-precomposed-152.png" sizes="152x152" rel="apple-touch-icon-precomposed"> 
+
+    <link rel="shortcut icon" type="image/x-icon" href="/images/favicon/apple-touch-icon_16x16.ico">
+    <link rel="shortcut icon" type="image/png" href="/images/favicon/apple-touch-icon-precomposed-96.png">   
+
+
 </head>
 <body>
 
+<header>
+    <div class="back"> <a href="/game"></a> </div>
+    <div class="user">
+        <a href="/account">
+			<img class="image" src="/images/fa-user.svg" alt="Unknown User"/>
+			<span class="text">
+			 	You
+			</span>
+        </a>
+    </div>
+
+</header>
+
 <div class="container">
 	<h1>How to give permission</h1>
-	<p><a href="/"> Ga terug naar de game</a></p>
 	<img id="browserimage" />
 	<div id="browserimagelink"></div>
 
