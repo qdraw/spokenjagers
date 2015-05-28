@@ -46,11 +46,11 @@
 
 	<div class="container">
 		<div class="account-box">
-			<h2>Account information</h2>
+			<h2>Account informatie</h2>
 
 			<p id="me"> </p>
 
-			<p>Name: <%= user.displayName %></p>
+			<p>Naam: <%= user.displayName %></p>
 
 			<!--
 			<p> familyName : <%= user.name.familyName %> <br />
@@ -58,9 +58,9 @@
 			</p>
 			-->
 
-			<p>gender: <%= user.gender  %></p>
+			<p>geslacht: <%= user.gender  %></p>
 
-			<p>Email: <%= user.emails[0].value %></p>
+			<p>E-mail: <%= user.emails[0].value %></p>
 			<p>Provider: <%= user.provider %></p>
 
 			<p id="id">ID: <%= user.id %></p>
@@ -68,11 +68,17 @@
 
 			<br />
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--------<br />
-			That’s all we know.
+			<!-- 			That’s all we know. -->
+			Dit is alles wat wij weten
 			<br />
-			No Likes, e-mails, posts or whatever.
+			Geen likes, emails of berichten worden er verstuurd. 
+			<!-- 
+			No Likes, e-mails, posts or whatever. -->
 			<br />
-			Check <a href="privacy/">this page</a> for legal information
+			Controleer  <a href="privacy/">deze pagina</a> voor juridische informatie
+
+			<!-- 
+			Check <a href="privacy/">this page</a> for legal information -->
 			<br />
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--------<br />
 
@@ -103,7 +109,7 @@
 					console.log(latitude,longitude)
 
 					//http://www.openstreetmap.org/?mlat=52.67205555555555&mlon=5.918580555555556#map=13/52.6721/5.9186
-			        var a = "Geolocation: <a target='_blank' href='" + "http://www.openstreetmap.org/?mlat=" + latitude + "&mlon=" + longitude + "#map=13/" + latitude + "/" + longitude + "'>" + "view on the map" + "</a>"
+			        var a = "Geolocation: <a target='_blank' href='" + "http://www.openstreetmap.org/?mlat=" + latitude + "&mlon=" + longitude + "#map=13/" + latitude + "/" + longitude + "'>" + "bekijk op de kaart" + "</a>"
 	
 					document.getElementById("geolocation").innerHTML = a;
 									

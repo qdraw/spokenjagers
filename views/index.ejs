@@ -47,7 +47,7 @@
 			<a href="/account">
 				<img class="image" src="/images/fa-user.svg" alt="Unknown User"/>
 				<span class="text">
-				 	You
+				 	Jij
 				</span>
 			</a>
 		</div>
@@ -60,8 +60,9 @@
 
 		<div class="login-small-box">
 			<div class="login-name">
-				<h1> GhostHunter </h1>
-				<p>	a realtime open air ghost hunting game</p>
+				<h1> Spokenjagers </h1> <!-- GhostHunter -->
+				<p>Jaag in de echte wereld op virtuele spoken</p>
+<!-- 				<p>	a realtime open air ghost hunting game</p>  -->
 			</div>
 
 			<div class="login-description">
@@ -74,36 +75,39 @@
 		<div id="providers" class="login-small-box">
 			<% if (cookies.provider === "facebook") { %>
 				<a class="login-facebook" href="/auth/facebook">
-					Log in with Facebook
+					Log in met Facebook
 				</a>
+				<!-- 					Log in with Facebook -->
 				<a class="login-google-low" href="/auth/google">
-					Log in with Google
+					Log in met Google
 				</a>
 
 			<% } else if (cookies.provider === "google") { %>
 				<a class="login-google" href="/auth/google">
-					Log in with Google
+					Log in met Google
 				</a>
 				<a class="login-facebook-low" href="/auth/facebook">
-					Log in with Facebook
+					Log in met Facebook
 				</a>
 			<% } else { %>
 				<a class="login-facebook" href="/auth/facebook">
-					Log in with Facebook
+					Log in met Facebook
 				</a>
 				<a class="login-google" href="/auth/google">
-					Log in with Google
+					Log in met Google
 				</a>
 			<% } %>
 		</div>
 		
 		<div id="providers-disabled">
-			Sorry, but you can't login
+			Sorry, maar op dit moment is inloggen niet mogelijk
 		</div>
+		<!-- Sorry, but you can't login -->
 
 		<div class="login-small-box info">
 
-			This app requires your geo-location and read-only access to your social media account.
+			Deze app vereist je geolocatie. Wij gebruiken je social media account alleen om je te kunnen herkenen.
+			<!-- This app requires your geo-location and read-only access to your social media account. -->
 		</div>
 
 
@@ -112,7 +116,8 @@
 	<div class="facebook-messenger">
 		<img src="images/iconfinder-ios-share.svg" alt="ios share icon">
 		Open in Safari <br />
-		to continue
+		om verder te gaan
+<!--		to continue -->
 	</div>
 
 
@@ -137,7 +142,9 @@
 
 		<div class="dashboard-name-box">
 			<div class="dashboard-name">
-				<h2> Welcome back, <br /> <%= user.displayName %> </h2>
+				<h2> Welkom terug, <br /> <%= user.displayName %> </h2>
+				<!-- <h2> Welcome back, <br /> <%= user.displayName %> </h2> -->
+
 			</div>
 
 			<img src="<%= user.photos[0].value %>" width="50px" height="50px" alt="<%= user.displayName %>"/><br />
@@ -146,30 +153,31 @@
 
 		<div class="login-small-box">
 
-			<a class="dashboard-login" href="../game">Start the game</a>
+			<a class="dashboard-login" href="../game">Start</a>
 
 		</div>
 
 		<div class="login-small-box">
 
 			<div class="score">
-				<h3>Level</h3>
+				<h3>Score</h3>
 				<p></p>
 			</div>
 			<div class="health">
-				<h3>Health</h3>
+				<h3>Leven</h3>
+				<!-- <h3>Health</h3> -->
 				<p></p>
 			</div>
 			<div class="money">
-				<h3>Money</h3>
+				<h3>Geld</h3>
 				<p></p>
 			</div>
 
 		</div>
 
 		<div class="login-small-box" id="users">
-			<h3> Users playing right now</h3>
-
+			<!-- <h3> Users playing right now</h3>  -->
+			<h3> Gebruikers die nu actief zijn</h3>
 		</div>
 
 	<script type="text/javascript">
@@ -311,7 +319,9 @@
 		        
 		        if (document.querySelectorAll("#users p").length <= 0) {
     		        var p = document.createElement("p");
-    		        p.innerHTML = "There are no users playing now"
+    		        p.innerHTML = "Er zijn nu geen spelers actief"
+    		        // p.innerHTML = "There are no users playing now"
+
     		        document.getElementById("users").appendChild(p);
 		        };
 

@@ -440,6 +440,7 @@ dashboard-name-box img {
 	display: none;
 }
 #update {
+	display: none;
 	position: absolute;
 	bottom: 20px;
 	right: 10px;

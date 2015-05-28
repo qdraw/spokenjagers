@@ -347,7 +347,7 @@ setInterval(function(){
 	if ((delay > 10001) &&(delay < 15001)) {
 		if (document.querySelectorAll("#connection-error").length >= 0) {
 			document.querySelector("#connection-error").style.display = "block";
-			document.querySelector("#connection-error").innerHTML = "Warning, <br />You've lost the connection for 10 seconds";
+			document.querySelector("#connection-error").innerHTML = "Pas op!, <br />Je bent de verbinding kwijt voor 10 seconde";
 		}
 		else {
 			alert("you've lost the connection for 10 seconds");
