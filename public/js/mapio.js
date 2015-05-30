@@ -517,7 +517,7 @@ socket.on('score', function(score){
 	if (score["points"] == null) {
 		console.log("null");
 		document.getElementById("info").style.display = "block";
-		document.getElementById("info").innerHTML = "Inside the blue circle you can shoot a ghost!"
+		document.getElementById("info").innerHTML = "Binnen de blauwe cirkel kun je spoken vangen"
 	};
 
 }); //e/score
