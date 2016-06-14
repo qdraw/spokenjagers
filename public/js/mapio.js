@@ -76,26 +76,31 @@ var map = L.map('map', { zoomControl:false }).setView([51, 5.1], 16);
 
 
 // // // https: also suppported. The grey maps
-L.tileLayer('https://{s}.{base}.maps.cit.api.here.com/maptile/2.1/maptile/{mapID}/normal.day.grey/{z}/{x}/{y}/256/png8?app_id={app_id}&app_code={app_code}', {
-	// attribution: 'Map &copy; 1987-2014 <a href="http://developer.here.com">HERE</a>',
-	subdomains: '1234',
-	mapID: 'newest',
-	app_id: 'Y8m9dK2brESDPGJPdrvs',
-	app_code: 'dq2MYIvjAotR8tHvY8Q_Dg',
-	base: 'base',
+// L.tileLayer('https://{s}.{base}.maps.cit.api.here.com/maptile/2.1/maptile/{mapID}/normal.day.grey/{z}/{x}/{y}/256/png8?app_id={app_id}&app_code={app_code}', {
+// 	// attribution: 'Map &copy; 1987-2014 <a href="http://developer.here.com">HERE</a>',
+// 	subdomains: '1234',
+// 	mapID: 'newest',
+// 	app_id: 'Y8m9dK2brESDPGJPdrvs',
+// 	app_code: 'dq2MYIvjAotR8tHvY8Q_Dg',
+// 	base: 'base',
+// 	minZoom: 0,
+// 	maxZoom: 18
+// }).addTo(map);
+
+// // https: also suppported. The grey maps
+L.tileLayer('https://{s}.tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png', {
 	minZoom: 0,
 	maxZoom: 18
 }).addTo(map);
 
 
 
-/*
-// // LocalMaps
- L.tileLayer('local-maps/{z}/{x}/{y}.jpg', {
- 	minZoom: 4,
- 	maxZoom: 18
- }).addTo(map);
-*/
+// // // LocalMaps
+//  L.tileLayer('local-maps/{z}/{x}/{y}.jpg', {
+//  	minZoom: 4,
+//  	maxZoom: 18
+//  }).addTo(map);
+
 
 
 

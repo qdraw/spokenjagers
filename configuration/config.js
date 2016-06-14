@@ -9,7 +9,7 @@ module.exports={
 	"google_api_key" 		: 	"936362512301-o2oq44a3s0mkukf1evhfcep7tfimeulv.apps.googleusercontent.com",
 	"google_api_secret"		:	"W53BdA8rEYp5yCHBtgT4erWb",
 	"use_database"			:	"true",
-	"host"					:	"s84.webhostingserver.nl",
+	"host"					:	"s216.webhostingserver.nl",
 	"username"				:	"deb40577_game",
 	"password"				:	"Der8Ik4yo1Hec9fold2oL5cob3da",
 	// "host"					:	"localhost",
