@@ -87,10 +87,9 @@ var map = L.map('map', { zoomControl:false }).setView([51, 5.1], 16);
 // 	maxZoom: 18
 // }).addTo(map);
 
-// // https: also suppported. The grey maps
-L.tileLayer('https://{s}.tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png', {
-	minZoom: 0,
-	maxZoom: 18
+L.tileLayer('https://{s}.tile.thunderforest.com/transport/{z}/{x}/{y}.png', {
+		minZoom: 6,
+		maxZoom: 18
 }).addTo(map);
 
 

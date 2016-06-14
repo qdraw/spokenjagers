@@ -21,8 +21,8 @@
     "mysql": "latest",
     "passport": "latest",
     "passport-facebook": "latest",
-    "passport-google-oauth": "^0.2.0",
-    "passport-http": "^0.2.2",
+    "passport-google-oauth": "latest",
+    "passport-http": "latest",
     "socket.io": "latest"
   },
   "devDependencies": {},
