@@ -75,17 +75,17 @@ var map = L.map('map', { zoomControl:false }).setView([51, 5.1], 16);
 // }).addTo(map);
 
 
-// // https: also suppported. The grey maps
-L.tileLayer('https://{s}.{base}.maps.cit.api.here.com/maptile/2.1/maptile/{mapID}/normal.day.grey/{z}/{x}/{y}/256/png8?app_id={app_id}&app_code={app_code}', {
-	// attribution: 'Map &copy; 1987-2014 <a href="http://developer.here.com">HERE</a>',
-	subdomains: '1234',
-	mapID: 'newest',
-	app_id: 'oenPwMCqbQkUSqj1WhRx',
-	app_code: 'kBxLcdTofTHUlsT7tl2X5w',
-	base: 'base',
-	minZoom: 0,
-	maxZoom: 18
-}).addTo(map);
+// // // https: also suppported. The grey maps
+// L.tileLayer('https://{s}.{base}.maps.cit.api.here.com/maptile/2.1/maptile/{mapID}/normal.day.grey/{z}/{x}/{y}/256/png8?app_id={app_id}&app_code={app_code}', {
+// 	// attribution: 'Map &copy; 1987-2014 <a href="http://developer.here.com">HERE</a>',
+// 	subdomains: '1234',
+// 	mapID: 'newest',
+// 	app_id: 'oenPwMCqbQkUSqj1WhRx',
+// 	app_code: 'kBxLcdTofTHUlsT7tl2X5w',
+// 	base: 'base',
+// 	minZoom: 0,
+// 	maxZoom: 18
+// }).addTo(map);
 
 // L.tileLayer('https://{s}.tile.thunderforest.com/transport/{z}/{x}/{y}.png', {
 // 		minZoom: 6,
@@ -93,8 +93,10 @@ L.tileLayer('https://{s}.{base}.maps.cit.api.here.com/maptile/2.1/maptile/{mapID
 // }).addTo(map);
 
 
-
-
+L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+	minZoom: 6,
+	maxZoom: 18
+}).addTo(map);
 
 
 // // // LocalMaps
