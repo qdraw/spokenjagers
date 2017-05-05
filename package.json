@@ -14,6 +14,7 @@
   "dependencies": {
     "body-parser": "latest",
     "cookie-parser": "latest",
+    "dotenv": "^4.0.0",
     "ejs": "latest",
     "express": "latest",
     "express-session": "latest",

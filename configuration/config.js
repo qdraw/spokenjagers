@@ -12,9 +12,6 @@ module.exports={
 	"host"					:	"s216.webhostingserver.nl",
 	"username"				:	"deb40577_game",
 	"password"				:	"Der8Ik4yo1Hec9fold2oL5cob3da",
-	// "host"					:	"localhost",
-	// "username"				:	"root",
-	// "username"				:	"root",
 	"database"				:	"deb40577_game"
 }
 
@@ -46,5 +43,3 @@ module.exports={
 
 // Windows
 // https://account.live.com/developers/applications/create
-
-

@@ -1,8 +1,0 @@
-#!/bin/bash
-
-# /opt/ngrok http -subdomain=qdraw 80
-
-
-# /opt/ngrok http -inspect=false -subdomain=qdraw 8080
-/opt/ngrok http -subdomain=qdraw 8080
-

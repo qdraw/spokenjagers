@@ -1,20 +1,20 @@
 /*
-                          ,                                  
-                         ,:                                  
-          ,:==++=~,      :~                                  
-        ,=+=:::::+?~     ~=                 ,,                  
-       ~+~:~==++=,,~,    ~=                :==:   ,=~,       ,   
-      ==,~      :~,      ~~       ~??~     :~ =:   :I=      ,,        
-     ~~=,        ==,    ,~II    :?$+=?=:      ?,   ++:     ;;  
-    ,==~~      ,,,   ,?Z$7ZI:  ,I$,  ~?:   +$$=,  ,+?,+= ,:;  
-     =+:     ,,,:  ,7Z: ,~=,   =I?~,+7   ,=$~,=I~   +I~77 ~:,  
-    ,=~:,   :==~::  ?I~  ,~=,  ,?$Z7$?:  +7:  ~I~   +$I==I=:   
-    ,=~:~:,:~=++,  ,I?:  ,=?:  :I7+~~:  ,?7:,~++,   =$I :I+,   
-     ,==::::::+?=~  ~II,,=II,  ,??: :~~  +?=++I$+   ~7? ,++:   
-       :~::~:, :+?+:  ?II+~:  ,:+~   ,~~  ==~::::,  :+,  :=:   
-                ,=II+:        ,:,    ,~=:                    
-                  :=~==                ~=,                   
-                      ,                ,::                            
+                          ,
+                         ,:
+          ,:==++=~,      :~
+        ,=+=:::::+?~     ~=                 ,,
+       ~+~:~==++=,,~,    ~=                :==:   ,=~,       ,
+      ==,~      :~,      ~~       ~??~     :~ =:   :I=      ,,
+     ~~=,        ==,    ,~II    :?$+=?=:      ?,   ++:     ;;
+    ,==~~      ,,,   ,?Z$7ZI:  ,I$,  ~?:   +$$=,  ,+?,+= ,:;
+     =+:     ,,,:  ,7Z: ,~=,   =I?~,+7   ,=$~,=I~   +I~77 ~:,
+    ,=~:,   :==~::  ?I~  ,~=,  ,?$Z7$?:  +7:  ~I~   +$I==I=:
+    ,=~:~:,:~=++,  ,I?:  ,=?:  :I7+~~:  ,?7:,~++,   =$I :I+,
+     ,==::::::+?=~  ~II,,=II,  ,??: :~~  +?=++I$+   ~7? ,++:
+       :~::~:, :+?+:  ?II+~:  ,:+~   ,~~  ==~::::,  :+,  :=:
+                ,=II+:        ,:,    ,~=:
+                  :=~==                ~=,
+                      ,                ,::
 */
 
 // Check ./sources for the code snippits that i've used in this code
@@ -28,7 +28,9 @@ var express				=		require('express')
 	, session			=		require('express-session')
 	, cookieParser		=		require('cookie-parser')
 	, bodyParser		=		require('body-parser')
-	, config			=		require('./configuration/config')
+	, config			=		require('dotenv').config()
+    // , config            =        require('./configuration/config')
+
 	, mysql				=		require('mysql')
 
 	, app				=		express()
@@ -38,23 +40,35 @@ var express				=		require('express')
 	, fs				=		require('fs');
 
 
+var config = {
+	host: process.env.MYSQL_HOST || null,
+	user: process.env.MYSQL_USER || null,
+	password: process.env.MYSQL_PASSWORD || null,
+	database: process.env.MYSQL_DATABASE || null,
+	use_database: process.env.USE_DATABASE || false,
+	google_api_key: process.env.GOOGLE_API_KEY,
+	google_api_secret: process.env.GOOGLE_API_SECRET,
+	facebook_api_key: process.env.FACEBOOK_API_KEY,
+	facebook_api_secret: process.env.FACEBOOK_API_SECRET
+}
+
 
 // Domain options, for testing and running on multiple domains
 console.log( "Dirname " + __dirname);
 
 // Just for testing and debugging
-if (__dirname.indexOf("avans-individueel-verdieping-blok11-12")) {
+if (__dirname.indexOf("spokenjagers")) {
     console.log("> callbackURL > localhost");
     global["callbackURL"] = "http://" + "localhost" + ":8080" + "/auth/facebook/callback"
 }
 
-if(__dirname === "/mnt/data/avans-individueel-verdieping-blok11-12") {
+if(__dirname === "/mnt/data/spokenjagers") {
     console.log("> callbackURL > /mnt/data");
     global["callbackURL"] = "http://" + "xserve.qdraw.eu" + "/auth/facebook/callback";
     config.host = "localhost";
 }
 
-if ( __dirname.indexOf("avans-individueel-verdieping-blok11-12") == -1) {
+if ( __dirname.indexOf("spokenjagers") == -1) {
     console.log("> callbackURL > herokuapp");
     global["callbackURL"] = "https://" + "qdraw.herokuapp.com" + "/auth/facebook/callback";
 }
@@ -64,14 +78,13 @@ if ( __dirname.indexOf("avans-individueel-verdieping-blok11-12") == -1) {
 process.argv.forEach(function (val, index, array) {
     if (val === "localauth") {
         config.host = "127.0.0.1";
-    }   
+    }
 });
-
 
 //Define MySQL parameter in Config.js file.
 var mysqlConfig = {
     host        :     config.host,
-    user        :     config.username,
+    user        :     config.user,
     password    :     config.password,
     database    :     config.database
 };
@@ -130,63 +143,6 @@ function handleDisconnect() {
 }
 
 
-
-
-
-/// Old style
-
-// //Define MySQL parameter in Config.js file.
-// var connection = mysql.createConnection({
-// 	host		: 	  config.host,
-// 	user		: 	  config.username,
-// 	password 	: 	  config.password,
-// 	database 	: 	  config.database
-// });
-
-// //Connect to Database only if Config.js parameter is set.
-// if(config.use_database==='true'){
-// 	connection.connect();
-
-// 	connection.query('CREATE TABLE IF NOT EXISTS users (id MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY, userid TEXT, displayname TEXT, displayimage TEXT, provider TEXT, email TEXT, gender TEXT, health INTEGER, score INTEGER, money INTEGER, useragent TEXT, value TEXT, latestConnectionTime INT, area TEXT)',
-// 	function(err, result){
-// 	    // Case there is an error during the creation
-// 	    if(err) {
-// 	        console.log(err);
-// 	    }
-//   		console.log('> mysql connected as id ' + connection.threadId);
-// 	});
-
-// 	// GHOST ITEM IN DB
-// 	connection.query('CREATE TABLE IF NOT EXISTS ghosts (id MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY, area TEXT, arealocation TEXT, spook1 TEXT, spook2 TEXT, spook3 TEXT, spook4 TEXT, spook5 TEXT, spook6 TEXT, spook7 TEXT, spook8 TEXT, spook9 TEXT)',
-// 	function(err, result){
-// 	    // Case there is an error during the creation
-// 	    if(err) {
-// 	        console.log(err);
-// 	    }
-// 	});
-
-//     var spookCounter = 9;
-
-// }// connection
-
-
-
-
-
-
-
-// // only for locations logger
-// if(config.use_database==='true'){
-
-//     connection.query('CREATE TABLE IF NOT EXISTS locations (id MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY)',
-//     function(err, result){
-//         // Case there is an error during the creation
-//         if(err) {
-//             console.log(err);
-//         }
-//     });
-
-// }//fi
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
@@ -253,7 +209,7 @@ function localAuth () {
                 })
             });
         }
-    )); 
+    ));
 
     app.get('/auth/localauth', passport.authenticate('basic',{ session: true }), function(req, res){
         res.redirect("/")
@@ -264,17 +220,16 @@ function localAuth () {
 
 // print process.argv ++ use: nodemon server.js ngrok
 process.argv.forEach(function (val, index, array) {
-    if (val === "ngrok") {
-        console.log("> callbackURL > NGROK \nhttps://qdraw.ngrok.io/");
-        global["callbackURL"] = "https://" + "qdraw.ngrok.io" + "/auth/facebook/callback";
+    if (val === "localtunnel") {
+        console.log("> callbackURL > NGROK \nhttps://spokenjagers.localtunnel.me/");
+        global["callbackURL"] = "https://spokenjagers.localtunnel.me/auth/facebook/callback";
     }
     if (val === "localauth") {
         console.log("> localauth Enabled");
         localAuth ()
         // localAuth
-    }    
+    }
 });
-
 
 // GoogleStrategy to L:ogin
 passport.use(new GoogleStrategy({
@@ -288,7 +243,6 @@ passport.use(new GoogleStrategy({
 		authenticateUser (profile);
 
 		process.nextTick(function () {
-
 			return done(null, profile);
 		});
 	}
@@ -306,7 +260,7 @@ passport.use(new FacebookStrategy({
 		callbackURL: global["callbackURL"]
 	},
 	function(accessToken, refreshToken, profile, done) {
-		
+
 		console.log("> Welcome " + profile.displayName + " " + profile.id + " " + profile.provider);
 		// graph.facebook.com/10153168999049854/picture?type=large
 
@@ -396,7 +350,7 @@ app.get('/auth/facebook/callback', function(req, res, next){
     if (err) { return next(err); }
     if (!user) { return res.redirect('/'); }
 
-    // If we have previously stored a redirectUrl, use that, 
+    // If we have previously stored a redirectUrl, use that,
     // otherwise, use the default.
     if (req.session.redirectUrl) {
       redirectUrl = req.session.redirectUrl;
@@ -414,7 +368,7 @@ app.get('/auth/facebook/callback', function(req, res, next){
 
 //google
 app.get('/auth/google',
-  passport.authenticate('google', { scope: 
+  passport.authenticate('google', { scope:
     [ 'https://www.googleapis.com/auth/plus.login',
     , 'https://www.googleapis.com/auth/plus.profile.emails.read' ] }));
 
@@ -426,7 +380,7 @@ app.get('/auth/google/callback', function(req, res, next){
     if (err) { return next(err); }
     if (!user) { return res.redirect('/'); }
 
-    // If we have previously stored a redirectUrl, use that, 
+    // If we have previously stored a redirectUrl, use that,
     // otherwise, use the default.
     if (req.session.redirectUrl) {
       redirectUrl = req.session.redirectUrl;
@@ -525,7 +479,7 @@ io.on('connection', function(socket){
 
 	console.log("	");
 	var userid = 0;
-	
+
 	// console.log(userid);
 
     // Every User has one connection
@@ -579,8 +533,8 @@ io.on('connection', function(socket){
         var nowTime = new Date().getTime();
         var unixTime = Math.ceil(nowTime/1000);
         var microSeconds = nowTime;
-        var microSeconds = nowTime.toString().substring(unixTime.toString().length, nowTime.toString().length); 
-        return microSeconds;   
+        var microSeconds = nowTime.toString().substring(unixTime.toString().length, nowTime.toString().length);
+        return microSeconds;
     }
 
     // Send Data to client to display all users on the map
@@ -589,7 +543,7 @@ io.on('connection', function(socket){
     }, 500);
 
 
-    // show cpu-load to user 
+    // show cpu-load to user
     // check if removed the Send Time interval
     var cpuload = null;
 
@@ -617,7 +571,7 @@ io.on('connection', function(socket){
     }//e/checkCpuLoad
 
     checkCpuLoad ();
-    
+
     setInterval(function (argument) {
     	checkCpuLoad ();
 	},60000)
@@ -662,7 +616,7 @@ io.on('connection', function(socket){
                 };
             });
 
-        }; 
+        };
 
 
     }, 200);
@@ -768,7 +722,7 @@ io.on('connection', function(socket){
 				    		var arealocation = result[i]["arealocation"];
 
 				    		if (arealocation != null) {
-					    		var arealocation = arealocation.split(","); 
+					    		var arealocation = arealocation.split(",");
 
 					    		var areaDistance = calcCrow(arealocation[0], arealocation[1], userData[c][userid][0], userData[c][userid][1]);
 
@@ -786,7 +740,7 @@ io.on('connection', function(socket){
 			    				console.log("> ERROR null " + arealocation )
 				    		}//e/ls
 				    	};
-				    	
+
 				    	// console.log(AreaListOfGeoLocation);
 
 				    	if (AreaListOfGeoLocation.length === 0) {
@@ -819,7 +773,7 @@ io.on('connection', function(socket){
 				    	// 	console.log("link user to that area length === 1 ");
 			      //           connection.query("UPDATE users SET "+ "area" +" = '" + "area_" + currentAreaNumber + "' WHERE userid = '" + userid +"'");
 			      //           connection.query("UPDATE users SET "+ "latestConnectionTime" +" = '" + Math.floor(Date.now() / 1000) + "' WHERE userid = '" + userid +"'");
-			                
+
 			      //           currentAreaName = "area_" + currentAreaNumber;
 			      //           currentAreaPosition = result[i]["arealocation"];
 
@@ -845,24 +799,24 @@ io.on('connection', function(socket){
 				    		// console.log("lowestnumber");
 				    		// console.log(lowestnumber);
 				    		// console.log("lowestnumberkey");
-				    		// console.log(lowestnumberkey);							
+				    		// console.log(lowestnumberkey);
 				    		// console.log("geo");
 				    		// console.log(geo);
 				    		// console.log("index");
-				    		// console.log(index);							
+				    		// console.log(index);
 
 			                connection.query("UPDATE users SET "+ "area" +" = '" + "area_" + index + "' WHERE userid = '" + userid +"'");
 			                connection.query("UPDATE users SET "+ "latestConnectionTime" +" = '" + Math.floor(Date.now() / 1000) + "' WHERE userid = '" + userid +"'");
-			                
+
 			                global["currentAreaName"][userid] = "area_" + index;
 			                global["currentAreaPosition"][userid] = geo;
 
 			                isArealistAvailableBoolean = true;
 
 				    	};//e/fi
-				    	
 
-						
+
+
 					});
 
     			}//e/els
@@ -927,7 +881,7 @@ io.on('connection', function(socket){
 
 						if (selectResult[i]["area"] == currentAreaName[userid]) {
 							for (var x = 0; x < ghostsNamesArray.length; x++) {
-								
+
 								// selectResult[i][ghostsNamesArray[x]]
 								try {
 									var ghostExistInDatabase = selectResult[i][ghostsNamesArray[x]].split(",");
@@ -998,7 +952,7 @@ io.on('connection', function(socket){
 	// used to be moveopp
 
 
-	// // Score HANDELING , kill the opponent, seperate channel 
+	// // Score HANDELING , kill the opponent, seperate channel
 
     socket.on('shoot', function(shoot){
     	if (opponentHandelingStartBoolean) {
@@ -1024,7 +978,7 @@ io.on('connection', function(socket){
 					Object.keys(global["ghosts"][area]).forEach(function(ghostsName) {
 						// first scores in db!!
 	               		if (calcCrow(shoot.lat, shoot.lng, global["ghosts"][area][ghostsName][0], global["ghosts"][area][ghostsName][1]) < 0.06) {
-	                    	
+
 	                    	console.log("> User: " + userid );
 
 		                    // // Give +1 to the user
@@ -1068,7 +1022,7 @@ io.on('connection', function(socket){
 
 
 
-		                    
+
 
 	               		}//e/hit
 
@@ -1099,7 +1053,7 @@ io.on('connection', function(socket){
 
 	                    // opponent has lost:
 	                    if (global["opponent"]["opponent_" + i][2] <= 0) {
-	                        global["opponent"]["opponent_" + i][0] = newOpponent (i); 
+	                        global["opponent"]["opponent_" + i][0] = newOpponent (i);
 	                        global["opponent"]["opponent_" + i][1] = newOpponent (i);
 	                    };
 
@@ -1174,194 +1128,7 @@ io.on('connection', function(socket){
 	}, 1000);
 
 
-
-     // // logger database
-    // if(config.use_database==='true'){
-
-    //     setInterval(function(){
-
-
-    //         if (userid != 0) {
-    //             try {
-    //                 if ((userData[c][userid][0] != 0) && (userData[c][userid][0] != undefined)) {
-    //                     var lat = userData[c][userid][0];
-    //                 };
-    //                 if ((userData[c][userid][1] != 0) && (userData[c][userid][1] != undefined)) {
-    //                     var lng = userData[c][userid][1];
-    //                     var altitude = userData[c][userid][3];
-    //                     var speed = userData[c][userid][4];
-
-    //                     if (altitude === 0 || altitude == undefined) {
-    //                         altitude = -1000;
-    //                     };
-
-    //                     if (speed ===  null || speed ===  undefined) {
-    //                         speed = 0;
-    //                     };
-
-    //                     var myDate = new Date().toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
-    //                     var today = new Date().toJSON().slice(0,10);
-
-    //                     var appendData = lat + ";" + lng + ";" + altitude + ";" + today + "T" + myDate + "Z" + ";" + speed;
-
-    //                     if ( (lat != 0) && (lng != 0 ) && (userid != 0 )) {
-    //                         connection.query("INSERT INTO locations (_" + userid + "_) VALUES('" + appendData + "')"); 
-    //                         console.log("appendData")                
-    //                     };
-    //                 };
-
-    //             }
-    //             catch(e) {
-    //                 console.log("srcgpx writer fails under: " + userid);
-    //             }
-    //         };///e/userid
-
-
-
-    //     }, 2000);
-
-    // }
-
-
-
-    // // // Logger --> /logs/*.scrgpx
-    // setInterval(function(){
-
-    //     if (userid != 0) {
-    //         try {
-    //             if ((userData[c][userid][0] != 0) && (userData[c][userid][0] != undefined)) {
-    //                 var lat = userData[c][userid][0];
-    //             };
-    //             if ((userData[c][userid][1] != 0) && (userData[c][userid][1] != undefined)) {
-    //                 var lng = userData[c][userid][1];
-    //                 var altitude = userData[c][userid][3];
-    //                 var speed = userData[c][userid][4];
-
-    //                 if (altitude === 0 || altitude == undefined) {
-    //                     altitude = -1000;
-    //                 };
-
-    //                 if (speed ===  null) {
-    //                     speed = 0;
-    //                 };
-
-    //                 var myDate = new Date().toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
-    //                 var today = new Date().toJSON().slice(0,10);
-
-    //                 var logfilename = "logs/" + userid + ".srcgpx";
-
-    //                 var appendData = '<trkpt lat="'+ lat +'" lon="'+ lng +'">' + "\n" + "<ele>" + altitude + "</ele>\n" + "<time>" + today + "T" + myDate + "Z" +"</time>" + "\n<extensions>\n<speed>" + speed +"</speed>\n</extensions>\n"+ "</trkpt> \n";
-    //                 var appendData = appendData;
-
-    //                 if ( (lat != 0) && (lng != 0 ) && (userid != 0 )) {
-    //                     fs.appendFile(logfilename, appendData, function (err) {
-    //                     });                    
-    //                 };
-    //             };
-
-    //         }
-    //         catch(e) {
-    //             console.log("srcgpx writer fails under: " + userid);
-    //         }
-    //     };///e/userid
-
-    // }, 2000);
-
-    // setInterval(function(){
-    //     if (userid != 0) {
-    //         try {
-    //             // var fs = require('fs');
-    //             var logfilename = "logs/" + userid + ".srcgpx";
-
-    //             var file = "";
-    //             fs.readFile(logfilename, 'utf8', function (err,data) {
-    //               if (err) {
-    //                 return console.log(err);
-    //               }
-    //               // console.log(data);
-    //               global["file_" + userid ] = data;
-    //             });
-
-    //             var logfilename = "logs/" + userid + ".gpx";
-
-    //             var prevAppendData = '<?xml version="1.0" encoding="UTF-8" ?>' + "\n" + '<gpx xmlns="http://www.topografix.com/GPX/1/1" version="1.1" creator="Qdraw" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd ">' + "\n" + "<trk>" +"\n" + "<name>Qdraw " + userid + "</name> \n <trkseg> \n\n";
-    //             var afterAppendData = "</trkseg></trk></gpx>";
-    //             writeFile = prevAppendData + global["file_" + userid ] + afterAppendData;
-    //             fs.writeFile(logfilename, writeFile, function(err) {
-    //                 if(err) {
-    //                     return console.log(err);
-    //                 }
-    //             });
-    //             global["file_" + userid ] = "";  
-    //         }
-    //         catch(e) {
-    //             console.log("gpx writer fails");
-    //         }
-    //     };///e/userid
-
-    // }, 20000);
-    // // end of logger
-
-
-
-
 });///e/connection
-
-
-function writeApacheLog(path,req,httpcode) {
-
-
- 
-    try {
-        var ip = req.connection.remoteAddress || req.socket.remoteAddress || req.connection.socket.remoteAddress;
-        // req.header('x-forwarded-for') ||
-    }
-    catch(e){
-        var ip = "127.0.0.1";
-    }
-
-     // 127.0.0.1 - frank [10/Oct/2000:13:55:36 -0700] "GET /apache_pb.gif HTTP/1.0" 200 2326 
-
-    var month_names_short = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-    var myDate = new Date().toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
-    var d = new Date();
-    var n = d.getTimezoneOffset();
-    var o = n * -1;
-    var p = o / 60;
-    if ((p >= 0)&& (p <= 9) ) {
-        var u = "+0" + p + ":00";
-    };
-
-    var day = d.getUTCDate();
-    if ((day >= 0)&& (day <= 9) ) {
-        day = "0" + day;
-    }
-
-    var stats = fs.statSync(__dirname + path);
-    var fileSizeInBytes = stats["size"]    
-
-    var log = ip + " -  - ["+ day +"/" + month_names_short[d.getMonth()] + "/" + d.getFullYear() + ":" + myDate + " " + u + "] " + '"' + "GET " + path + " HTTP/1.1"+ '"' + " " + httpcode + " " + fileSizeInBytes + ' "-" ' + '"' + req.headers['user-agent'] + '"' + "\n";
-
-    try {
-        fs.appendFile("logs/access.log", log, function (err) {
-        }); 
-    }
-    catch(e){}
-
-    // // requires database.js
-    // updatePoints("score", userid);
-
-    // var today = new Date().toJSON().slice(0,10);
-    // console.log("today " + today);
-    // var toda1y = new Date();
-    // console.log("toda1y " + toda1y);
-
-}//e/apache
-
-
-// global["spooks"] = {};
-
-
 
 
 // Global object Score:
@@ -1401,7 +1168,7 @@ function readScore (userid) {
             };
 
             // console.log("update score  -> " +  global["score"][userid]);
-            // global["score"][userid] = 
+            // global["score"][userid] =
 
             // // connection.query("INSERT into users(score) VALUES('" + global["score"][userid] + "')");
             // // 'SELECT * FROM users WHERE userid = ?', [userid]
@@ -1443,8 +1210,8 @@ function calcCrow(lat1, lon1, lat2, lon2){
     var lat2 = toRad(lat2);
 
     var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-    Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
-    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+    Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
     var d = R * c;
     return d;
 }
@@ -1463,10 +1230,10 @@ function url2base64inDatabase(url,userid) {
   	var path = 0;
 
 	var pos = url.indexOf('//')
-	var res = url.substring(0, (pos+2)); 
+	var res = url.substring(0, (pos+2));
 
 	if (res === "https://") {
-		var res = url.substring((pos+2), url.lenght); 
+		var res = url.substring((pos+2), url.lenght);
 		var pos = res.indexOf('/')
 		var host = res.substring(0, pos);
 		var path = res.substring(pos, pos.lenght);
@@ -1479,7 +1246,7 @@ function url2base64inDatabase(url,userid) {
 		  host: host,
 		  path: path
 		};
-		
+
 		var base64;
 
 		var req = http.get(options, function(res) {
@@ -1516,7 +1283,7 @@ function url2base64inDatabase(url,userid) {
 
 	};//e/path+host
 
-	
+
 }//e/url
 
 
@@ -1598,7 +1365,7 @@ function moveOpponent (currentAreaName,currentAreaPosition,ghostsName) {
 
 
 
-      
+
         // console.log("---------------------------");
 
 	    try{
@@ -1622,7 +1389,7 @@ function moveOpponent (currentAreaName,currentAreaPosition,ghostsName) {
 				newOpponent (currentAreaName,currentAreaPosition,ghostsName);
 			};
 
-	        var speed = 0.00009; // 00005 
+	        var speed = 0.00009; // 00005
 			var speedNeg = speed * -1;
 	        var value = getRandomArbitrary(speedNeg, speed);
 
@@ -1677,7 +1444,7 @@ function newOpponent (currentAreaName,currentAreaPosition,ghostsName) {
         // used to be: 0.0006
         var areaLatLongOffset = 0.01;
         global["ghosts"][currentAreaName][ghostsName] = [getRandomArbitrary(Number(currentAreaPosition[0])-areaLatLongOffset, Number(currentAreaPosition[0])+areaLatLongOffset),getRandomArbitrary(Number(currentAreaPosition[1])-areaLatLongOffset, Number(currentAreaPosition[1])+areaLatLongOffset),10];
-        
+
         // console.log(global["ghosts"][currentAreaName][ghostsName]);
 
 
@@ -1695,7 +1462,7 @@ function newOpponent (currentAreaName,currentAreaPosition,ghostsName) {
 
         // console.log(ghostcors);
 
-        // UPDATE Customers SET ContactName='Alfred Schmidt', City='Hamburg' WHERE CustomerName='Alfreds Futterkiste'; 
+        // UPDATE Customers SET ContactName='Alfred Schmidt', City='Hamburg' WHERE CustomerName='Alfreds Futterkiste';
 
         connection.query("UPDATE ghosts SET "+ ghostsName +" = '" + ghostcors + "' WHERE area = '" + currentAreaName +"'");
 
@@ -1711,7 +1478,7 @@ function newOpponent (currentAreaName,currentAreaPosition,ghostsName) {
 // ghostAttackUser!!!
 
 var ghostAttackUserInterval = setInterval(function () {
-    
+
     if (startMoveOpponents){
         ghostAttackUser ()
     }
@@ -1727,7 +1494,7 @@ var ghostAttackUserInterval = setInterval(function () {
                 // console.log(area)
                 Object.keys(global["ghosts"][area]).forEach(function(ghostsName) {
                     if (calcCrow(global["ghosts"][area][ghostsName][0], global["ghosts"][area][ghostsName][1], userData[c][useridI][0], userData[c][useridI][1]) <= 0.0199883) { // 0199883
-                        
+
                         console.log("-----loop " + calcCrow(global["ghosts"][area][ghostsName][0], global["ghosts"][area][ghostsName][1], userData[c][useridI][0], userData[c][useridI][1]) )
                         console.log(global["ghosts"][area][ghostsName])
 
@@ -1759,7 +1526,7 @@ var ghostAttackUserInterval = setInterval(function () {
                                     //     newOpponent (global["currentAreaName"][useridI],global["currentAreaPosition"][useridI],ghostsName)
                                     // };
 
-        
+
 
 
                                 }//e/fi
@@ -1818,49 +1585,12 @@ var ghostAttackUserInterval = setInterval(function () {
 
 
 
-                    }; //e/fi                    
+                    }; //e/fi
 
                 });//e/object
             });
-        });        
+        });
 
     }//e/attackUser
 
 },1000);
-
-
-
-// var killAreasInterval = setInterval(function () {
-    
-//     if (startMoveOpponents){
-//         killAreas ()
-//     }//e/estartMoveOpponents
-
-//     function killAreas () {
-//         Object.keys(latestConnectionTime).forEach(function(item) {
-
-//             // calc in unix time
-//             var time1 = Number(latestConnectionTime[item]/1000);
-//             var time2 = Math.floor(Date.now() /1000);
-
-
-//             if (time2-time1 > 10) { // 7200
-//                 console.log("user kicked out::!")
-//                 console.log(latestConnectionTime[item]);
-//                 console.log(time2-time1);
-
-
-//                 delete global["currentAreaName"][item];
-//                 delete global["currentAreaPosition"][item];
-
-//                 delete latestConnectionTime[item];
-
-
-
-//             };
-//         });//e/object
-
-//     }//e/KillArea
-
-
-// },1000);
