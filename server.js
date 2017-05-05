@@ -29,8 +29,6 @@ var express				=		require('express')
 	, cookieParser		=		require('cookie-parser')
 	, bodyParser		=		require('body-parser')
 	, config			=		require('dotenv').config()
-    // , config            =        require('./configuration/config')
-
 	, mysql				=		require('mysql')
 
 	, app				=		express()
