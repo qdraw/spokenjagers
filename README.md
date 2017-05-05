@@ -1,4 +1,4 @@
-# avans-individueel-verdieping-blok11-12 
+# Spokenjagers Game
 
 ## How run the server part of this game localy
 
@@ -21,7 +21,7 @@
 	mysql > create user deb40577_game;
 	mysql > grant all on deb40577_game.* to 'deb40577_game'@'localhost' identified by 'PASSW!ORD';
 
-4.	Setup "configuration/config.js" file
+4.	Setup ".env" file (or change env_rename to .env)
 
 	a.	facebook_api_key
 			You can find your App ID at:
@@ -44,7 +44,7 @@
 
 
 5.	Install dependencies using npm
-	
+
 	a.	Go to the current directory using the terminal or your MS-DOS Window.
 		(cd /this/directory)
 
