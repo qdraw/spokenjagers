@@ -60,7 +60,7 @@
 
 			<p>geslacht: <%= user.gender  %></p>
 
-			<%if (user.emails.length > 0) { %>
+			<%if (user.emails) { %>
 				<p>E-mail: <%= user.emails[0].value %></p>
 			<% } %>
 
